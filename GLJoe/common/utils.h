@@ -18,6 +18,20 @@ namespace GLJoe
 	{
 		return theta * M_PI / 180.0;
 	}
+	
+	
+	float Random(float a, float b)
+	{
+		float random = ((float) rand()) / (float) RAND_MAX;
+		float diff = b - a;
+		float r = random * diff;
+		return a + r;
+	}
+	
+	int RandomInt(int a, int b)
+	{
+		return static_cast<int>(Random(a, b));
+	}
 } // namespace GLJoe
 
 #endif // DEF_GLJOE_UTILS_H
