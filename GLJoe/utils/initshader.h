@@ -20,17 +20,18 @@ namespace GLJoe
 // Create a NULL-terminated string by reading the provided file
 static char* readShaderSource(const char* shaderFile)
 {
-	FILE* fp = fopen(shaderFile, "r");
+	FILE* fp = fopen(shaderFile, "rb");
 
-	if (fp == NULL)
+	if (fp == NULL) {
 		return NULL;
-
+	}
 	fseek(fp, 0L, SEEK_END);
 	long size = ftell(fp);
 
 	fseek(fp, 0L, SEEK_SET);
 	char* buf = new char[size + 1];
-	if (fread(buf, 1, size, fp) != (size_t) size)
+	size_t res = fread(buf, 1, size, fp);
+	if (res != (size_t) size)
 		return NULL;
 
 	buf[size] = '\0';
@@ -62,7 +63,7 @@ GLuint InitShader(const char* vShaderFile, const char* fShaderFile)
 		s.source = readShaderSource(s.filename);
 		if (shaders[i].source == NULL)
 		{
-			Error("Failed to read %s", s.filename);
+			Error("Failed to read %s %s", s.filename, strerror(errno));
 		}
 
 		GLuint shader = glCreateShader(s.type);
