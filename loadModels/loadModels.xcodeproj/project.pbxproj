@@ -31,6 +31,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		BEC2BE66174E10C3000C44FA /* castle.mtl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = castle.mtl; path = "glm-data/castle.mtl"; sourceTree = "<group>"; };
 		BECC167E174476A9004C1344 /* loadModels */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = loadModels; sourceTree = BUILT_PRODUCTS_DIR; };
 		BECC168A174478BD004C1344 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
 		BECC168C174478C2004C1344 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
@@ -92,6 +93,7 @@
 		BECC1680174476A9004C1344 /* loadModels */ = {
 			isa = PBXGroup;
 			children = (
+				BEC2BE66174E10C3000C44FA /* castle.mtl */,
 				BEEE796D1744E64D0035771C /* dragon.obj */,
 				BEEE796E1744E64D0035771C /* lady_c.obj */,
 				BEE111061744939F00602BFC /* objParser */,

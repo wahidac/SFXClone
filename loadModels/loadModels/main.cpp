@@ -261,7 +261,7 @@ main( int argc, char **argv )
     glutCreateWindow( "Color Cube" );
     
     init();
-    obj = new OBJObject("dragon.obj",program);
+    obj = new OBJObject("airboat.obj",program);
 
     
     
