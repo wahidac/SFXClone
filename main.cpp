@@ -5,6 +5,16 @@ using namespace std;
 using namespace GLJoe;
 
 
+// Parameters for game
+#define MAX_ENEMIES 100
+const float APPEARANCE_RATE = 0.001;
+const int POINTS_PER_KILL = 250;
+
+// Parameters for view
+const float ZOOM_OUT_FACTOR = 50.0;
+const float EYE_POSITION_Z = 2.0;
+
+
 // Uniforms
 GLuint ModelView;
 GLuint Projection;
@@ -30,7 +40,7 @@ GLfloat shiftY;
 Cube spaceship;
 Transform transformSpaceship;
 
-Enemy* enemies[100] = {0};
+Enemy* enemies[MAX_ENEMIES] = {0};
 int iEnemy; // index of last enemy created
 int number; // number of living enemies
 Vec4 offsetSpaceship;
@@ -39,14 +49,15 @@ int numberKilled = 0; // number of killed enemies
 // Timers for animation
 int lastTime;
 int newTime;
+int lastTimeEnemyAppeared;
 
 // Program
 GLuint program;
 
 void initView()
 {
-	initialEyePos = Vec3(0, 0, 2);
-	zoom = 1.0 / 50;
+	initialEyePos = Vec3(0, 0, EYE_POSITION_Z);
+	zoom = 1.0 / ZOOM_OUT_FACTOR;
 	rotX = 0;
 	rotY = 0;
 	shiftX = 0;
@@ -111,7 +122,7 @@ void keyboard(unsigned char key, int x, int y)
 		exit(EXIT_SUCCESS);
 		break;
 	case ' ': // space
-		for (int i = 0; i < 100; ++i)
+		for (int i = 0; i < MAX_ENEMIES; ++i)
 		{
 			if (enemies[i])
 			{
@@ -151,21 +162,21 @@ void special(int key, int x, int y)
 	switch (key)
 	{
 	case GLUT_KEY_RIGHT:
-		if (offsetSpaceship.x < 50.0)
+		if (offsetSpaceship.x < LIMIT_X_RIGHT)
 			offsetSpaceship += Vec4(1, 0, 0, 0);
 		break;
 	case GLUT_KEY_LEFT:
-		if (offsetSpaceship.x > -50.0)
+		if (offsetSpaceship.x > LIMIT_X_LEFT)
 			offsetSpaceship += Vec4(-1, 0, 0, 0);
 		break;
 	case GLUT_KEY_UP:
-		if (offsetSpaceship.y < 50.0)
+		if (offsetSpaceship.y < LIMIT_Y_RIGHT)
 			offsetSpaceship += Vec4(0, 1, 0, 0);
 		break;
 	case GLUT_KEY_DOWN:
-		if (offsetSpaceship.y > -50.0)
+		if (offsetSpaceship.y > LIMIT_Y_LEFT)
 			offsetSpaceship += Vec4(0, -1, 0, 0);
-		break;		
+		break;
 	}
 	
 	(void) key, (void)x, (void)y;
@@ -183,23 +194,27 @@ void idle()
 {
 	newTime = glutGet(GLUT_ELAPSED_TIME);
 	int elapsedTime = newTime - lastTime;
-	lastTime = newTime;
+	int elapsedTimeSinceLastEnemyAppeared = newTime
+		- lastTimeEnemyAppeared;
+	lastTime = newTime;	
 	
-	if (number < 100 && RandomInt(1, 50) == 1)
+	if (number < MAX_ENEMIES && 
+		APPEARANCE_RATE * elapsedTimeSinceLastEnemyAppeared > 1)
 	{
 		while (enemies[iEnemy])
 			iEnemy++;
 		delete enemies[iEnemy];
 		enemies[iEnemy] = new Enemy(program);
-		iEnemy = (iEnemy + 1) % 100;
+		iEnemy = (iEnemy + 1) % MAX_ENEMIES;
 		number++;
+		lastTimeEnemyAppeared = newTime;
 	}
 	
-	for (int i = 0; i < 100; ++i)
+	for (int i = 0; i < MAX_ENEMIES; ++i)
 	{
 		if (enemies[i])
 		{
-			if (enemies[i]->offset.z < -10)
+			if (enemies[i]->offset.z < Z_ENEMIES_STOP)
 				enemies[i]->offset += Vec4(0, 0, elapsedTime / 1000.0 *
 					enemies[i]->speed, 0);
 		}
@@ -233,7 +248,7 @@ void display()
 	
 	// Draw cube 1
 	glUniform1i(EnableTex, 1);
-	for (int i = 0; i < 100; ++i)
+	for (int i = 0; i < MAX_ENEMIES; ++i)
 	{
 		if (enemies[i])
 		{			
@@ -246,7 +261,7 @@ void display()
 	
 	unsigned char score[40];
 	unsigned char energy[40];
-	sprintf((char*) score, "Score: %d", 250 * numberKilled);
+	sprintf((char*) score, "Score: %d", POINTS_PER_KILL * numberKilled);
 	sprintf((char*) energy, "Energy: 100%%");
 	
 	glColor3f(1, 1, 1);

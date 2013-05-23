@@ -86,7 +86,11 @@
  /usr/include/x86_64-linux-gnu/bits/stdio.h \
  /usr/include/x86_64-linux-gnu/bits/stdio2.h /usr/include/c++/4.7/cstring \
  /usr/include/string.h /usr/include/x86_64-linux-gnu/bits/string3.h \
- /usr/include/c++/4.7/cstdarg /usr/include/GL/glew.h \
+ /usr/include/c++/4.7/cstdarg /usr/include/c++/4.7/cerrno \
+ /usr/include/errno.h /usr/include/x86_64-linux-gnu/bits/errno.h \
+ /usr/include/linux/errno.h /usr/include/x86_64-linux-gnu/asm/errno.h \
+ /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
+ /usr/include/GL/glew.h \
  /usr/lib/gcc/x86_64-linux-gnu/4.7/include/stdint.h /usr/include/stdint.h \
  /usr/include/GL/glu.h /usr/include/GL/gl.h /usr/include/GL/freeglut.h \
  /usr/include/GL/freeglut_std.h /usr/include/stdlib.h \
