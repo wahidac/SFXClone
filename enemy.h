@@ -10,6 +10,17 @@
 using namespace GLJoe;
 using namespace std;
 
+// Parameters
+const float LIMIT_X_LEFT = -50.0;
+const float LIMIT_X_RIGHT = 50.0;
+const float LIMIT_Y_LEFT = -50.0;
+const float LIMIT_Y_RIGHT = 50.0;
+const float Z_APPEARANCE = -30.0; // distance enemies appear at
+const float Z_ENEMIES_STOP = -10.0; // distance enemies stop at
+const float SPEED_MIN = 1.0;
+const float SPEED_MAX = 10.0;
+
+
 class Enemy
 {
 public:
@@ -20,9 +31,10 @@ public:
 	
 	Enemy(const GLuint& program)
 	{
-		offset = Vec4(Random(-50, 50), Random(-50, 50), -30, 0);
+		offset = Vec4(Random(LIMIT_X_LEFT, LIMIT_X_RIGHT),
+			Random(LIMIT_Y_LEFT, LIMIT_Y_RIGHT), Z_APPEARANCE, 0);
 		transform = Identity();
-		speed = Random(1, 10);
+		speed = Random(SPEED_MIN, SPEED_MAX);
 		cube.generate();
 		
 		// Texture
