@@ -9,12 +9,13 @@ uniform vec3 theta;
 
 
 uniform mat4 Projection;
-uniform mat4 ModelView;
+uniform mat4 cMw;
+uniform mat4 wMo;
 
 void main() 
 {    
     color       = vec4(1,0,0,1);
-    gl_Position = ModelView*vPosition;
-    
-    //Projection*ModelView*vPosition;
+    //gl_Position = ModelView*vPosition;
+    mat4 ModelView = cMw*wMo;
+    gl_Position = Projection*ModelView*vPosition;
 } 

@@ -157,7 +157,7 @@ colorcube()
 void
 init()
 {
-    program = InitShader( "vshader71.glsl", "fshader71.glsl" );
+    program = InitShader( "vshader.glsl", "fshader.glsl" );
     glUseProgram( program );
     
     
@@ -261,7 +261,7 @@ main( int argc, char **argv )
     glutCreateWindow( "Color Cube" );
     
     init();
-    obj = new OBJObject("airboat.obj",program);
+    obj = new OBJObject("castle.obj",program);
 
     
     

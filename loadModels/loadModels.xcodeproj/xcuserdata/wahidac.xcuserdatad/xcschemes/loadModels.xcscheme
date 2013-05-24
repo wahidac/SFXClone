@@ -44,7 +44,7 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
       useCustomWorkingDirectory = "YES"
-      customWorkingDirectory = "/Users/wahidac/workspace/CS174A/Project/loadModels/loadModels"
+      customWorkingDirectory = "/Users/wahidac/workspace/CS174A/Project/SFXClone/loadModels/loadModels"
       buildConfiguration = "Debug"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"

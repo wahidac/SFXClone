@@ -4,7 +4,7 @@
    version = "1.0">
    <FileBreakpoints>
       <FileBreakpoint
-         shouldBeEnabled = "Yes"
+         shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "loadModels/vbomeshadj.cpp"
@@ -17,7 +17,7 @@
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
-         shouldBeEnabled = "Yes"
+         shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "loadModels/vbomeshadj.cpp"
@@ -30,7 +30,7 @@
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
-         shouldBeEnabled = "Yes"
+         shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "loadModels/vbomeshadj.cpp"
@@ -47,25 +47,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "loadModels/OBJObject.cpp"
-         timestampString = "390391788.456234"
+         timestampString = "390992997.533428"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "76"
-         endingLineNumber = "76"
-         landmarkName = "OBJObject::drawSelf()"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "loadModels/objparser.cpp"
-         timestampString = "390991831.98409"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "63"
-         endingLineNumber = "63"
-         landmarkName = "OBJParser::load(char *path)"
+         startingLineNumber = "12"
+         endingLineNumber = "12"
+         landmarkName = "OBJObject::OBJObject(char *objFileName, GLuint program)"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>
