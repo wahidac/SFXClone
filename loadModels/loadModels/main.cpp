@@ -171,6 +171,7 @@ display( void )
 {
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     obj->drawSelf();
+    //obj->drawSelfWithMaterials();
     glutSwapBuffers();
 }
 
@@ -261,7 +262,7 @@ main( int argc, char **argv )
     glutCreateWindow( "Color Cube" );
     
     init();
-    obj = new OBJObject("castle.obj",program);
+    obj = new OBJObject("xwing.obj",program);
 
     
     

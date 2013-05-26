@@ -4,7 +4,7 @@ varying  vec3 fL;
 varying  vec3 fV;
 varying  vec4 color;
 
-uniform vec4 AmbientProduct, DiffuseProduct, SpecularProduct;
+uniform vec4 LightAmbient, LightDiffuse, LightSpecular;
 uniform mat4 ModelView;
 uniform vec4 LightPosition;
 uniform float Shininess;

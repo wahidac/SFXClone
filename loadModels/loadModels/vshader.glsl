@@ -1,6 +1,12 @@
 attribute  vec3 vNormal;
 attribute  vec4 vPosition;
 
+attribute  vec4 vMaterialAmbient;
+attribute  vec4 vMaterialDiffuse;
+attribute  vec4 vMaterialSpecular;
+attribute  float vMaterialShininess;
+
+
 
 varying vec3 fN; //normal at current position
 varying vec3 fV; //vector from point to viewer
@@ -14,11 +20,14 @@ uniform mat4 Projection;
 uniform vec4 LightPosition;
 uniform int shaderType;
 
-uniform vec4 AmbientProduct, DiffuseProduct, SpecularProduct;
-uniform float Shininess;
+uniform vec4 LightAmbient, LightDiffuse, LightSpecular;
 
 void main()
 {    
+    vec4 AmbientProduct = LightAmbient * vMaterialAmbient;
+    vec4 DiffuseProduct = LightDiffuse * vMaterialDiffuse;
+    vec4 SpecularProduct = LightSpecular * vMaterialSpecular;
+   
     mat4 ModelView = cMw*wMo;
     fN = (ModelView*vec4(vNormal,0)).xyz;
     fV = -(ModelView*vPosition).xyz;
@@ -38,7 +47,7 @@ void main()
         float Kd = max(dot(L, N), 0.0);
         vec4 diffuse = Kd*DiffuseProduct;
     
-        float Ks = pow(max(dot(N, H), 0.0), Shininess);
+        float Ks = pow(max(dot(N, H), 0.0), vMaterialShininess);
         vec4 specular = Ks*SpecularProduct;
 
         // discard the specular highlight if the light's behind the vertex

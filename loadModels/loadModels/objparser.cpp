@@ -33,6 +33,7 @@ OBJMeshNormal::OBJMeshNormal(float i, float j, float k)
   this->k = k;
 }
 
+
 /****************
  * OBJMeshTriangle
  ****************/
@@ -122,47 +123,67 @@ int OBJMesh::numTriangles()
 
 std::vector<OBJMeshTriangle> OBJMesh::getTriangles()
 {
-  int listSize = numTriangles();
-  std::vector<OBJMeshTriangle> list (listSize);
-
-  std::vector<OBJMeshTriangle>::iterator i;
-  for (i = list.begin(); i != list.end(); ++i)
-  {
-    //get corresponding model triangle
-    GLMtriangle t = mModel->triangles[std::distance(list.begin(), i)];
-
-    //get v1
-    int vidx = t.vindices[0];
-    (*i).v1.x = (float)mModel->vertices[3*vidx + 0];
-    (*i).v1.y = (float)mModel->vertices[3*vidx + 1];
-    (*i).v1.z = (float)mModel->vertices[3*vidx + 2];
-    //get v2
-    vidx = t.vindices[1];
-    (*i).v2.x = (float)mModel->vertices[3*vidx + 0];
-    (*i).v2.y = (float)mModel->vertices[3*vidx + 1];
-    (*i).v2.z = (float)mModel->vertices[3*vidx + 2];
-    //get v3
-    vidx = t.vindices[2];
-    (*i).v3.x = (float)mModel->vertices[3*vidx + 0];
-    (*i).v3.y = (float)mModel->vertices[3*vidx + 1];
-    (*i).v3.z = (float)mModel->vertices[3*vidx + 2];
-
-    //get n1
-    int nidx = t.nindices[0];
-    (*i).n1.i = (float)mModel->normals[3*nidx + 0];
-    (*i).n1.j = (float)mModel->normals[3*nidx + 1];
-    (*i).n1.k = (float)mModel->normals[3*nidx + 2];
-    //get n2
-    nidx = t.nindices[1];
-    (*i).n2.i = (float)mModel->normals[3*nidx + 0];
-    (*i).n2.j = (float)mModel->normals[3*nidx + 1];
-    (*i).n2.k = (float)mModel->normals[3*nidx + 2];
-    //get n3
-    nidx = t.nindices[2];
-    (*i).n3.i = (float)mModel->normals[3*nidx + 0];
-    (*i).n3.j = (float)mModel->normals[3*nidx + 1];
-    (*i).n3.k = (float)mModel->normals[3*nidx + 2];
-  }
-  return list;
+    
+    GLMgroup *group = mModel->groups;
+    GLMmaterial* materialsToUse = mModel->materials;
+    
+    int listSize = numTriangles();
+    std::vector<OBJMeshTriangle> list (listSize);
+    std::vector<OBJMeshTriangle>::iterator i = list.begin();
+    
+   while (group) {
+       int numTrianglesInGroup = group->numtriangles;
+       for (int k = 0; k < numTrianglesInGroup; k++) {
+           GLuint triangleIndex = group->triangles[k];
+           GLMtriangle t = mModel->triangles[triangleIndex];
+           
+           if (i == list.end()) {
+               std::cout<<"Error! Iterator has reached end of list!";
+               exit(1);
+           }
+           
+           //get v1
+           int vidx = t.vindices[0];
+           (*i).v1.x = (float)mModel->vertices[3*vidx + 0];
+           (*i).v1.y = (float)mModel->vertices[3*vidx + 1];
+           (*i).v1.z = (float)mModel->vertices[3*vidx + 2];
+           //get v2
+           vidx = t.vindices[1];
+           (*i).v2.x = (float)mModel->vertices[3*vidx + 0];
+           (*i).v2.y = (float)mModel->vertices[3*vidx + 1];
+           (*i).v2.z = (float)mModel->vertices[3*vidx + 2];
+           //get v3
+           vidx = t.vindices[2];
+           (*i).v3.x = (float)mModel->vertices[3*vidx + 0];
+           (*i).v3.y = (float)mModel->vertices[3*vidx + 1];
+           (*i).v3.z = (float)mModel->vertices[3*vidx + 2];
+           
+           //get n1
+           int nidx = t.nindices[0];
+           (*i).n1.i = (float)mModel->normals[3*nidx + 0];
+           (*i).n1.j = (float)mModel->normals[3*nidx + 1];
+           (*i).n1.k = (float)mModel->normals[3*nidx + 2];
+           //get n2
+           nidx = t.nindices[1];
+           (*i).n2.i = (float)mModel->normals[3*nidx + 0];
+           (*i).n2.j = (float)mModel->normals[3*nidx + 1];
+           (*i).n2.k = (float)mModel->normals[3*nidx + 2];
+           //get n3
+           nidx = t.nindices[2];
+           (*i).n3.i = (float)mModel->normals[3*nidx + 0];
+           (*i).n3.j = (float)mModel->normals[3*nidx + 1];
+           (*i).n3.k = (float)mModel->normals[3*nidx + 2];
+           
+           
+           (*i).material = &materialsToUse[group->material];
+           //Advance the iterator
+           i++;
+           
+       }
+       
+       group = group->next;
+    }
+    
+    return list;
 }
 

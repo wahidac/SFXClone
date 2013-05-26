@@ -25,7 +25,7 @@ public:
         delete [] normals;
         delete mesh;
     }
-    void loadVerticesAndNormals();
+    void loadVerticesNormalsMaterials();
     void initializeOpenGLBuffers();
     GLuint returnVAO() {
         return vao;
@@ -38,6 +38,10 @@ private:
     GLuint vao; //The vertex attribute that defines this object;
     vec4 *vertices;
     vec3 *normals;
+    vec4 *materials_ambient;
+    vec4 *materials_diffuse;
+    vec4 *materials_specular;
+    GLfloat *materials_shininess;
     OBJParser parser;
     OBJMesh* mesh;
     int numTriangles;

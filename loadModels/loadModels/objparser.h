@@ -27,6 +27,7 @@ class OBJMeshTriangle
  public:
   OBJMeshPoint v1, v2, v3;
   OBJMeshNormal n1, n2, n3;
+  GLMmaterial *material;
   OBJMeshPoint getCentroid() const;
   bool operator < (const OBJMeshTriangle& other) const;
 };
@@ -41,9 +42,8 @@ class OBJMesh
   std::vector<OBJMeshTriangle> getTriangles();
 
   void rotate(enum DIRECTION d);
-
- private:
   GLMmodel *mModel;
+ private:
   void generateNormals();
 };
 
