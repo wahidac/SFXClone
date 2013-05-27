@@ -262,7 +262,7 @@ main( int argc, char **argv )
     glutCreateWindow( "Color Cube" );
     
     init();
-    obj = new OBJObject("xwing.obj",program);
+    obj = new OBJObject("Models/f-16.obj",program);
 
     
     

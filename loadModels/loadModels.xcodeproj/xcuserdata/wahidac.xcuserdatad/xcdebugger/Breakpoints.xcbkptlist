@@ -42,18 +42,5 @@
          landmarkName = "VBOMeshAdj::determineAdjacency(vector&lt;int&gt; &amp;el)"
          landmarkType = "5">
       </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "Yes"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "loadModels/OBJObject.cpp"
-         timestampString = "391229427.383617"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "13"
-         endingLineNumber = "13"
-         landmarkName = "OBJObject::OBJObject(char *objFileName, GLuint program)"
-         landmarkType = "5">
-      </FileBreakpoint>
    </FileBreakpoints>
 </Bucket>
