@@ -6,6 +6,7 @@
 #define DEF_ENEMY_H
 
 #include "GLJoe.h"
+#include "OBJObject.h"
 
 using namespace GLJoe;
 using namespace std;
@@ -24,18 +25,20 @@ const float SPEED_MAX = 10.0;
 class Enemy
 {
 public:
-	Cube cube;
+	//Cube cube;
 	Vec4 offset;
 	float speed;
-	Transform transform;
-	
-	Enemy(const GLuint& program)
+	Transform cMw, wMo;
+    OBJObject *enemyType;
+
+	Enemy(const GLuint& program, OBJObject *enemyType) : enemyType(enemyType)
 	{
 		offset = Vec4(Random(LIMIT_X_LEFT, LIMIT_X_RIGHT),
 			Random(LIMIT_Y_LEFT, LIMIT_Y_RIGHT), Z_APPEARANCE, 0);
-		transform = Identity();
+		cMw = Identity();
+        wMo = Identity();
 		speed = Random(SPEED_MIN, SPEED_MAX);
-		cube.generate();
+		/*cube.generate();
 		
 		// Texture
 		TgaImage img;
@@ -48,7 +51,16 @@ public:
 		
 		// Initialize buffers
 		cube.initDraw(program);
+         */
 	}
+    
+    void draw() {
+        enemyType->cMw = cMw;
+        enemyType->wMo = wMo;
+        enemyType->drawSelf();
+    }
+
+    
 };
 
 

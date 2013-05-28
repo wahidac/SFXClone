@@ -1,8 +1,8 @@
-//#version 130 
+#version 130 
 
-varying vec3 fN;
-varying vec3 fL;
-varying vec3 fE;
+in vec3 fN;
+in vec3 fL;
+in vec3 fE;
 
 uniform vec4 AmbientProduct;
 uniform vec4 DiffuseProduct;
