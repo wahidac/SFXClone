@@ -14,13 +14,13 @@
 
 namespace GLJoe
 {
-	GLfloat Radians(const GLfloat theta)
+	inline GLfloat Radians(const GLfloat theta)
 	{
 		return theta * M_PI / 180.0;
 	}
 	
 	
-	float Random(float a, float b)
+	inline float Random(float a, float b)
 	{
 		float random = ((float) rand()) / (float) RAND_MAX;
 		float diff = b - a;
@@ -28,7 +28,7 @@ namespace GLJoe
 		return a + r;
 	}
 	
-	int RandomInt(int a, int b)
+	inline int RandomInt(int a, int b)
 	{
 		return static_cast<int>(Random(a, b));
 	}

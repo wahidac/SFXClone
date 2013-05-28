@@ -18,20 +18,19 @@ namespace GLJoe
 {
 
 // Create a NULL-terminated string by reading the provided file
-static char* readShaderSource(const char* shaderFile)
+inline static char* readShaderSource(const char* shaderFile)
 {
-	FILE* fp = fopen(shaderFile, "rb");
+	FILE* fp = fopen(shaderFile, "r");
 
-	if (fp == NULL) {
+	if (fp == NULL)
 		return NULL;
-	}
+
 	fseek(fp, 0L, SEEK_END);
 	long size = ftell(fp);
 
 	fseek(fp, 0L, SEEK_SET);
 	char* buf = new char[size + 1];
-	size_t res = fread(buf, 1, size, fp);
-	if (res != (size_t) size)
+	if (fread(buf, 1, size, fp) != (size_t) size)
 		return NULL;
 
 	buf[size] = '\0';
@@ -41,8 +40,8 @@ static char* readShaderSource(const char* shaderFile)
 }
 
 // Create a GLSL program object from vertex and fragment shader files
-GLuint InitShader(const char* vShaderFile, const char* fShaderFile)
-{	
+inline GLuint InitShader(const char* vShaderFile, const char* fShaderFile)
+{
 	struct Shader
 	{
 		const char* filename;
@@ -63,7 +62,7 @@ GLuint InitShader(const char* vShaderFile, const char* fShaderFile)
 		s.source = readShaderSource(s.filename);
 		if (shaders[i].source == NULL)
 		{
-			Error("Failed to read %s %s", s.filename, strerror(errno));
+			Error("Failed to read %s", s.filename);
 		}
 
 		GLuint shader = glCreateShader(s.type);

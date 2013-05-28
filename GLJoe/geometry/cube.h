@@ -151,9 +151,16 @@ public:
 	// Create a vertex array object and initialize the buffers
 	void initDraw(const GLuint& program)
 	{
-		// Create a vertex array object		
-		glGenVertexArrays(1, &_vao);
-		glBindVertexArray(_vao);
+		// Create a vertex array object
+        #ifdef __APPLE__  //apple
+            glGenVertexArraysAPPLE(1, &_vao);
+            glBindVertexArrayAPPLE(_vao);
+        #else 
+            glGenVertexArrays(1, &_vao);
+            glBindVertexArray(_vao);
+        #endif 
+
+        
 		
 		// Create 3 buffers
 		GLuint buffer[3];
@@ -190,7 +197,12 @@ public:
 	// Draw the cube
 	void draw(GLenum mode = GL_TRIANGLES)
 	{
-		glBindVertexArray(_vao);
+        #ifdef __APPLE__  //apple
+            glBindVertexArrayAPPLE(_vao);
+        #else
+            glBindVertexArray(_vao);
+        #endif
+
 		glBindTexture(GL_TEXTURE_2D, _texImage);
 		glDrawArrays(mode, 0, numPoints());
 	}

@@ -6,7 +6,7 @@
  * @author Joachim Valente <joachim.valente@gmail.com>
  * @date 6/11/2013
  */
-
+ 
 #ifndef DEF_GLJOE_GLJOE_H
 #define DEF_GLJOE_GLJOE_H 
  
@@ -17,7 +17,6 @@
 #include <cstdio>
 #include <cstring>
 #include <cstdarg>
-#include <cerrno>
  
 #ifdef __APPLE__  //apple 
 #  include <OpenGL/OpenGL.h>

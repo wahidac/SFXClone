@@ -13,12 +13,11 @@
 namespace GLJoe
 {
 
-
 /**
  * Non-class versions
  */
  
-Mat3 Identity2()
+inline Mat3 Identity2()
 {
 	return Mat3(
 		1, 0, 0,	
@@ -27,7 +26,7 @@ Mat3 Identity2()
 	);
 }
 
-Mat3 Rotate(const GLfloat theta)
+inline Mat3 Rotate(const GLfloat theta)
 {
 	GLfloat angle = Radians(theta);
 	Mat3 r = Identity2();
@@ -38,7 +37,7 @@ Mat3 Rotate(const GLfloat theta)
 	return r;
 }
 
-Mat3 Translate(const GLfloat x, const GLfloat y)
+inline Mat3 Translate(const GLfloat x, const GLfloat y)
 {
 	Mat3 t = Identity2();
 	t[0][2] = x;
@@ -47,12 +46,12 @@ Mat3 Translate(const GLfloat x, const GLfloat y)
 	return t;
 }
 
-Mat3 Translate(const Vec2& v)
+inline Mat3 Translate(const Vec2& v)
 {
 	return Translate(v.x, v.y);
 }
 
-Mat3 Scale(const GLfloat x, const GLfloat y)
+inline Mat3 Scale(const GLfloat x, const GLfloat y)
 {
 	return Mat3(
 		x, 0, 0,
@@ -61,7 +60,7 @@ Mat3 Scale(const GLfloat x, const GLfloat y)
 	);
 }
 
-Mat3 Scale(const Vec2& v)
+inline Mat3 Scale(const Vec2& v)
 {
 	return Scale(v.x, v.y);
 }

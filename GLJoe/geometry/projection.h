@@ -13,7 +13,7 @@
 namespace GLJoe
 {
 
-Mat4 Ortho(const GLfloat left, const GLfloat right,
+inline Mat4 Ortho(const GLfloat left, const GLfloat right,
 	const GLfloat bottom, const GLfloat top,
 	const GLfloat zNear, const GLfloat zFar)
 {
@@ -28,13 +28,13 @@ Mat4 Ortho(const GLfloat left, const GLfloat right,
 	return c;
 }
 
-Mat4 Ortho2D(const GLfloat left, const GLfloat right,
+inline Mat4 Ortho2D(const GLfloat left, const GLfloat right,
 	const GLfloat bottom, const GLfloat top)
 {
 	return Ortho(left, right, bottom, top, -1.0, 1.0);
 }
 
-Mat4 Frustum(const GLfloat left, const GLfloat right,
+inline Mat4 Frustum(const GLfloat left, const GLfloat right,
 	const GLfloat bottom, const GLfloat top,
 	const GLfloat zNear, const GLfloat zFar)
 {
@@ -50,7 +50,7 @@ Mat4 Frustum(const GLfloat left, const GLfloat right,
 	return c;
 }
 
-Mat4 Perspective(const GLfloat fovy, const GLfloat aspect,
+inline Mat4 Perspective(const GLfloat fovy, const GLfloat aspect,
 	const GLfloat zNear, const GLfloat zFar)
 {
 	GLfloat top   = tan(Radians(fovy) / 2) * zNear;
@@ -65,7 +65,7 @@ Mat4 Perspective(const GLfloat fovy, const GLfloat aspect,
 	return c;
 }
 
-Mat4 LookAt(const Vec4& eye, const Vec4& at, const Vec4& up)
+inline Mat4 LookAt(const Vec4& eye, const Vec4& at, const Vec4& up)
 {
 	Vec4 n = (eye - at).normalize();
 	Vec3 uu = (cross(up, n)).normalize();

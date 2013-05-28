@@ -18,7 +18,7 @@ namespace GLJoe
  * Non-class versions
  */
  
-Mat4 Identity()
+inline Mat4 Identity()
 {
 	return Mat4(
 		1, 0, 0, 0,		
@@ -28,7 +28,7 @@ Mat4 Identity()
 	);
 }
 
-Mat4 RotateX(const GLfloat theta)
+inline Mat4 RotateX(const GLfloat theta)
 {
 	GLfloat angle = Radians(theta);
 	Mat4 r = Identity();
@@ -39,7 +39,7 @@ Mat4 RotateX(const GLfloat theta)
 	return r;
 }
 
-Mat4 RotateY(const GLfloat theta)
+inline Mat4 RotateY(const GLfloat theta)
 {
 	GLfloat angle = Radians(theta);
 	Mat4 r = Identity();
@@ -50,7 +50,7 @@ Mat4 RotateY(const GLfloat theta)
 	return r;
 }
 
-Mat4 RotateZ(const GLfloat theta)
+inline Mat4 RotateZ(const GLfloat theta)
 {
 	GLfloat angle = Radians(theta);
 	Mat4 r = Identity();
@@ -61,7 +61,7 @@ Mat4 RotateZ(const GLfloat theta)
 	return r;
 }
 
-Mat4 Translate(const GLfloat x, const GLfloat y, const GLfloat z)
+inline Mat4 Translate(const GLfloat x, const GLfloat y, const GLfloat z)
 {
 	Mat4 t = Identity();
 	t[0][3] = x;
@@ -71,17 +71,17 @@ Mat4 Translate(const GLfloat x, const GLfloat y, const GLfloat z)
 	return t;
 }
 
-Mat4 Translate(const Vec3& v)
+inline Mat4 Translate(const Vec3& v)
 {
 	return Translate(v.x, v.y, v.z);
 }
 
-Mat4 Translate(const Vec4& v)
+inline Mat4 Translate(const Vec4& v)
 {
 	return Translate(v.x, v.y, v.z);
 }
 
-Mat4 Scale(const GLfloat x, const GLfloat y, const GLfloat z)
+inline Mat4 Scale(const GLfloat x, const GLfloat y, const GLfloat z)
 {
 	return Mat4(
 		x, 0, 0, 0,
@@ -91,12 +91,12 @@ Mat4 Scale(const GLfloat x, const GLfloat y, const GLfloat z)
 	);
 }
 
-Mat4 Scale(const GLfloat s)
+inline Mat4 Scale(const GLfloat s)
 {
 	return Scale(s, s, s);
 }
 
-Mat4 Scale(const Vec3& v)
+inline Mat4 Scale(const Vec3& v)
 {
 	return Scale(v.x, v.y, v.z);
 }

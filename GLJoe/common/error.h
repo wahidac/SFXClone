@@ -14,7 +14,7 @@ namespace GLJoe
 {	
 
 // Error: print a message and exit
-void Error(const char* format, ...)
+inline void Error(const char* format, ...)
 {
 	va_list argptr;
 	va_start(argptr, format);
@@ -27,7 +27,7 @@ void Error(const char* format, ...)
 }
 
 // Warning: print a message
-void Warning(const char* format, ...)
+inline void Warning(const char* format, ...)
 {
 	va_list argptr;
 	va_start(argptr, format);
@@ -38,7 +38,7 @@ void Warning(const char* format, ...)
 }
 
 // Info: print an information message
-void Info(const char* format, ...)
+inline void Info(const char* format, ...)
 {
 	va_list argptr;
 	va_start(argptr, format);
@@ -49,7 +49,7 @@ void Info(const char* format, ...)
 }
 
 // Debug: print a message for debug
-void Debug(const char* format, ...)
+inline void Debug(const char* format, ...)
 {
 	va_list argptr;
 	va_start(argptr, format);
