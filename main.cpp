@@ -36,7 +36,6 @@ OBJObject* spaceship;
 EnemyTypes* enemyTypes;
 
 Enemy* enemies[MAX_ENEMIES] = {0};
-//OBJObject* enemies[MAX_ENEMIES] = {0};
 int iEnemy; // index of last enemy created
 int number; // number of living enemies
 Vec4 offsetSpaceship;
@@ -275,9 +274,9 @@ void display()
 	
 	glColor3f(1, 1, 1);
 	glRasterPos2f(0.5, 0.8);
-//	glutBitmapString(GLUT_BITMAP_HELVETICA_18, score);
+	glutBitmapString(GLUT_BITMAP_HELVETICA_18, score);
 	glRasterPos2f(-0.8, 0.8);
-//	glutBitmapString(GLUT_BITMAP_HELVETICA_18, energy);
+	glutBitmapString(GLUT_BITMAP_HELVETICA_18, energy);
 	
 	glutSwapBuffers();
 }
@@ -289,8 +288,8 @@ int main(int argc, char **argv)
 	glutInitWindowSize(512, 512);
 	glutCreateWindow("SFX Clone");
 
-//	glewExperimental = GL_TRUE;
-//	glewInit();
+	glewExperimental = GL_TRUE;
+	glewInit();
 
 	init();
 
