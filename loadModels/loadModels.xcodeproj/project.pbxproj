@@ -7,15 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		BE2F86751753FE120045A31A /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BECC16BD17448DEC004C1344 /* main.cpp */; };
+		BE2F86761753FE400045A31A /* glm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BED671FF1752D0AA00385B13 /* glm.cpp */; };
+		BE2F86771753FE6A0045A31A /* objparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEE11109174493E100602BFC /* objparser.cpp */; };
+		BE8204761754004D00F3F1ED /* OBJObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE8204741754004D00F3F1ED /* OBJObject.cpp */; };
 		BECC168B174478BD004C1344 /* GLUT.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BECC168A174478BD004C1344 /* GLUT.framework */; };
 		BECC168D174478C2004C1344 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BECC168C174478C2004C1344 /* OpenGL.framework */; };
-		BECC169F1744795E004C1344 /* tga.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BECC16961744795E004C1344 /* tga.cpp */; };
-		BECC16A01744795E004C1344 /* InitShader.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BECC169E1744795E004C1344 /* InitShader.cpp */; };
-		BECC16BE17448DEC004C1344 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BECC16BD17448DEC004C1344 /* main.cpp */; };
-		BED672001752D0AA00385B13 /* glm.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BED671FF1752D0AA00385B13 /* glm.cpp */; };
-		BEE1110E174493E100602BFC /* objparser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEE11109174493E100602BFC /* objparser.cpp */; };
-		BEE1110F174493E100602BFC /* renderer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEE1110B174493E100602BFC /* renderer.cpp */; };
-		BEE111131744CA5800602BFC /* OBJObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEE111111744CA5800602BFC /* OBJObject.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -31,19 +28,31 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		BE2F8648175348940045A31A /* skyscraper.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = skyscraper.obj; sourceTree = "<group>"; };
+		BE8204741754004D00F3F1ED /* OBJObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OBJObject.cpp; sourceTree = "<group>"; };
+		BE8204751754004D00F3F1ED /* OBJObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OBJObject.h; sourceTree = "<group>"; };
+		BE82047A175401CE00F3F1ED /* error.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = error.h; sourceTree = "<group>"; };
+		BE82047B175401CE00F3F1ED /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
+		BE82047D175401CE00F3F1ED /* mat2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mat2.h; sourceTree = "<group>"; };
+		BE82047E175401CE00F3F1ED /* mat3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mat3.h; sourceTree = "<group>"; };
+		BE82047F175401CE00F3F1ED /* mat4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mat4.h; sourceTree = "<group>"; };
+		BE820480175401CE00F3F1ED /* stack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stack.h; sourceTree = "<group>"; };
+		BE820481175401CE00F3F1ED /* vec2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vec2.h; sourceTree = "<group>"; };
+		BE820482175401CE00F3F1ED /* vec3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vec3.h; sourceTree = "<group>"; };
+		BE820483175401CE00F3F1ED /* vec4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vec4.h; sourceTree = "<group>"; };
+		BE820485175401CE00F3F1ED /* .cube.h.swp */ = {isa = PBXFileReference; lastKnownFileType = file; path = .cube.h.swp; sourceTree = "<group>"; };
+		BE820486175401CE00F3F1ED /* cube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cube.h; sourceTree = "<group>"; };
+		BE820487175401CE00F3F1ED /* projection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = projection.h; sourceTree = "<group>"; };
+		BE820488175401CE00F3F1ED /* transform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = transform.h; sourceTree = "<group>"; };
+		BE820489175401CE00F3F1ED /* transform2d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = transform2d.h; sourceTree = "<group>"; };
+		BE82048A175401CE00F3F1ED /* GLJoe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLJoe.h; sourceTree = "<group>"; };
+		BE82048C175401CE00F3F1ED /* initshader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = initshader.h; sourceTree = "<group>"; };
+		BE82048D175401CE00F3F1ED /* tgaimage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tgaimage.h; sourceTree = "<group>"; };
 		BEC2BE6D174E15F3000C44FA /* vshader.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = vshader.glsl; sourceTree = "<group>"; };
 		BEC2BE6E174E15F3000C44FA /* fshader.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fshader.glsl; sourceTree = "<group>"; };
 		BECC167E174476A9004C1344 /* loadModels */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = loadModels; sourceTree = BUILT_PRODUCTS_DIR; };
 		BECC168A174478BD004C1344 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = System/Library/Frameworks/GLUT.framework; sourceTree = SDKROOT; };
 		BECC168C174478C2004C1344 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
-		BECC16951744795E004C1344 /* mat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mat.h; sourceTree = "<group>"; };
-		BECC16961744795E004C1344 /* tga.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = tga.cpp; sourceTree = "<group>"; };
-		BECC16971744795E004C1344 /* tga.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tga.h; sourceTree = "<group>"; };
-		BECC16981744795E004C1344 /* vec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vec.h; sourceTree = "<group>"; };
-		BECC169A1744795E004C1344 /* Angel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Angel.h; sourceTree = "<group>"; };
-		BECC169B1744795E004C1344 /* CheckError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CheckError.h; sourceTree = "<group>"; };
-		BECC169C1744795E004C1344 /* earth.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = earth.tga; sourceTree = "<group>"; };
-		BECC169E1744795E004C1344 /* InitShader.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InitShader.cpp; sourceTree = "<group>"; };
 		BECC16BD17448DEC004C1344 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		BED671FE1752D0AA00385B13 /* glm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = glm.h; sourceTree = "<group>"; };
 		BED671FF1752D0AA00385B13 /* glm.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = glm.cpp; sourceTree = "<group>"; };
@@ -127,10 +136,6 @@
 		BED6724F1752D17F00385B13 /* xwing.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = xwing.obj; sourceTree = "<group>"; };
 		BEE11109174493E100602BFC /* objparser.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = objparser.cpp; sourceTree = "<group>"; };
 		BEE1110A174493E100602BFC /* objparser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objparser.h; sourceTree = "<group>"; };
-		BEE1110B174493E100602BFC /* renderer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = renderer.cpp; sourceTree = "<group>"; };
-		BEE1110C174493E100602BFC /* renderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = renderer.h; sourceTree = "<group>"; };
-		BEE111111744CA5800602BFC /* OBJObject.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = OBJObject.cpp; sourceTree = "<group>"; };
-		BEE111121744CA5800602BFC /* OBJObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OBJObject.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -146,6 +151,62 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		BE820477175401CE00F3F1ED /* GLJoe */ = {
+			isa = PBXGroup;
+			children = (
+				BE820478175401CE00F3F1ED /* common */,
+				BE82047C175401CE00F3F1ED /* core */,
+				BE820484175401CE00F3F1ED /* geometry */,
+				BE82048A175401CE00F3F1ED /* GLJoe.h */,
+				BE82048B175401CE00F3F1ED /* utils */,
+			);
+			path = GLJoe;
+			sourceTree = "<group>";
+		};
+		BE820478175401CE00F3F1ED /* common */ = {
+			isa = PBXGroup;
+			children = (
+				BE82047A175401CE00F3F1ED /* error.h */,
+				BE82047B175401CE00F3F1ED /* utils.h */,
+			);
+			path = common;
+			sourceTree = "<group>";
+		};
+		BE82047C175401CE00F3F1ED /* core */ = {
+			isa = PBXGroup;
+			children = (
+				BE82047D175401CE00F3F1ED /* mat2.h */,
+				BE82047E175401CE00F3F1ED /* mat3.h */,
+				BE82047F175401CE00F3F1ED /* mat4.h */,
+				BE820480175401CE00F3F1ED /* stack.h */,
+				BE820481175401CE00F3F1ED /* vec2.h */,
+				BE820482175401CE00F3F1ED /* vec3.h */,
+				BE820483175401CE00F3F1ED /* vec4.h */,
+			);
+			path = core;
+			sourceTree = "<group>";
+		};
+		BE820484175401CE00F3F1ED /* geometry */ = {
+			isa = PBXGroup;
+			children = (
+				BE820485175401CE00F3F1ED /* .cube.h.swp */,
+				BE820486175401CE00F3F1ED /* cube.h */,
+				BE820487175401CE00F3F1ED /* projection.h */,
+				BE820488175401CE00F3F1ED /* transform.h */,
+				BE820489175401CE00F3F1ED /* transform2d.h */,
+			);
+			path = geometry;
+			sourceTree = "<group>";
+		};
+		BE82048B175401CE00F3F1ED /* utils */ = {
+			isa = PBXGroup;
+			children = (
+				BE82048C175401CE00F3F1ED /* initshader.h */,
+				BE82048D175401CE00F3F1ED /* tgaimage.h */,
+			);
+			path = utils;
+			sourceTree = "<group>";
+		};
 		BECC1675174476A9004C1344 = {
 			isa = PBXGroup;
 			children = (
@@ -167,21 +228,12 @@
 		BECC1680174476A9004C1344 /* loadModels */ = {
 			isa = PBXGroup;
 			children = (
+				BE820477175401CE00F3F1ED /* GLJoe */,
 				BED672011752D17E00385B13 /* Models */,
 				BEC2BE6D174E15F3000C44FA /* vshader.glsl */,
 				BEC2BE6E174E15F3000C44FA /* fshader.glsl */,
 				BEE111061744939F00602BFC /* objParser */,
 				BECC16BD17448DEC004C1344 /* main.cpp */,
-				BECC16951744795E004C1344 /* mat.h */,
-				BECC16961744795E004C1344 /* tga.cpp */,
-				BECC16971744795E004C1344 /* tga.h */,
-				BECC16981744795E004C1344 /* vec.h */,
-				BECC169A1744795E004C1344 /* Angel.h */,
-				BECC169B1744795E004C1344 /* CheckError.h */,
-				BECC169C1744795E004C1344 /* earth.tga */,
-				BECC169E1744795E004C1344 /* InitShader.cpp */,
-				BEE111111744CA5800602BFC /* OBJObject.cpp */,
-				BEE111121744CA5800602BFC /* OBJObject.h */,
 			);
 			path = loadModels;
 			sourceTree = "<group>";
@@ -189,6 +241,7 @@
 		BED672011752D17E00385B13 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				BE2F8648175348940045A31A /* skyscraper.obj */,
 				BED672021752D17E00385B13 /* airboat.obj */,
 				BED672031752D17E00385B13 /* al.mtl */,
 				BED672041752D17E00385B13 /* al.obj */,
@@ -276,10 +329,10 @@
 			children = (
 				BED671FE1752D0AA00385B13 /* glm.h */,
 				BED671FF1752D0AA00385B13 /* glm.cpp */,
+				BE8204741754004D00F3F1ED /* OBJObject.cpp */,
+				BE8204751754004D00F3F1ED /* OBJObject.h */,
 				BEE11109174493E100602BFC /* objparser.cpp */,
 				BEE1110A174493E100602BFC /* objparser.h */,
-				BEE1110B174493E100602BFC /* renderer.cpp */,
-				BEE1110C174493E100602BFC /* renderer.h */,
 			);
 			name = objParser;
 			sourceTree = "<group>";
@@ -335,13 +388,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				BECC169F1744795E004C1344 /* tga.cpp in Sources */,
-				BECC16A01744795E004C1344 /* InitShader.cpp in Sources */,
-				BECC16BE17448DEC004C1344 /* main.cpp in Sources */,
-				BEE1110E174493E100602BFC /* objparser.cpp in Sources */,
-				BEE1110F174493E100602BFC /* renderer.cpp in Sources */,
-				BEE111131744CA5800602BFC /* OBJObject.cpp in Sources */,
-				BED672001752D0AA00385B13 /* glm.cpp in Sources */,
+				BE2F86771753FE6A0045A31A /* objparser.cpp in Sources */,
+				BE2F86761753FE400045A31A /* glm.cpp in Sources */,
+				BE2F86751753FE120045A31A /* main.cpp in Sources */,
+				BE8204761754004D00F3F1ED /* OBJObject.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

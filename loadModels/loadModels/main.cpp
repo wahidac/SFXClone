@@ -1,53 +1,10 @@
-// rotating cube with two texture objects
-// change textures with 1 and 2 keys
-
-#include "Angel.h"
-#include "tga.h"
+#include "GLJoe.h"
 #include "OBJobject.h"
 
-using namespace std;
 
-const int  NumVertices  = 11566*3;
-const int  TextureSizeW  = 2048;
-const int  TextureSizeH  = 1024;
-const GLfloat aspectRatio = float(TextureSizeW)/float(TextureSizeH);
-
-
-typedef Angel::vec4 point4;
-typedef Angel::vec4 color4;
-
-// Texture objects and storage for texture image
-GLuint textures[2];
-
-//GLubyte image[TextureSizeH][TextureSizeW][3];
-//GLubyte image2[TextureSizeH][TextureSizeW][3];
-GLubyte image[TextureSizeH * TextureSizeW * 3];
-//GLubyte image2[TextureSizeH * TextureSizeW * 3];
-
-
-// Vertex data arrays
-point4  *points;
-color4  quad_colors[NumVertices];
-vec2    tex_coords[NumVertices];
-vec2    tex_coords_zoom[NumVertices];
-
-
-// Array of rotation angles (in degrees) for each coordinate axis
-enum { Xaxis = 0, Yaxis = 1, Zaxis = 2, NumAxes = 3 };
-int      Axis = Xaxis;
-GLfloat  Theta[NumAxes] = { 0.0, 0.0, 0.0 };
-GLuint   theta;
-
-//Indices to interact with shaders
-GLuint vPosition, vColor, vTexCoord, ModelView, Projection;
-
-//Perspective projection parameters
-GLfloat  fovy = 95.0;  // Field-of-view in Y direction angle (in degrees)
-GLfloat  aspect;      // Viewport aspect ratio
-GLfloat  near= 0.1, far=10.0;
 
 //Transformation matrices
-mat4 positionCamera = Translate(0.0, 0.0, -2);
+GLJoe::Mat4 positionCamera = GLJoe::Translate(0.0, 0.0, -2);
 
 
 OBJMesh *m;
@@ -56,112 +13,35 @@ GLuint vao,vao2;
 GLuint program;
 OBJObject *obj;
 
+GLfloat near= 1.0, far=50.0;
+//GLfloat left= -5.0, right=5.0, top=5.0, bottom= -5.0, near=1.0, far=500.0;
+
+//Perspective projection parameters
+GLfloat  fovy = 90.0;  // Field-of-view in Y direction angle (in degrees)
+GLfloat  aspect = 1;       // Viewport aspect ratio
+
+//lighting parameters
+GLJoe::Vec4 light_position(0,0,1,1);
+GLJoe::Vec4 light_ambient(.8, .8, .8, 1.0 );
+GLJoe::Vec4 light_diffuse( .8, .8,.8, 1.0 );
+GLJoe::Vec4 light_specular( .8, .8, .8, 1.0 );
+GLJoe::Mat4 projection = GLJoe::Perspective(fovy, aspect, near, far);
+
+
 //----------------------------------------------------------------------------
 
 int Index = 0;
-
-void
-quad( int a, int b, int c, int d )
-{
-    point4 vertices[8] = {
-        point4( -0.5, -0.5,  0.5, 1.0 ),
-        point4( -0.5,  0.5,  0.5, 1.0 ),
-        point4(  0.5,  0.5,  0.5, 1.0 ),
-        point4(  0.5, -0.5,  0.5, 1.0 ),
-        point4( -0.5, -0.5, -0.5, 1.0 ),
-        point4( -0.5,  0.5, -0.5, 1.0 ),
-        point4(  0.5,  0.5, -0.5, 1.0 ),
-        point4(  0.5, -0.5, -0.5, 1.0 )
-    };
-    
-    color4 colors[8] = {
-        color4( 0.0, 0.0, 0.0, 1.0 ),  // black
-        color4( 1.0, 0.0, 0.0, 1.0 ),  // red
-        color4( 1.0, 1.0, 0.0, 1.0 ),  // yellow
-        color4( 0.0, 1.0, 0.0, 1.0 ),  // green
-        color4( 0.0, 0.0, 1.0, 1.0 ),  // blue
-        color4( 1.0, 0.0, 1.0, 1.0 ),  // magenta
-        color4( 1.0, 1.0, 1.0, 1.0 ),  // white
-        color4( 1.0, 1.0, 1.0, 1.0 )   // cyan
-    };
-    
-    //Adjust t so that aspect ration of image is preserved
-    float t = .5/aspectRatio;
-    t = 1/t;
-    
-    quad_colors[Index] = colors[a];
-    points[Index] = vertices[a];
-    tex_coords_zoom[Index] = vec2( 0.0, t);
-    tex_coords[Index] = vec2( 0.0, 1.0);
-
-
-    Index++;
-    
-    quad_colors[Index] = colors[a];
-    points[Index] = vertices[b];
-    tex_coords_zoom[Index] = vec2( 0.0, 0.0);
-    tex_coords[Index] = vec2( 0.0, 0.0 );
-
-
-    Index++;
-    
-    quad_colors[Index] = colors[a];
-    points[Index] = vertices[c];
-    tex_coords_zoom[Index] = vec2( 2.0, 0.0);
-    tex_coords[Index] = vec2( 1.0, 0.0 );
-
-
-    Index++;
-    
-    quad_colors[Index] = colors[a];
-    points[Index] = vertices[a];
-    tex_coords_zoom[Index] = vec2( 0.0,t);
-    tex_coords[Index] = vec2( 0.0, 1.0 );
-
-
-    Index++;
-    
-    quad_colors[Index] = colors[a];
-    points[Index] = vertices[c];
-    tex_coords_zoom[Index] = vec2( 2.0, 0.0);
-    tex_coords[Index] = vec2( 1.0, 0.0 );
-
-
-    Index++;
-    
-    quad_colors[Index] = colors[a];
-    points[Index] = vertices[d];
-    tex_coords_zoom[Index] = vec2( 2.0, t);
-    tex_coords[Index] = vec2( 1.0, 1.0 );
-
-    Index++;
-        
-}
-
-//----------------------------------------------------------------------------
-
-void
-colorcube()
-{
-    quad( 1, 0, 3, 2 );
-    quad( 2, 3, 7, 6 );
-    quad( 3, 0, 4, 7 );
-    quad( 6, 5, 1, 2 );
-    quad( 4, 5, 6, 7 );
-    quad( 5, 4, 0, 1 );
-}
-
-//----------------------------------------------------------------------------
 
 
 void
 init()
 {
-    program = InitShader( "vshader.glsl", "fshader.glsl" );
+    program = GLJoe::InitShader("vshader.glsl", "fshader.glsl" );
     glUseProgram( program );
     
-    
     glEnable( GL_DEPTH_TEST );
+    
+    //Set Projection parameters
   
     glClearColor( 1.0, 1.0, 1.0, 1.0 );
 }
@@ -171,46 +51,32 @@ display( void )
 {
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
     obj->drawSelf();
-    //obj->drawSelfWithMaterials();
     glutSwapBuffers();
 }
 
-//----------------------------------------------------------------------------
 
-void
-mouse( int button, int state, int x, int y )
-{
-    if ( state == GLUT_DOWN ) {
-        switch( button ) {
-            case GLUT_LEFT_BUTTON:    Axis = Xaxis;  break;
-            case GLUT_MIDDLE_BUTTON:  Axis = Yaxis;  break;
-            case GLUT_RIGHT_BUTTON:   Axis = Zaxis;  break;
-        }
-    }
-}
-
-//----------------------------------------------------------------------------
-
-void
-reshape( int width, int height )
-{
-    glViewport( 0, 0, width, height );
-    aspect = GLfloat(width)/height;
-}
-
-//----------------------------------------------------------------------------
-
-void
-idle( void )
-{
-    Theta[Axis] += 0.01;
+OBJObjectShaderHandles initShaderHandles() {
+    OBJObjectShaderHandles handles;
     
-    if ( Theta[Axis] > 360.0 ) {
-        Theta[Axis] -= 360.0;
-    }
+    handles.cMw = glGetUniformLocation(program, "cMw");
+    handles.wMo = glGetUniformLocation( program, "wMo" );
+    handles.Projection = glGetUniformLocation( program, "Projection" );
+    handles.LightAmbient = glGetUniformLocation(program, "LightAmbient");
+    handles.LightDiffuse = glGetUniformLocation(program, "LightDiffuse");
+    handles.LightSpecular = glGetUniformLocation(program, "LightSpecular");
+    handles.LightPosition = glGetUniformLocation(program, "LightPosition");
+    handles.vMaterialAmbient = glGetAttribLocation( program, "vMaterialAmbient" );
+    handles.vMaterialDiffuse = glGetAttribLocation( program, "vMaterialDiffuse" );
+    handles.vMaterialSpecular = glGetAttribLocation( program, "vMaterialSpecular" );
+    handles.vMaterialShininess = glGetAttribLocation( program, "vMaterialShininess" );
+    handles.vNormal = glGetAttribLocation( program, "vNormal" );
+    handles.vPosition = glGetAttribLocation( program, "vPosition" );
+
     
-    glutPostRedisplay();
+    return handles;
 }
+//----------------------------------------------------------------------------
+
 
 //----------------------------------------------------------------------------
 
@@ -223,11 +89,13 @@ keyboard( unsigned char key, int mousex, int mousey )
             exit( EXIT_SUCCESS );
             break;
        case 'i':
-           positionCamera = Translate(0.0, 0.0, 0.1) * positionCamera;
+           obj->wMo.translate(0, 0, .1);
            break; //forward
-       case 'o': positionCamera = Translate(0.0, 0.0, -0.1) * positionCamera;
+       case 'o':
+           obj->wMo.translate(0, 0, -.1);
            break; //backwards
-       case 'r': positionCamera = Translate(0.0, 0.0, -2);
+       case 'r':
+           obj->wMo.rotateX(5);
            break;
        default:
            break;
@@ -240,45 +108,42 @@ keyboard( unsigned char key, int mousex, int mousey )
 int
 main( int argc, char **argv )
 {
- /*   glutInit( &argc, argv );
-    glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH );
-    glutInitWindowSize( 512, 512 );
-    glutCreateWindow( "Color Cube" );
 
-    loadFile("earth.tga");
-    init();
-    glutDisplayFunc( display );
-    glutKeyboardFunc( keyboard );
-    glutReshapeFunc( reshape );
-    glutMouseFunc( mouse );
-    glutIdleFunc( idle );
-    
-    glutMainLoop();
-    return 0;
-  */
     glutInit( &argc, argv );
     glutInitDisplayMode( GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH );
     glutInitWindowSize( 512, 512 );
     glutCreateWindow( "Color Cube" );
     
     init();
-    obj = new OBJObject("Models/f-16.obj",program);
-
     
+    OBJObjectParams defaults;
+    defaults.material_ambient = GLJoe::Vec4(1,0,0,1);
+    defaults.material_diffuse = GLJoe::Vec4(1,0,0,1);
+    defaults.material_specular = GLJoe::Vec4(1,1,1,1);
+    defaults.material_shininess = 300;
+    
+    OBJObjectShaderHandles handles = initShaderHandles();
+    
+    //Set light position + lighting properties as well as projection matrix
+    glUniform4fv( handles.LightPosition,1, light_position );
+    glUniform4fv( handles.LightAmbient, 1, light_ambient );
+    glUniform4fv( handles.LightDiffuse, 1, light_diffuse );
+    glUniform4fv( handles.LightSpecular, 1, light_specular );
+    glUniformMatrix4fv( handles.Projection, 1, GL_TRUE, projection );
+    
+    
+    GLJoe::Transform cMw,wMo;
+    
+    cMw.translate(0, 0, -2);
+    wMo.rotateX(90);
+    
+    obj = new OBJObject("Models/f-16.obj",handles,cMw,wMo,NULL);
+
     
     glutDisplayFunc( display );
     glutKeyboardFunc( keyboard );
-    glutReshapeFunc( reshape );
-    glutMouseFunc( mouse );
-    glutIdleFunc( idle );
-    
+
     glutMainLoop();
 
-    //Renderer renderer;
-    //renderer.init(&argc, argv);
-    
-    //Draw the object to the screen
-    //renderer.render(m);
-   
     return 0;
 }
