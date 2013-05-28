@@ -28,6 +28,7 @@ public:
 	//Cube cube;
 	Vec4 offset;
 	float speed;
+    //world to camera and object to world matrices
 	Transform cMw, wMo;
     OBJObject *enemyType;
 

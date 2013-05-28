@@ -2,6 +2,10 @@ attribute  vec3 vNormal;
 attribute  vec4 vPosition;
 attribute  vec2 vTexCoords;
 
+//For simplicity, I store shader parameters for each individual
+//vertex on the GPU, because for a given object loaded using the GLM library, 
+//it is possible for different parts of the object itself to 
+//have different shading parameters.
 attribute  vec4 vMaterialAmbient;
 attribute  vec4 vMaterialDiffuse;
 attribute  vec4 vMaterialSpecular;

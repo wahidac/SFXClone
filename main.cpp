@@ -98,6 +98,7 @@ void init()
     // Initialize model view parameters
     initView();
     
+    //world to camera and object to world matrices
     Transform cMw, wMo;
     cMw.translate(-initialEyePos);
     wMo.rotateY(180);
@@ -221,7 +222,8 @@ void idle()
 		while (enemies[iEnemy])
 			iEnemy++;
 		delete enemies[iEnemy];
-        //Make this enemy random
+        
+        //Pick a random enemy from our different types of enemies.
 		enemies[iEnemy] = new Enemy(program,enemyTypes->enemies[rand()%NUM_ENEMY_TYPES]);
         
 		iEnemy = (iEnemy + 1) % MAX_ENEMIES;
