@@ -26,26 +26,26 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		BE63B1D1174E048800F81D07 /* .error.h.swp */ = {isa = PBXFileReference; lastKnownFileType = file; path = .error.h.swp; sourceTree = "<group>"; };
+		BE63B1D2174E048800F81D07 /* error.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = error.h; sourceTree = "<group>"; };
+		BE63B1D3174E048800F81D07 /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
+		BE63B1D5174E048800F81D07 /* mat2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mat2.h; sourceTree = "<group>"; };
+		BE63B1D6174E048800F81D07 /* mat3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mat3.h; sourceTree = "<group>"; };
+		BE63B1D7174E048800F81D07 /* mat4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mat4.h; sourceTree = "<group>"; };
+		BE63B1D8174E048800F81D07 /* stack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stack.h; sourceTree = "<group>"; };
+		BE63B1D9174E048800F81D07 /* vec2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vec2.h; sourceTree = "<group>"; };
+		BE63B1DA174E048800F81D07 /* vec3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vec3.h; sourceTree = "<group>"; };
+		BE63B1DB174E048800F81D07 /* vec4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vec4.h; sourceTree = "<group>"; };
+		BE63B1DD174E048800F81D07 /* .cube.h.swp */ = {isa = PBXFileReference; lastKnownFileType = file; path = .cube.h.swp; sourceTree = "<group>"; };
+		BE63B1DE174E048800F81D07 /* cube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cube.h; sourceTree = "<group>"; };
+		BE63B1DF174E048800F81D07 /* projection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = projection.h; sourceTree = "<group>"; };
+		BE63B1E0174E048800F81D07 /* transform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = transform.h; sourceTree = "<group>"; };
+		BE63B1E1174E048800F81D07 /* transform2d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = transform2d.h; sourceTree = "<group>"; };
+		BE63B1E2174E048800F81D07 /* GLJoe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLJoe.h; sourceTree = "<group>"; };
+		BE63B1E4174E048800F81D07 /* initshader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = initshader.h; sourceTree = "<group>"; };
+		BE63B1E5174E048800F81D07 /* tgaimage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tgaimage.h; sourceTree = "<group>"; };
 		BE687A21174A1D0F006D3447 /* enemy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = enemy.h; sourceTree = "<group>"; };
 		BE687A22174A1D0F006D3447 /* fshader.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = fshader.glsl; sourceTree = "<group>"; };
-		BE687A25174A1D0F006D3447 /* .error.h.swp */ = {isa = PBXFileReference; lastKnownFileType = file; path = .error.h.swp; sourceTree = "<group>"; };
-		BE687A26174A1D0F006D3447 /* error.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = error.h; sourceTree = "<group>"; };
-		BE687A27174A1D0F006D3447 /* utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = utils.h; sourceTree = "<group>"; };
-		BE687A29174A1D0F006D3447 /* mat2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mat2.h; sourceTree = "<group>"; };
-		BE687A2A174A1D0F006D3447 /* mat3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mat3.h; sourceTree = "<group>"; };
-		BE687A2B174A1D0F006D3447 /* mat4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mat4.h; sourceTree = "<group>"; };
-		BE687A2C174A1D0F006D3447 /* stack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stack.h; sourceTree = "<group>"; };
-		BE687A2D174A1D0F006D3447 /* vec2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vec2.h; sourceTree = "<group>"; };
-		BE687A2E174A1D0F006D3447 /* vec3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vec3.h; sourceTree = "<group>"; };
-		BE687A2F174A1D0F006D3447 /* vec4.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = vec4.h; sourceTree = "<group>"; };
-		BE687A31174A1D0F006D3447 /* .cube.h.swp */ = {isa = PBXFileReference; lastKnownFileType = file; path = .cube.h.swp; sourceTree = "<group>"; };
-		BE687A32174A1D0F006D3447 /* cube.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cube.h; sourceTree = "<group>"; };
-		BE687A33174A1D0F006D3447 /* projection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = projection.h; sourceTree = "<group>"; };
-		BE687A34174A1D0F006D3447 /* transform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = transform.h; sourceTree = "<group>"; };
-		BE687A35174A1D0F006D3447 /* transform2d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = transform2d.h; sourceTree = "<group>"; };
-		BE687A36174A1D0F006D3447 /* GLJoe.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLJoe.h; sourceTree = "<group>"; };
-		BE687A38174A1D0F006D3447 /* initshader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = initshader.h; sourceTree = "<group>"; };
-		BE687A39174A1D0F006D3447 /* tgaimage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = tgaimage.h; sourceTree = "<group>"; };
 		BE687A41174A1D0F006D3447 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		BE687A42174A1D0F006D3447 /* texture.tga */ = {isa = PBXFileReference; lastKnownFileType = file; path = texture.tga; sourceTree = "<group>"; };
 		BE687A43174A1D0F006D3447 /* vshader.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = vshader.glsl; sourceTree = "<group>"; };
@@ -69,59 +69,59 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		BE687A23174A1D0F006D3447 /* GLJoe */ = {
+		BE63B1CF174E048800F81D07 /* GLJoe */ = {
 			isa = PBXGroup;
 			children = (
-				BE687A24174A1D0F006D3447 /* common */,
-				BE687A28174A1D0F006D3447 /* core */,
-				BE687A30174A1D0F006D3447 /* geometry */,
-				BE687A36174A1D0F006D3447 /* GLJoe.h */,
-				BE687A37174A1D0F006D3447 /* utils */,
+				BE63B1D0174E048800F81D07 /* common */,
+				BE63B1D4174E048800F81D07 /* core */,
+				BE63B1DC174E048800F81D07 /* geometry */,
+				BE63B1E2174E048800F81D07 /* GLJoe.h */,
+				BE63B1E3174E048800F81D07 /* utils */,
 			);
 			path = GLJoe;
 			sourceTree = "<group>";
 		};
-		BE687A24174A1D0F006D3447 /* common */ = {
+		BE63B1D0174E048800F81D07 /* common */ = {
 			isa = PBXGroup;
 			children = (
-				BE687A25174A1D0F006D3447 /* .error.h.swp */,
-				BE687A26174A1D0F006D3447 /* error.h */,
-				BE687A27174A1D0F006D3447 /* utils.h */,
+				BE63B1D1174E048800F81D07 /* .error.h.swp */,
+				BE63B1D2174E048800F81D07 /* error.h */,
+				BE63B1D3174E048800F81D07 /* utils.h */,
 			);
 			path = common;
 			sourceTree = "<group>";
 		};
-		BE687A28174A1D0F006D3447 /* core */ = {
+		BE63B1D4174E048800F81D07 /* core */ = {
 			isa = PBXGroup;
 			children = (
-				BE687A29174A1D0F006D3447 /* mat2.h */,
-				BE687A2A174A1D0F006D3447 /* mat3.h */,
-				BE687A2B174A1D0F006D3447 /* mat4.h */,
-				BE687A2C174A1D0F006D3447 /* stack.h */,
-				BE687A2D174A1D0F006D3447 /* vec2.h */,
-				BE687A2E174A1D0F006D3447 /* vec3.h */,
-				BE687A2F174A1D0F006D3447 /* vec4.h */,
+				BE63B1D5174E048800F81D07 /* mat2.h */,
+				BE63B1D6174E048800F81D07 /* mat3.h */,
+				BE63B1D7174E048800F81D07 /* mat4.h */,
+				BE63B1D8174E048800F81D07 /* stack.h */,
+				BE63B1D9174E048800F81D07 /* vec2.h */,
+				BE63B1DA174E048800F81D07 /* vec3.h */,
+				BE63B1DB174E048800F81D07 /* vec4.h */,
 			);
 			path = core;
 			sourceTree = "<group>";
 		};
-		BE687A30174A1D0F006D3447 /* geometry */ = {
+		BE63B1DC174E048800F81D07 /* geometry */ = {
 			isa = PBXGroup;
 			children = (
-				BE687A31174A1D0F006D3447 /* .cube.h.swp */,
-				BE687A32174A1D0F006D3447 /* cube.h */,
-				BE687A33174A1D0F006D3447 /* projection.h */,
-				BE687A34174A1D0F006D3447 /* transform.h */,
-				BE687A35174A1D0F006D3447 /* transform2d.h */,
+				BE63B1DD174E048800F81D07 /* .cube.h.swp */,
+				BE63B1DE174E048800F81D07 /* cube.h */,
+				BE63B1DF174E048800F81D07 /* projection.h */,
+				BE63B1E0174E048800F81D07 /* transform.h */,
+				BE63B1E1174E048800F81D07 /* transform2d.h */,
 			);
 			path = geometry;
 			sourceTree = "<group>";
 		};
-		BE687A37174A1D0F006D3447 /* utils */ = {
+		BE63B1E3174E048800F81D07 /* utils */ = {
 			isa = PBXGroup;
 			children = (
-				BE687A38174A1D0F006D3447 /* initshader.h */,
-				BE687A39174A1D0F006D3447 /* tgaimage.h */,
+				BE63B1E4174E048800F81D07 /* initshader.h */,
+				BE63B1E5174E048800F81D07 /* tgaimage.h */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -148,9 +148,9 @@
 		BEF29E93174A1BE80095CC79 /* Dev */ = {
 			isa = PBXGroup;
 			children = (
+				BE63B1CF174E048800F81D07 /* GLJoe */,
 				BE687A21174A1D0F006D3447 /* enemy.h */,
 				BE687A22174A1D0F006D3447 /* fshader.glsl */,
-				BE687A23174A1D0F006D3447 /* GLJoe */,
 				BE687A41174A1D0F006D3447 /* main.cpp */,
 				BE687A42174A1D0F006D3447 /* texture.tga */,
 				BE687A43174A1D0F006D3447 /* vshader.glsl */,
