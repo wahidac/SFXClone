@@ -1,12 +1,12 @@
-#version 130
+//version 130
 
-in vec4 vPosition;
-in vec3 vNormal;
-in vec2 vTexCoords;
+attribute vec4 vPosition;
+attribute vec3 vNormal;
+attribute vec2 vTexCoords;
 
-out vec3 fN;
-out vec3 fE;
-out vec3 fL;
+varying vec3 fN;
+varying vec3 fE;
+varying vec3 fL;
 
 uniform mat4 ModelView;
 uniform vec4 LightPosition;
@@ -21,7 +21,7 @@ void main()
 	vec4 position = IndividualRotation * vPosition + Offset;
 	vec3 normal = (IndividualRotation * vec4(vNormal, 1)).xyz;
 	
-	vec4 N = vec4(normal, 0.0f);
+	vec4 N = vec4(normal, 0.0);
 	fN =  (ModelView * N).xyz;
 	fE = -(ModelView * position).xyz;
 	fL =  (LightPosition).xyz;
