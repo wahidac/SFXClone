@@ -14,7 +14,7 @@ const int POINTS_PER_KILL = 250;
 
 // Parameters for view
 const float ZOOM_OUT_FACTOR = 50.0;
-const float EYE_POSITION_Z = 2.0;
+const float EYE_POSITION_Z = 10.0;
 
 //Lighting Parameters
 Vec4 light_position(0,0,1,1);
@@ -223,11 +223,14 @@ void idle()
 		delete enemies[iEnemy];
         
         //Pick a random enemy from our different types of enemies.
-		enemies[iEnemy] = new Enemy(program,enemyTypes->enemies[rand()%NUM_ENEMY_TYPES]);
+        int randomEnemyType = rand()%NUM_ENEMY_TYPES;
+		enemies[iEnemy] = new Enemy(program,enemyTypes->enemies[randomEnemyType]);
         
 		iEnemy = (iEnemy + 1) % MAX_ENEMIES;
 		number++;
 		lastTimeEnemyAppeared = newTime;
+		
+		cout << "Creating enemy " << randomEnemyType << endl;
 	}
 	
 	for (int i = 0; i < MAX_ENEMIES; ++i)

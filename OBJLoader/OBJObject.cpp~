@@ -11,7 +11,7 @@
 
 
 //Make sure to call initializeOpenGLBuffers before making a call to draw!!
-OBJObject::OBJObject(const char *objFileName, const OBJObjectShaderHandles &shaderHandles, const GLJoe::Transform &cMw,
+OBJObject::OBJObject(char *objFileName, const OBJObjectShaderHandles &shaderHandles, const GLJoe::Transform &cMw,
                     const GLJoe::Transform &wMo, OBJObjectParams *defaultShaderParams): shaderHandles(shaderHandles),
                     cMw(cMw), wMo(wMo), buffersInitialized(false)
 {

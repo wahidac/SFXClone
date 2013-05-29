@@ -41,7 +41,7 @@ struct OBJObjectShaderHandles {
 class OBJObject {
     
 public:
-    OBJObject(const char *objFileName, const OBJObjectShaderHandles &shaderHandles, const GLJoe::Transform &cMw, const GLJoe::Transform &wMo, OBJObjectParams *defaultShaderParams);
+    OBJObject(char *objFileName, const OBJObjectShaderHandles &shaderHandles, const GLJoe::Transform &cMw, const GLJoe::Transform &wMo, OBJObjectParams *defaultShaderParams);
     ~OBJObject() {
         delete [] vertices;
         delete [] normals;

@@ -56,7 +56,7 @@ bool OBJMeshTriangle::operator < (const OBJMeshTriangle& other) const
  * OBJParser
  ****************/
 
-OBJMesh* OBJParser::load(const char *path)
+OBJMesh* OBJParser::load(char *path)
 {
   if (!path)
     return NULL;

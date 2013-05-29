@@ -32,7 +32,7 @@ public:
 	Transform cMw, wMo;
     OBJObject *enemyType;
 
-	Enemy(const GLuint& program, OBJObject *enemyType) : enemyType(enemyType)
+	Enemy(const GLuint& program, OBJObject *pEnemyType) : enemyType(pEnemyType)
 	{
 		offset = Vec4(Random(LIMIT_X_LEFT, LIMIT_X_RIGHT),
 			Random(LIMIT_Y_LEFT, LIMIT_Y_RIGHT), Z_APPEARANCE, 0);

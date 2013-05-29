@@ -61,24 +61,20 @@
 PROGRAM   = sfxclone
 
 # The pre-processor and compiler options.
-MY_CFLAGS = -IGLJoe
+MY_CFLAGS = -IGLJoe -IOBJLoader
 
 # The linker options.
 MY_LIBS   = -lglut -lGL -lGLU -lGLEW
 
 # The pre-processor options used by the cpp (man cpp for more).
-CPPFLAGS  = -Wall -W -Werror -Wimport -Wunused-macros -Wendif-labels  \
-	-Wformat-nonliteral -Wcast-align -Wcast-qual -Wshadow -Wundef \
-	-Wwrite-strings -Wpointer-arith -Wfloat-equal \
-	-Wno-unused-parameter \
-	-pedantic -ansi
+CPPFLAGS  = 
 
 # The options used in linking as well as in any direct use of ld.
 LDFLAGS   =
 
 # The directories in which source files reside.
 # If not specified, only the current directory will be serached.
-SRCDIRS   =
+SRCDIRS   = . GLJoe OBJLoader
 
 ## Implicit Section: change the following only when necessary.
 ##==========================================================================
