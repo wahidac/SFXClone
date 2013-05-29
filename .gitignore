@@ -2,4 +2,6 @@
 *.exe
 *.o
 *.d
-
+*.vcxproj
+*.vcxproj.*
+Debug/
