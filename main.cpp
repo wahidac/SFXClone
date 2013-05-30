@@ -110,7 +110,7 @@ void init()
     wMo.scale(5);
     
 	// Generate the spaceship
-    aircraftModel = new OBJObject("Models/f-16.obj", shaderHandles, cMw, wMo, NULL);
+    aircraftModel = new OBJObject("Models/Aircraft/f-16.obj", shaderHandles, cMw, wMo, NULL);
     //Initialize buffers before making any call to draw
     aircraftModel->initializeOpenGLBuffers();
 

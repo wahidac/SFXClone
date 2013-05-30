@@ -29,11 +29,11 @@ public:
         defaults.material_specular = GLJoe::Vec4(1,1,1,1);
         defaults.material_shininess = 300;
         
-        enemies[0] = new OBJObject("Models/pig.obj", shaderHandles, cMw, wMo, &defaults);
+        enemies[0] = new OBJObject("Models/Animals/pig.obj", shaderHandles, cMw, wMo, &defaults);
         enemies[0]->initializeOpenGLBuffers();
-        enemies[1] = new OBJObject("Models/shark.obj", shaderHandles, cMw, wMo, &defaults);
+        enemies[1] = new OBJObject("Models/Animals/shark.obj", shaderHandles, cMw, wMo, &defaults);
         enemies[1]->initializeOpenGLBuffers();
-        enemies[2] = new OBJObject("Models/eagle.obj", shaderHandles, cMw, wMo, &defaults);
+        enemies[2] = new OBJObject("Models/Animals/eagle.obj", shaderHandles, cMw, wMo, &defaults);
         enemies[2]->initializeOpenGLBuffers();        
     }
     
