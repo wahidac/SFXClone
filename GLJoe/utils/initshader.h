@@ -20,7 +20,7 @@ namespace GLJoe
 // Create a NULL-terminated string by reading the provided file
 inline static char* readShaderSource(const char* shaderFile)
 {
-	FILE* fp = fopen(shaderFile, "r");
+	FILE* fp = fopen(shaderFile, "rb");
 
 	if (fp == NULL)
 		return NULL;
