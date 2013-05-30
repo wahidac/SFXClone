@@ -1,7 +1,8 @@
 #include "GLJoe.h"
 #include "enemy.h"
 #include "EnemyTypes.h"
-#include "OBJObject.h"
+#include "Spaceship.h"
+#include "OBJLoader/OBJObject.h"
 
 using namespace std;
 using namespace GLJoe;
@@ -9,6 +10,8 @@ using namespace GLJoe;
 
 // Parameters for game
 #define MAX_ENEMIES 100
+#define SPACESHIP_SPEED .1
+
 const float APPEARANCE_RATE = 0.001;
 const int POINTS_PER_KILL = 250;
 
@@ -32,13 +35,15 @@ GLfloat shiftX;
 GLfloat shiftY;
 
 // Spaceship and enemies
-OBJObject* spaceship;
+Spaceship* spaceship;
 EnemyTypes* enemyTypes;
+
+//Specification of how the aircraft looks
+OBJObject* aircraftModel;
 
 Enemy* enemies[MAX_ENEMIES] = {0};
 int iEnemy; // index of last enemy created
 int number; // number of living enemies
-Vec4 offsetSpaceship;
 int numberKilled = 0; // number of killed enemies
 
 // Timers for animation
@@ -103,15 +108,16 @@ void init()
     cMw.translate(-initialEyePos);
     wMo.rotateY(180);
     wMo.scale(5);
+    
 	// Generate the spaceship
-    spaceship = new OBJObject("Models/f-16.obj", shaderHandles, cMw, wMo, NULL);
-    
+    aircraftModel = new OBJObject("Models/f-16.obj", shaderHandles, cMw, wMo, NULL);
     //Initialize buffers before making any call to draw
-	spaceship->initializeOpenGLBuffers();
-    
+    aircraftModel->initializeOpenGLBuffers();
+
+    spaceship = new Spaceship(aircraftModel,SPACESHIP_SPEED,cMw,wMo);
+
     //Initialize Enemy vertices/normals/shader params/textures
     enemyTypes = new EnemyTypes(shaderHandles);
-    
     
 	// Initialize timers
 	lastTime = newTime = glutGet(GLUT_ELAPSED_TIME);
@@ -119,6 +125,7 @@ void init()
 	// Clear color
 	glClearColor(0.1, 0.1, 0.2, 1);
 	glEnable(GL_DEPTH_TEST);
+    
 }
 
 void keyboard(unsigned char key, int x, int y)
@@ -136,7 +143,7 @@ void keyboard(unsigned char key, int x, int y)
 			if (enemies[i])
 			{
 				Vec2 oe = enemies[i]->offset.xy();
-				Vec2 os = offsetSpaceship.xy();
+				Vec2 os = spaceship->offset.xy();
 				if (os.x >= oe.x - 5 &&
 					os.x <= oe.x + 5 &&
 					os.y >= oe.y - 5 &&
@@ -171,33 +178,60 @@ void special(int key, int x, int y)
 	switch (key)
 	{
 	case GLUT_KEY_RIGHT:
-		if (offsetSpaceship.x < LIMIT_X_RIGHT) {
-			offsetSpaceship += Vec4(1, 0, 0, 0);
-            spaceship->wMo.translate(Vec4(1,0,0,0));
+		if (spaceship->offset.x < LIMIT_X_RIGHT) {
+            //Keep moving until user releases!
+            spaceship->setInMotion('R');
         }
 		break;
 	case GLUT_KEY_LEFT:
-		if (offsetSpaceship.x > LIMIT_X_LEFT) {
-			offsetSpaceship += Vec4(-1, 0, 0, 0);
-            spaceship->wMo.translate(Vec4(-1,0,0,0));
+		if (spaceship->offset.x > LIMIT_X_LEFT) {
+            Vec4 dx(-.1, 0, 0, 0);
+            spaceship->setInMotion('L');
         }
 		break;
 	case GLUT_KEY_UP:
-		if (offsetSpaceship.y < LIMIT_Y_RIGHT) {
-			offsetSpaceship += Vec4(0, 1, 0, 0);
-            spaceship->wMo.translate(Vec4(0,1,0,0));
+		if (spaceship->offset.y < LIMIT_Y_RIGHT) {
+            spaceship->setInMotion('U');
         }
 		break;
 	case GLUT_KEY_DOWN:
-		if (offsetSpaceship.y > LIMIT_Y_LEFT) {
-			offsetSpaceship += Vec4(0, -1, 0, 0);
-            spaceship->wMo.translate(Vec4(0,-1,0,0));
+		if (spaceship->offset.y > LIMIT_Y_LEFT) {
+            spaceship->setInMotion('D');
         }
 		break;
 	}
     
 	
 	(void) key, (void)x, (void)y;
+}
+
+void specialKeyReleased(int key, int x, int y) {
+    glutPostRedisplay();
+
+    switch (key)
+	{
+        case GLUT_KEY_RIGHT:
+            if (spaceship->isInMotion && spaceship->direction =='R') {
+                spaceship->stopShip();
+            }
+            break;
+        case GLUT_KEY_LEFT:
+            if (spaceship->isInMotion && spaceship->direction =='L') {
+                spaceship->stopShip();
+            }
+            break;
+        case GLUT_KEY_UP:
+            if (spaceship->isInMotion && spaceship->direction =='U') {
+                spaceship->stopShip();
+            }
+            break;
+        case GLUT_KEY_DOWN:
+            if (spaceship->isInMotion && spaceship->direction =='D') {
+                spaceship->stopShip();
+            }
+            break;
+	}
+    
 }
 
 void reshape(int width, int height)
@@ -253,7 +287,7 @@ void display()
 	
 	// Draw spaceship
 	//glUniform1i(EnableTex, 0);
-    spaceship->drawSelf();
+    spaceship->draw();
 	
 
 	//glUniform1i(EnableTex, 1);
@@ -299,7 +333,8 @@ int main(int argc, char **argv)
 	glutSpecialFunc(special);
 	glutReshapeFunc(reshape);
 	glutIdleFunc(idle);
-
+    glutSpecialUpFunc(specialKeyReleased);
+    
 	glutMainLoop();
 	return 0;
 }
