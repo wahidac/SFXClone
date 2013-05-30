@@ -14,7 +14,7 @@ const int POINTS_PER_KILL = 250;
 
 // Parameters for view
 const float ZOOM_OUT_FACTOR = 50.0;
-const float EYE_POSITION_Z = 10.0;
+const float EYE_POSITION_Z = 50.0;
 
 //Lighting Parameters
 Vec4 light_position(0,0,1,1);
@@ -99,14 +99,15 @@ void init()
     
     //world to camera and object to world matrices
     Transform cMw, wMo;
+    
     cMw.translate(-initialEyePos);
     wMo.rotateY(180);
-    wMo.scale(.5);
+    wMo.scale(5);
 	// Generate the spaceship
     spaceship = new OBJObject("Models/f-16.obj", shaderHandles, cMw, wMo, NULL);
+    
     //Initialize buffers before making any call to draw
 	spaceship->initializeOpenGLBuffers();
-    
     
     //Initialize Enemy vertices/normals/shader params/textures
     enemyTypes = new EnemyTypes(shaderHandles);
@@ -171,26 +172,26 @@ void special(int key, int x, int y)
 	{
 	case GLUT_KEY_RIGHT:
 		if (offsetSpaceship.x < LIMIT_X_RIGHT) {
-			//offsetSpaceship += Vec4(1, 0, 0, 0);
-            spaceship->wMo.translate(Vec4(.1,0,0,0));
+			offsetSpaceship += Vec4(1, 0, 0, 0);
+            spaceship->wMo.translate(Vec4(1,0,0,0));
         }
 		break;
 	case GLUT_KEY_LEFT:
 		if (offsetSpaceship.x > LIMIT_X_LEFT) {
-			//offsetSpaceship += Vec4(-1, 0, 0, 0);
-            spaceship->wMo.translate(Vec4(-.1,0,0,0));
+			offsetSpaceship += Vec4(-1, 0, 0, 0);
+            spaceship->wMo.translate(Vec4(-1,0,0,0));
         }
 		break;
 	case GLUT_KEY_UP:
 		if (offsetSpaceship.y < LIMIT_Y_RIGHT) {
-			//offsetSpaceship += Vec4(0, 1, 0, 0);
-            spaceship->wMo.translate(Vec4(0,.1,0,0));
+			offsetSpaceship += Vec4(0, 1, 0, 0);
+            spaceship->wMo.translate(Vec4(0,1,0,0));
         }
 		break;
 	case GLUT_KEY_DOWN:
 		if (offsetSpaceship.y > LIMIT_Y_LEFT) {
-			//offsetSpaceship += Vec4(0, -1, 0, 0);
-            spaceship->wMo.translate(Vec4(0,-.1,0,0));
+			offsetSpaceship += Vec4(0, -1, 0, 0);
+            spaceship->wMo.translate(Vec4(0,-1,0,0));
         }
 		break;
 	}
@@ -255,7 +256,6 @@ void display()
     spaceship->drawSelf();
 	
 
-	// Draw cube 1
 	//glUniform1i(EnableTex, 1);
 	for (int i = 0; i < MAX_ENEMIES; ++i)
 	{
@@ -263,9 +263,6 @@ void display()
 		{
             enemies[i]->cMw = Translate(-initialEyePos);
             enemies[i]->wMo = Translate(enemies[i]->offset);
-			//glUniform4fv(Offset, 1, enemies[i]->offset);
-			//glUniformMatrix4fv(IndividualRotation, 1, GL_TRUE,
-			//	enemies[i]->transform);
 			enemies[i]->draw();
 		}
 	}
