@@ -5,6 +5,7 @@
 #include "OBJLoader/OBJObject.h"
 #include "Background.h"
 
+//#define USE_AUDIO
 
 #ifdef USE_AUDIO
 #include <SFML/Audio.hpp>
@@ -146,7 +147,22 @@ void init()
 	lastTime = newTime = glutGet(GLUT_ELAPSED_TIME);
 	
 #ifdef USE_AUDIO
-	// Sounds and music
+
+#ifdef __APPLE__  //apple
+    // Sounds and music
+	if (!bufferLaser.loadFromFile("Sounds/laser.wav"))
+	{
+		Error("Failed loading sound %s", "laser.wav");
+	}
+	soundLaser.setBuffer(bufferLaser);
+	if (!music.openFromFile("Sounds/music.ogg"))
+	{
+		Error("Failed loading music %s", "music.ogg");
+	}
+	music.setLoop(true);
+	music.play();
+#else
+    // Sounds and music
 	if (!bufferLaser.LoadFromFile("Sounds/laser.wav"))
 	{
 		Error("Failed loading sound %s", "laser.wav");
@@ -158,6 +174,8 @@ void init()
 	}
 	music.SetLoop(true);
 	music.Play();
+#endif
+    
 #endif
 	
 	// Clear color
@@ -177,7 +195,13 @@ void keyboard(unsigned char key, int x, int y)
 		break;
 	case ' ': // space
 #ifdef USE_AUDIO
-	    soundLaser.Play();
+            
+#ifdef __APPLE__
+	    soundLaser.play();
+#else
+        soundLaser.Play();
+#endif
+            
 #endif
 		for (int i = 0; i < MAX_ENEMIES; ++i)
 		{

@@ -1,7 +1,7 @@
 #ifndef IMGLOADER_H
 #define IMGLOADER_H
 
-#include<GLJoe.h>
+#include"GLJoe.h"
 #include<stdio.h>
 
 #include "lodepng.h"
