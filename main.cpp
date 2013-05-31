@@ -16,7 +16,7 @@ using namespace GLJoe;
 
 // Parameters for game
 #define MAX_ENEMIES 100
-#define SPACESHIP_SPEED 1
+#define SPACESHIP_SPEED 25
 
 const float APPEARANCE_RATE = 0.001;
 const int POINTS_PER_KILL = 250;
@@ -344,6 +344,10 @@ void idle()
 					enemies[i]->speed, 0);
 		}
 	}
+    
+    //Update the spaceship's position based on how much time has elapsed since the last time idle was called
+    spaceship->updatePosition(elapsedTime/1000.0);
+
 	
 	glutPostRedisplay();
 }

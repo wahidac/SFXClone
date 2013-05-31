@@ -35,9 +35,7 @@ public:
     void draw(); 
     void setInMotion(char dir);
     void stopShip();
-    
-private:
-    void updatePosition();
+    void updatePosition(float deltaTime);
     
 };
 
