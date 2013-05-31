@@ -4,13 +4,14 @@
 #include "Spaceship.h"
 #include "OBJLoader/OBJObject.h"
 #include "Background.h"
+#include <SFML/Audio.hpp>
 
 using namespace std;
 using namespace GLJoe;
 
 // Parameters for game
 #define MAX_ENEMIES 100
-#define SPACESHIP_SPEED .1
+#define SPACESHIP_SPEED 1
 
 const float APPEARANCE_RATE = 0.001;
 const int POINTS_PER_KILL = 250;
@@ -61,6 +62,11 @@ GLuint program;
 OBJObjectShaderHandles shaderHandles;
 
 #define DEFAULT_WINDOW_SIZE 512
+
+// Sounds
+sf::SoundBuffer bufferLaser;
+sf::Sound soundLaser;
+sf::Music music;
 
 void initView()
 {
@@ -118,7 +124,7 @@ void init()
     wMo.scale(5);
 
 	// Generate the spaceship
-    aircraftModel = new OBJObject("Models/f-16.obj", shaderHandles, cMw, wMo, NULL);
+    aircraftModel = new OBJObject("Models/Aircraft/f-16.obj", shaderHandles, cMw, wMo, NULL);
     //Initialize buffers before making any call to draw
     aircraftModel->initializeOpenGLBuffers();
 
@@ -132,6 +138,19 @@ void init()
 
 	// Initialize timers
 	lastTime = newTime = glutGet(GLUT_ELAPSED_TIME);
+	
+	// Sounds and music
+	if (!bufferLaser.LoadFromFile("Sounds/laser.wav"))
+	{
+		Error("Failed loading sound %s", "laser.wav");
+	}
+	soundLaser.SetBuffer(bufferLaser);
+	if (!music.OpenFromFile("Sounds/music.ogg"))
+	{
+		Error("Failed loading music %s", "music.ogg");
+	}
+	music.SetLoop(true);
+	music.Play();
 	
 	// Clear color
 	glClearColor(0.1, 0.1, 0.2, 1);
@@ -149,6 +168,7 @@ void keyboard(unsigned char key, int x, int y)
 		exit(EXIT_SUCCESS);
 		break;
 	case ' ': // space
+	    soundLaser.Play();
 		for (int i = 0; i < MAX_ENEMIES; ++i)
 		{
 			if (enemies[i])
