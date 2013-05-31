@@ -24,8 +24,8 @@ void main()
        float Kd = max(dot(L, N), 0.0);
        vec4 diffuse = Kd*DiffuseProduct;
        
-       if (EnableTex == 1)
-		    diffuse *= texture2D(Tex, vec2(gl_TexCoord[0]));
+       //if (EnableTex == 1)
+		//    diffuse *= texture2D(Tex, vec2(gl_TexCoord[0]));
         
        float Ks = pow(max(dot(N, H), 0.0), Shininess);
        
@@ -36,6 +36,10 @@ void main()
             specular = vec4(0.0, 0.0, 0.0, 1.0);
        }
 
-       gl_FragColor = ambient + diffuse + specular;
+	   vec4 combined = ambient + diffuse + specular;
+	   if (EnableTex == 1)
+			combined = texture2D(Tex, vec2(gl_TexCoord[0]));
+
+       gl_FragColor = combined; //ambient + diffuse + specular;
        gl_FragColor.a = 1.0;
 } 

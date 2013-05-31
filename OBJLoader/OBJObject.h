@@ -33,9 +33,12 @@ struct OBJObjectShaderHandles {
     GLuint vMaterialShininess;
     GLuint vNormal;
     GLuint vPosition;
+	GLuint vTexCoords;
     GLuint LightAmbient;
     GLuint LightDiffuse;
     GLuint LightSpecular;
+	GLuint tex;
+	GLuint EnableTex;
 };
 
 class OBJObject {

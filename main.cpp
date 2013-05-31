@@ -3,10 +3,10 @@
 #include "EnemyTypes.h"
 #include "Spaceship.h"
 #include "OBJLoader/OBJObject.h"
+#include "Background.h"
 
 using namespace std;
 using namespace GLJoe;
-
 
 // Parameters for game
 #define MAX_ENEMIES 100
@@ -34,6 +34,9 @@ GLint rotY;
 GLfloat shiftX;
 GLfloat shiftY;
 
+// Background objects
+Background* background;
+
 // Spaceship and enemies
 Spaceship* spaceship;
 EnemyTypes* enemyTypes;
@@ -56,6 +59,8 @@ GLuint program;
 
 // Structure to store all the GLuints that reference variable locations in the shaders
 OBJObjectShaderHandles shaderHandles;
+
+#define DEFAULT_WINDOW_SIZE 512
 
 void initView()
 {
@@ -81,6 +86,9 @@ void initShaderHandles() {
     shaderHandles.vMaterialShininess = glGetAttribLocation( program, "vMaterialShininess" );
     shaderHandles.vNormal = glGetAttribLocation( program, "vNormal" );
     shaderHandles.vPosition = glGetAttribLocation( program, "vPosition" );
+	shaderHandles.vTexCoords = glGetAttribLocation( program, "vTexCoords" );
+	shaderHandles.tex = glGetUniformLocation( program, "Tex" );
+	shaderHandles.EnableTex = glGetUniformLocation( program, "EnableTex" );
 }
 
 void init()
@@ -108,7 +116,7 @@ void init()
     cMw.translate(-initialEyePos);
     wMo.rotateY(180);
     wMo.scale(5);
-    
+
 	// Generate the spaceship
     aircraftModel = new OBJObject("Models/f-16.obj", shaderHandles, cMw, wMo, NULL);
     //Initialize buffers before making any call to draw
@@ -119,6 +127,9 @@ void init()
     //Initialize Enemy vertices/normals/shader params/textures
     enemyTypes = new EnemyTypes(shaderHandles);
     
+	//Initialize the background objects
+	background = new Background("Images/back.png", shaderHandles);
+
 	// Initialize timers
 	lastTime = newTime = glutGet(GLUT_ELAPSED_TIME);
 	
@@ -240,6 +251,8 @@ void reshape(int width, int height)
 
     Mat4 projection = Perspective(50, (float) width / (float) height, 1, 1000);
     glUniformMatrix4fv(shaderHandles.Projection, 1, GL_TRUE, projection);
+
+	background->resize(width, height);
 }
 
 void idle()
@@ -285,10 +298,12 @@ void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	
+	// Draw background
+	background->draw();
+
 	// Draw spaceship
-	//glUniform1i(EnableTex, 0);
+	glUniform1i(glGetUniformLocation(program, "EnableTex"), 0);
     spaceship->draw();
-	
 
 	//glUniform1i(EnableTex, 1);
 	for (int i = 0; i < MAX_ENEMIES; ++i)
@@ -319,7 +334,7 @@ int main(int argc, char **argv)
 {
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
-	glutInitWindowSize(512, 512);
+	glutInitWindowSize(DEFAULT_WINDOW_SIZE, DEFAULT_WINDOW_SIZE);
 	glutCreateWindow("SFX Clone");
 
 	glewExperimental = GL_TRUE;
