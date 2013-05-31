@@ -64,7 +64,7 @@ PROGRAM   = sfxclone
 MY_CFLAGS = -IGLJoe -IOBJLoader
 
 # The linker options.
-MY_LIBS   = -lglut -lGL -lGLU -lGLEW
+MY_LIBS   = -lglut -lGL -lGLU -lGLEW -lsfml-audio
 
 # The pre-processor options used by the cpp (man cpp for more).
 CPPFLAGS  = 

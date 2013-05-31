@@ -3,6 +3,7 @@
 #include "EnemyTypes.h"
 #include "Spaceship.h"
 #include "OBJLoader/OBJObject.h"
+#include <SFML/Audio.hpp>
 
 using namespace std;
 using namespace GLJoe;
@@ -10,7 +11,7 @@ using namespace GLJoe;
 
 // Parameters for game
 #define MAX_ENEMIES 100
-#define SPACESHIP_SPEED .1
+#define SPACESHIP_SPEED 1
 
 const float APPEARANCE_RATE = 0.001;
 const int POINTS_PER_KILL = 250;
@@ -56,6 +57,12 @@ GLuint program;
 
 // Structure to store all the GLuints that reference variable locations in the shaders
 OBJObjectShaderHandles shaderHandles;
+
+// Sounds
+sf::SoundBuffer bufferLaser;
+sf::Sound soundLaser;
+sf::Music music;
+
 
 void initView()
 {
@@ -122,6 +129,19 @@ void init()
 	// Initialize timers
 	lastTime = newTime = glutGet(GLUT_ELAPSED_TIME);
 	
+	// Sounds and music
+	if (!bufferLaser.LoadFromFile("Sounds/laser.wav"))
+	{
+		Error("Failed loading sound %s", "laser.wav");
+	}
+	soundLaser.SetBuffer(bufferLaser);
+	if (!music.OpenFromFile("Sounds/music.ogg"))
+	{
+		Error("Failed loading music %s", "music.ogg");
+	}
+	music.SetLoop(true);
+	music.Play();
+	
 	// Clear color
 	glClearColor(0.1, 0.1, 0.2, 1);
 	glEnable(GL_DEPTH_TEST);
@@ -138,6 +158,7 @@ void keyboard(unsigned char key, int x, int y)
 		exit(EXIT_SUCCESS);
 		break;
 	case ' ': // space
+	    soundLaser.Play();
 		for (int i = 0; i < MAX_ENEMIES; ++i)
 		{
 			if (enemies[i])
