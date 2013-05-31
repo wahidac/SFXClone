@@ -4,7 +4,11 @@
 #include "Spaceship.h"
 #include "OBJLoader/OBJObject.h"
 #include "Background.h"
+
+
+#ifdef USE_AUDIO
 #include <SFML/Audio.hpp>
+#endif
 
 using namespace std;
 using namespace GLJoe;
@@ -63,10 +67,12 @@ OBJObjectShaderHandles shaderHandles;
 
 #define DEFAULT_WINDOW_SIZE 512
 
+#ifdef USE_AUDIO
 // Sounds
 sf::SoundBuffer bufferLaser;
 sf::Sound soundLaser;
 sf::Music music;
+#endif
 
 void initView()
 {
@@ -139,6 +145,7 @@ void init()
 	// Initialize timers
 	lastTime = newTime = glutGet(GLUT_ELAPSED_TIME);
 	
+#ifdef USE_AUDIO
 	// Sounds and music
 	if (!bufferLaser.LoadFromFile("Sounds/laser.wav"))
 	{
@@ -151,6 +158,7 @@ void init()
 	}
 	music.SetLoop(true);
 	music.Play();
+#endif
 	
 	// Clear color
 	glClearColor(0.1, 0.1, 0.2, 1);
@@ -168,7 +176,9 @@ void keyboard(unsigned char key, int x, int y)
 		exit(EXIT_SUCCESS);
 		break;
 	case ' ': // space
+#ifdef USE_AUDIO
 	    soundLaser.Play();
+#endif
 		for (int i = 0; i < MAX_ENEMIES; ++i)
 		{
 			if (enemies[i])
