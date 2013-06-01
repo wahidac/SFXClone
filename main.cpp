@@ -6,7 +6,7 @@
 #include "Background.h"
 #include "Explosion.h"
 
-#define USE_AUDIO
+//#define USE_AUDIO
 
 #ifdef USE_AUDIO
 #include <SFML/Audio.hpp>
@@ -408,13 +408,7 @@ void display()
 	
 	// Draw background
 	background->draw();
-
-	// Draw spaceship
-	glUniform1i(glGetUniformLocation(program, "EnableTex"), 0);
-    spaceship->draw();
-
-   
-    
+       
 	//glUniform1i(EnableTex, 1);
 	for (int i = 0; i < MAX_ENEMIES; ++i)
 	{
@@ -439,6 +433,10 @@ void display()
             }
 		}
 	}
+    
+    // Draw spaceship
+	glUniform1i(glGetUniformLocation(program, "EnableTex"), 0);
+    spaceship->draw();
 	
 
 	unsigned char score[40];
@@ -448,9 +446,9 @@ void display()
 	
 	glColor3f(1, 1, 1);
 	glRasterPos2f(0.5, 0.8);
-//	glutBitmapString(GLUT_BITMAP_HELVETICA_18, score);
+	glutBitmapString(GLUT_BITMAP_HELVETICA_18, score);
 	glRasterPos2f(-0.8, 0.8);
-//	glutBitmapString(GLUT_BITMAP_HELVETICA_18, energy);
+	glutBitmapString(GLUT_BITMAP_HELVETICA_18, energy);
 	
 	glutSwapBuffers();
 }
@@ -462,8 +460,8 @@ int main(int argc, char **argv)
 	glutInitWindowSize(DEFAULT_WINDOW_SIZE, DEFAULT_WINDOW_SIZE);
 	glutCreateWindow("SFX Clone");
 
-//	glewExperimental = GL_TRUE;
-//	glewInit();
+	glewExperimental = GL_TRUE;
+	glewInit();
 
 	init();
 

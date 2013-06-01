@@ -39,7 +39,7 @@ public:
         wMo = Identity();
 		speed = Random(SPEED_MIN, SPEED_MAX);
         isDead = false;
-        explosionEndScale = 15;
+        
         explosionSpeed = 40;
         explosionCurrentScale = 1;
 	}
@@ -47,6 +47,10 @@ public:
     void killEnemy() {
         isDead = true;
         isAnimatingDeath = true;
+        
+        //Final size of the explosion is a function of how far away the enemy is
+        explosionEndScale = 150/abs(offset.z);
+
         explosioncMw = cMw;
         explosionwMo = wMo;
         explosionwMo.scale(explosionCurrentScale);
