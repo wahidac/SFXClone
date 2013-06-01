@@ -102,6 +102,8 @@ void initShaderHandles() {
 	shaderHandles.vTexCoords = glGetAttribLocation( program, "vTexCoords" );
 	shaderHandles.tex = glGetUniformLocation( program, "Tex" );
 	shaderHandles.EnableTex = glGetUniformLocation( program, "EnableTex" );
+	shaderHandles.MoveTex = glGetUniformLocation( program, "MoveTex" );
+	shaderHandles.TexOffset = glGetUniformLocation( program, "TexOffset" );
 }
 
 void init()
@@ -142,7 +144,7 @@ void init()
     enemyTypes = new EnemyTypes(shaderHandles);
     
 	//Initialize the background objects
-	background = new Background("Images/back.png", shaderHandles);
+	background = new Background("Images/mountainsky2.png", "Images/grass2048.png", shaderHandles);
 
 	// Initialize timers
 	lastTime = newTime = glutGet(GLUT_ELAPSED_TIME);

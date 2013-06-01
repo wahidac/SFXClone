@@ -39,6 +39,8 @@ struct OBJObjectShaderHandles {
     GLuint LightSpecular;
 	GLuint tex;
 	GLuint EnableTex;
+	GLuint MoveTex;
+	GLuint TexOffset;
 };
 
 class OBJObject {

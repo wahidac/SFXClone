@@ -7,17 +7,18 @@
 
 using namespace GLJoe;
 
-#define IMG_WIDTH 1920
-#define IMG_HEIGHT 1200
+#define IMG_WIDTH 2048
+#define IMG_HEIGHT 2048
 
 
 class Background
 {
 public:
-	Background(char* backImage, OBJObjectShaderHandles &shaderHandles);
+	Background(char* backImage, char* groundImage, OBJObjectShaderHandles &shaderHandles);
 	void draw();
 
 	void resize(int width, int height);
+	void moveGroundTexture(int offset);
 
 private:
 	Vec4* plane_vertices;
@@ -26,20 +27,26 @@ private:
 	Vec4* material_ambient;
 	Vec4* material_other;
 
-	GLubyte image[IMG_WIDTH * IMG_HEIGHT * 3];
+	GLubyte back_image[IMG_WIDTH * IMG_HEIGHT * 3];
+	GLubyte ground_image[IMG_WIDTH * IMG_HEIGHT * 3];
 
-	Transform cMw;
-	Transform wMo;
+	Transform back_cMw;
+	Transform back_wMo;
+	Transform ground_cMw;
+	Transform ground_wMo;
 
 	OBJObjectShaderHandles handles;
 
 	ImgLoader imgLoader;
 
+	OBJObject* city;
+
 	GLuint vao;
 
 	int num_vertices;
+	int texture_offset;
 
-	GLuint textures[1];
+	GLuint textures[2];
 
 	void initializeOpenGLBuffers();
 };

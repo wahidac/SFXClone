@@ -1,9 +1,10 @@
 #include "Background.h"
 
-Background::Background(char* backImage, OBJObjectShaderHandles &shaderHandles)
+Background::Background(char* backImage, char* groundImage, OBJObjectShaderHandles &shaderHandles)
 {
 	handles = shaderHandles;
-	imgLoader.loadImage(backImage, image, IMG_WIDTH, IMG_HEIGHT);
+	imgLoader.loadImage(backImage, back_image, IMG_WIDTH, IMG_HEIGHT);
+	imgLoader.loadImage(groundImage, ground_image, IMG_WIDTH, IMG_HEIGHT);
 	
 	num_vertices = 6;
 	
@@ -18,14 +19,15 @@ Background::Background(char* backImage, OBJObjectShaderHandles &shaderHandles)
 	plane_vertices = vertices;
 
 	Vec2 tex[6] = {
-		Vec2(1.0, 1.0),
-		Vec2(1.0, 0.0),
-		Vec2(0.0, 1.0),
-		Vec2(1.0, 0.0),
-		Vec2(0.0, 1.0),
-		Vec2(0.0, 0.0)
+		Vec2(1.0, 0.3),
+		Vec2(1.0, 1.3),
+		Vec2(0.0, 0.3),
+		Vec2(1.0, 1.3),
+		Vec2(0.0, 0.3),
+		Vec2(0.0, 1.3)
 	};
 	tex_coords = tex;
+	texture_offset = 0;
 
 	Vec3 normals[6] = {
 		Vec3(0.0, 0.0, 1.0),
@@ -57,8 +59,27 @@ Background::Background(char* backImage, OBJObjectShaderHandles &shaderHandles)
 	};
 	material_other = other;
 	
-	cMw.translate(0.0, 0.0, -999);
-	cMw.scale(1000);
+	back_cMw.translate(0.0, 0.0, -999);
+	back_cMw.scale(1000);
+
+	ground_cMw.rotateX(90);
+	ground_cMw.translate(0.0, -100.0, -500);
+	ground_cMw.scale(1000);
+
+	Transform city_cMw;
+	Transform city_wMo;
+	city_cMw.translate(0.0, 0.0, -80);
+	//city_wMo.rotateX(270);
+	city_wMo.scale(20);
+
+	OBJObjectParams cityparams;
+	cityparams.material_ambient = Vec4(0.8, 0.8, 0.8, 1.0);
+	cityparams.material_diffuse = Vec4(0.2, 0.4, 1.0, 1.0);
+	cityparams.material_specular = Vec4(0.0, 0.0, 0.0, 1.0);
+	cityparams.material_shininess = 6.0;
+
+	//city = new OBJObject("Models/Buildings/.obj", handles, city_cMw, city_wMo, &cityparams);
+	//city->initializeOpenGLBuffers();
 
 	initializeOpenGLBuffers();
 }
@@ -74,13 +95,21 @@ void Background::initializeOpenGLBuffers() {
 #endif
         
 	//Initialize textures
-	glGenTextures(1, textures);
+	glGenTextures(2, textures);
 	glBindTexture(GL_TEXTURE_2D, textures[0]);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, IMG_WIDTH, IMG_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, IMG_WIDTH, IMG_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, back_image);
 	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
     glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
 	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
     glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+
+	glBindTexture(GL_TEXTURE_2D, textures[1]);
+	glGenerateMipmap( GL_TEXTURE_2D );
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, IMG_WIDTH, IMG_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, ground_image);
+	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR );
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
 
 	glUniform1i(handles.tex, 0);
 
@@ -155,21 +184,46 @@ void Background::draw()
 	glBindTexture( GL_TEXTURE_2D, textures[0] );
 
 	//Send correct Transformation information to the shaders
-    glUniformMatrix4fv( handles.cMw, 1, GL_TRUE, cMw);
-    glUniformMatrix4fv( handles.wMo, 1, GL_TRUE, wMo);
+    glUniformMatrix4fv( handles.cMw, 1, GL_TRUE, back_cMw);
+    glUniformMatrix4fv( handles.wMo, 1, GL_TRUE, back_wMo);
 
 	//Turn on Textures
 	glUniform1i(handles.EnableTex, 1);
+	glUniform1i(handles.MoveTex, 0);
     
     //Draw the object
     glDrawArrays( GL_TRIANGLES, 0, num_vertices);
 
+	glBindTexture( GL_TEXTURE_2D, textures[1] );
+
+	glUniformMatrix4fv( handles.cMw, 1, GL_TRUE, ground_cMw);
+    glUniformMatrix4fv( handles.wMo, 1, GL_TRUE, ground_wMo);
+
+	glUniform1i(handles.MoveTex, 1);
+	glUniform1i(handles.TexOffset, texture_offset);
+
+	//Draw the object
+    glDrawArrays( GL_TRIANGLES, 0, num_vertices);
+
 	//Turn off Textures
 	glUniform1i(handles.EnableTex, 0);
+
+	//city->drawSelf();
 }
 
 void Background::resize(int width, int height)
 {
-	cMw = Translate(0.0, 0.0, -999);
-	cMw.scale(1000.0 * width / height, 1000.0, 1.0);
+	back_cMw = Translate(0.0, 0.0, -999);
+	back_cMw.scale(1000.0 * width / height, 1000.0, 1.0);
+
+	ground_cMw = RotateX(90);
+	ground_cMw.translate(0.0, -100.0, -500);
+	ground_cMw.scale(1000.0 * width / height, 1000.0, 1.0);
+}
+
+void Background::moveGroundTexture(int offset)
+{
+	texture_offset += offset;
+	if(texture_offset >= 100)
+		texture_offset = 0;
 }
