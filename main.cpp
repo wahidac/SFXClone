@@ -1,5 +1,7 @@
-#include "GLJoe.h"
+#include "GLJoe/GLJoe.h"
 #include "enemy.h"
+#include "BulletType.h"
+#include "bullets.h"
 #include "EnemyTypes.h"
 #include "Spaceship.h"
 #include "OBJLoader/OBJObject.h"
@@ -17,6 +19,7 @@ using namespace GLJoe;
 
 // Parameters for game
 #define MAX_ENEMIES 100
+#define MAX_BULLETS 50
 #define SPACESHIP_SPEED 25
 
 const float APPEARANCE_RATE = 0.001;
@@ -50,12 +53,16 @@ Explosion* explosion;
 // Spaceship and enemies
 Spaceship* spaceship;
 EnemyTypes* enemyTypes;
+BulletTypes* bulletTypes;
 
 //Specification of how the aircraft looks
 OBJObject* aircraftModel;
 
 Enemy* enemies[MAX_ENEMIES] = {0};
+Bullet* bullets[MAX_BULLETS] = {0};
 int iEnemy; // index of last enemy created
+int iBullet; // index of last bullet created
+int numBullets; // number of bullets currently in play
 int number; // number of living enemies
 int numberKilled = 0; // number of killed enemies
 
@@ -108,8 +115,6 @@ void initShaderHandles() {
 	shaderHandles.vTexCoords = glGetAttribLocation( program, "vTexCoords" );
 	shaderHandles.tex = glGetUniformLocation( program, "Tex" );
 	shaderHandles.EnableTex = glGetUniformLocation( program, "EnableTex" );
-	shaderHandles.MoveTex = glGetUniformLocation( program, "MoveTex" );
-	shaderHandles.TexOffset = glGetUniformLocation( program, "TexOffset" );
     shaderHandles.isAnimatingExplosion = glGetUniformLocation(program, "isAnimatingExplosion");
 }
 
@@ -149,9 +154,10 @@ void init()
 
     //Initialize Enemy vertices/normals/shader params/textures
     enemyTypes = new EnemyTypes(shaderHandles);
+	bulletTypes = new BulletTypes(shaderHandles);
     
 	//Initialize the background objects
-	background = new Background("Images/mountainsky.png", "Images/grass2048.png", shaderHandles);
+	background = new Background("Images/back.png", shaderHandles);
     
     //Initialize the explosion to show when an enemy dies
     explosion = new Explosion("Images/explosionTexture.png",shaderHandles);
@@ -233,33 +239,17 @@ void keyboard(unsigned char key, int x, int y)
 #endif
             
 #endif
-		for (int i = 0; i < MAX_ENEMIES; ++i)
-		{
-			if (enemies[i])
-			{
-				Vec2 oe = enemies[i]->offset.xy();
-				Vec2 os = spaceship->offset.xy();
-				if (os.x >= oe.x - 5 &&
-					os.x <= oe.x + 5 &&
-					os.y >= oe.y - 5 &&
-					os.y <= oe.y + 5)
-				{
-                    enemies[i]->killEnemy();
-                    
-                    #ifdef USE_AUDIO
-                    
-                    #ifdef __APPLE__
-                    soundExplosion.play();
-                    #else
-                    soundExplosion.Play();
-                    #endif
-                    
-                    #endif
-                    
-				}
-			}
-		}
-		break;
+
+		iBullet = 0;
+		while(bullets[iBullet])
+			iBullet++;
+		delete bullets[iBullet];
+		int randomBulletType = rand()%NUM_BULLET_TYPES;
+		bullets[iBullet] = new Bullet(program,bulletTypes->bullets[randomBulletType],spaceship->offset.x,spaceship->offset.y,true);
+		numBullets++;
+		cout << "firing bullet";
+
+
 	}
 	
 	glutPostRedisplay();
@@ -372,7 +362,56 @@ void idle()
 		
 		cout << "Creating enemy " << randomEnemyType << endl;
 	}
-	
+	for(int i = 0; i < MAX_BULLETS; i++){
+		if(bullets[i]){
+			if(bullets[i]->offset.z > -30){
+				bullets[i]->offset =bullets[i]->offset +  Vec4(0,0,bullets[i]->speed,0);
+
+			}else{
+				delete bullets[i];
+                bullets[i] = 0;
+                numBullets--;
+
+
+			}
+				
+
+
+		}
+
+
+	}
+	for (int i = 0; i < MAX_ENEMIES; ++i)
+		{
+			if (enemies[i])
+			{
+				Vec3 oe = enemies[i]->offset.xyz();
+				for(int j = 0; j < MAX_BULLETS; j++){
+					if(bullets[j]){
+						Vec3 os = bullets[j]->offset.xyz();
+						if (os.x >= oe.x - 2 &&
+							os.x <= oe.x + 2 &&
+							os.y >= oe.y - 2 &&
+							os.y <= oe.y + 2 &&
+							(os.z >= oe.z - .25 && os.z <= oe.z + .25))
+						{
+							enemies[i]->killEnemy();
+                    
+							#ifdef USE_AUDIO
+                    
+							#ifdef __APPLE__
+							soundExplosion.play();
+							#else
+							soundExplosion.Play();
+							#endif
+                    
+							#endif
+                    
+						}
+					}
+				}
+			}
+		}
 	for (int i = 0; i < MAX_ENEMIES; ++i)
 	{
 		if (enemies[i])
@@ -412,6 +451,20 @@ void display()
 	background->draw();
        
 	//glUniform1i(EnableTex, 1);
+	for(int j = 0; j < MAX_BULLETS; j++){
+		if(bullets[j]){
+			bullets[j]->cMw = Translate(-initialEyePos);
+			bullets[j]->wMo = Translate(bullets[j]->offset);
+
+
+			bullets[j]->draw();
+
+
+
+
+		}
+
+	}
 	for (int i = 0; i < MAX_ENEMIES; ++i)
 	{
 		if (enemies[i])
@@ -455,18 +508,6 @@ void display()
 	glutSwapBuffers();
 }
 
-void timerFunc(int val)
-{
-	//Function that gets called every 16ms (or 60 times per second)
-	background->moveGroundTexture(0.0010);
-	background->moveBuildings(1.6);
-
-	glutPostRedisplay();
-
-	//Recursively call the timer function to schedule it again
-	glutTimerFunc(16, timerFunc, 0);
-}
-
 int main(int argc, char **argv)
 {
 	glutInit(&argc, argv);
@@ -486,7 +527,6 @@ int main(int argc, char **argv)
 	glutReshapeFunc(reshape);
 	glutIdleFunc(idle);
     glutSpecialUpFunc(specialKeyReleased);
-	glutTimerFunc(16, timerFunc, 0);
     
 	glutMainLoop();
 	return 0;

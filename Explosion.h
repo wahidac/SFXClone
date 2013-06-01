@@ -10,8 +10,8 @@
 #define __particles__Explosion__
 
 #include <iostream>
-#include "GLJoe.h"
-#include "OBJObject.h"
+#include "GLJoe/GLJoe.h"
+#include "ObjLoader/OBJObject.h"
 #include "ImgLoader.h"
 
 using namespace GLJoe;

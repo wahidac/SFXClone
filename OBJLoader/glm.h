@@ -11,7 +11,7 @@
 
  */
 
-#include "GLJoe.h"
+#include "../GLJoe/GLJoe.h"
 
 #ifndef M_PI
 #define M_PI 3.14159265

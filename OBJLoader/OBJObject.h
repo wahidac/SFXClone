@@ -10,7 +10,7 @@
 #ifndef __loadModels__OBJObject__
 #define __loadModels__OBJObject__
 
-#include "GLJoe.h"
+#include "../GLJoe/GLJoe.h"
 #include "objparser.h"
 
 
@@ -39,8 +39,6 @@ struct OBJObjectShaderHandles {
     GLuint LightSpecular;
 	GLuint tex;
 	GLuint EnableTex;
-	GLuint MoveTex;
-	GLuint TexOffset;
     GLuint isAnimatingExplosion;
 };
 
@@ -73,11 +71,11 @@ public:
     GLJoe::Transform getwMo() {
         return wMo;
     }
-    void setcMw(const GLJoe::Transform &worldToCamera) {
+    void setcMw(const GLJoe::Mat4 &worldToCamera) {
         cMw = worldToCamera;
     }
     
-    void setwMo(const GLJoe::Transform &objectToWorld) {
+    void setwMo(const GLJoe::Mat4 &objectToWorld) {
         wMo = objectToWorld;
     }
     

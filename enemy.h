@@ -5,8 +5,8 @@
 #ifndef DEF_ENEMY_H
 #define DEF_ENEMY_H
 
-#include "GLJoe.h"
-#include "OBJObject.h"
+#include "GLJoe/GLJoe.h"
+#include "ObjLoader/OBJObject.h"
 #include "Explosion.h"
 
 using namespace GLJoe;

@@ -1,7 +1,7 @@
 #ifndef __objparser_h_
 #define __objparser_h_
 
-#include "GLJoe.h"
+#include "../GLJoe/GLJoe.h"
 #include "glm.h"
 #include <vector>
 

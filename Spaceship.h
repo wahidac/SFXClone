@@ -9,8 +9,8 @@
 #ifndef Dev_spaceship_h
 #define Dev_spaceship_h
 
-#include "GLJoe.h"
-#include "OBJObject.h"
+#include "GLJoe/GLJoe.h"
+#include "ObjLoader/OBJObject.h"
 
 using namespace GLJoe;
 

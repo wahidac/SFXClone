@@ -10,9 +10,9 @@
 #define __Dev__EnemyTypes__
 
 #include <iostream>
-#include "OBJObject.h"
+#include "ObjLoader/OBJObject.h"
 
-#define NUM_ENEMY_TYPES 3
+#define NUM_ENEMY_TYPES 4
 
 //Defines a collection of different enemy types. Just a way to group
 //all the data that defines how enemies look.
@@ -34,7 +34,9 @@ public:
         enemies[1] = new OBJObject("Models/Animals/shark.obj", shaderHandles, cMw, wMo, &defaults);
         enemies[1]->initializeOpenGLBuffers();
         enemies[2] = new OBJObject("Models/Animals/eagle.obj", shaderHandles, cMw, wMo, &defaults);
-        enemies[2]->initializeOpenGLBuffers();        
+        enemies[2]->initializeOpenGLBuffers();     
+		enemies[3] = new OBJObject("Models/Other/couch.obj",shaderHandles, cMw, wMo, &defaults);
+        enemies[3]->initializeOpenGLBuffers();     
     }
     
     ~EnemyTypes() {
