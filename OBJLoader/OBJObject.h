@@ -40,6 +40,9 @@ struct OBJObjectShaderHandles {
 	GLuint tex;
 	GLuint EnableTex;
     GLuint isAnimatingExplosion;
+	GLuint MoveTex;
+	GLuint TexOffset;
+
 };
 
 class OBJObject {
@@ -71,7 +74,7 @@ public:
     GLJoe::Transform getwMo() {
         return wMo;
     }
-    void setcMw(const GLJoe::Mat4 &worldToCamera) {
+    void setcMw(const GLJoe::Transform &worldToCamera) {
         cMw = worldToCamera;
     }
     

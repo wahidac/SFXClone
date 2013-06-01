@@ -1,9 +1,11 @@
 #include "Background.h"
 
-Background::Background(char* backImage, OBJObjectShaderHandles &shaderHandles)
+Background::Background(char* backImage, char* groundImage, OBJObjectShaderHandles &shaderHandles)
 {
 	handles = shaderHandles;
-	imgLoader.loadImage(backImage, image, IMG_WIDTH, IMG_HEIGHT);
+	imgLoader.loadImage(backImage, back_image, IMG_WIDTH, IMG_HEIGHT);
+	imgLoader.loadImage(groundImage, ground_image, IMG_WIDTH, IMG_HEIGHT);
+
 	
 	num_vertices = 6;
 	
@@ -18,14 +20,16 @@ Background::Background(char* backImage, OBJObjectShaderHandles &shaderHandles)
 	plane_vertices = vertices;
 
 	Vec2 tex[6] = {
-		Vec2(1.0, 1.0),
-		Vec2(1.0, 0.0),
-		Vec2(0.0, 1.0),
-		Vec2(1.0, 0.0),
-		Vec2(0.0, 1.0),
-		Vec2(0.0, 0.0)
+		Vec2(1.0, 0.3),
+		Vec2(1.0, 1.3),
+		Vec2(0.0, 0.3),
+		Vec2(1.0, 1.3),
+		Vec2(0.0, 0.3),
+		Vec2(0.0, 1.3)
+
 	};
 	tex_coords = tex;
+	texture_offset = 0;
 
 	Vec3 normals[6] = {
 		Vec3(0.0, 0.0, 1.0),
@@ -56,11 +60,6 @@ Background::Background(char* backImage, OBJObjectShaderHandles &shaderHandles)
 		Vec4(0.0, 0.0, 0.0, 0.0)
 	};
 	material_other = other;
-	
-<<<<<<< HEAD
-	cMw.translate(0.0, 0.0, -999);
-	cMw.scale(1000);
-=======
 	back_cMw.translate(0.0, 0.0, -999);
 	back_cMw.scale(1000);
 
@@ -68,21 +67,42 @@ Background::Background(char* backImage, OBJObjectShaderHandles &shaderHandles)
 	ground_cMw.translate(0.0, -100.0, -500);
 	ground_cMw.scale(1000);
 
-	Transform city_cMw;
-	Transform city_wMo;
-	city_cMw.translate(0.0, 0.0, -80);
-	//city_wMo.rotateX(270);
-	city_wMo.scale(20);
 
-	OBJObjectParams cityparams;
-	cityparams.material_ambient = Vec4(0.8, 0.8, 0.8, 1.0);
-	cityparams.material_diffuse = Vec4(0.2, 0.4, 1.0, 1.0);
-	cityparams.material_specular = Vec4(0.0, 0.0, 0.0, 1.0);
-	cityparams.material_shininess = 6.0;
+	OBJObjectParams defaultBldgParams;
+	defaultBldgParams.material_ambient = Vec4(0.8, 0.8, 0.8, 1.0);
+	defaultBldgParams.material_diffuse = Vec4(0.2, 0.4, 1.0, 1.0);
+	defaultBldgParams.material_specular = Vec4(0.0, 0.0, 0.0, 1.0);
+	defaultBldgParams.material_shininess = 6.0;
 
-	//city = new OBJObject("Models/Buildings/.obj", handles, city_cMw, city_wMo, &cityparams);
-	//city->initializeOpenGLBuffers();
->>>>>>> parent of 96d99d3... Kyle - finished background by adding moving buildings to scenery
+	bldgDist[0] = -300;
+	bldgDist[1] = -700;
+	bldgDist[2] = -900;
+	bldgDist[3] = -200;
+	bldgDist[4] = -500;
+
+	bldgWMO[0] = Translate(-43.0, -100, 0);
+	bldgWMO[1] = Translate(50.0, -100, 0);
+	bldgWMO[2] = Translate(10.0, -100, 0);
+	bldgWMO[3] = Translate(100.0, -100, 0);
+	bldgWMO[4] = Translate(-200.0, -100, 0);
+
+	
+	bldgWMO[0].scale(40, 100, 40);
+	bldgWMO[1].scale(40, 100, 40);
+	bldgWMO[2].scale(40, 70, 40);
+	bldgWMO[3].scale(40, 100, 40);
+	bldgWMO[4].scale(40, 100, 40);
+
+	buildings[0] = new OBJObject("Models/Buildings/skyscraper.obj", handles, bldgCMW[0], bldgWMO[0], &defaultBldgParams);
+	buildings[1] = new OBJObject("Models/Buildings/mayanTemple.obj", handles, bldgCMW[1], bldgWMO[1], NULL);
+	buildings[2] = new OBJObject("Models/Buildings/mayanTemple.obj", handles, bldgCMW[2], bldgWMO[2], NULL);
+	buildings[3] = new OBJObject("Models/Buildings/mayanTemple.obj", handles, bldgCMW[3], bldgWMO[3], NULL);
+	buildings[4] = new OBJObject("Models/Buildings/skyscraper.obj", handles, bldgCMW[4], bldgWMO[4], &defaultBldgParams);
+
+	num_buildings = 5;
+
+	for(int i = 0; i < num_buildings; i++)
+		buildings[i]->initializeOpenGLBuffers();
 
 	initializeOpenGLBuffers();
 }
@@ -98,13 +118,21 @@ void Background::initializeOpenGLBuffers() {
 #endif
         
 	//Initialize textures
-	glGenTextures(1, textures);
+	glGenTextures(2, textures);
 	glBindTexture(GL_TEXTURE_2D, textures[0]);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, IMG_WIDTH, IMG_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, IMG_WIDTH, IMG_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, back_image);
 	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
     glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
 	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );
     glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
+	glBindTexture(GL_TEXTURE_2D, textures[1]);
+	glGenerateMipmap( GL_TEXTURE_2D );
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, IMG_WIDTH, IMG_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, ground_image);
+	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR );
+    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
+
 
 	glUniform1i(handles.tex, 0);
 
@@ -179,19 +207,17 @@ void Background::draw()
 	glBindTexture( GL_TEXTURE_2D, textures[0] );
 
 	//Send correct Transformation information to the shaders
-    glUniformMatrix4fv( handles.cMw, 1, GL_TRUE, cMw);
-    glUniformMatrix4fv( handles.wMo, 1, GL_TRUE, wMo);
+    glUniformMatrix4fv( handles.cMw, 1, GL_TRUE, back_cMw);
+    glUniformMatrix4fv( handles.wMo, 1, GL_TRUE, back_wMo);
+
 
 	//Turn on Textures
-	glUniform1i(handles.EnableTex, 1);
-    
+    glUniform1i(handles.MoveTex, 1);
+	glUniform1f(handles.TexOffset, texture_offset);
     //Draw the object
     glDrawArrays( GL_TRIANGLES, 0, num_vertices);
 
-<<<<<<< HEAD
-	//Turn off Textures
-	glUniform1i(handles.EnableTex, 0);
-=======
+
 	glBindTexture( GL_TEXTURE_2D, textures[1] );
 
 	glUniformMatrix4fv( handles.cMw, 1, GL_TRUE, ground_cMw);
@@ -205,17 +231,16 @@ void Background::draw()
 
 	//Turn off Textures
 	glUniform1i(handles.EnableTex, 0);
+	for(int i = 0; i < num_buildings; i++)
+	{
+		buildings[i]->setcMw(bldgCMW[i]);
+		buildings[i]->drawSelf();
+	}
 
-	//city->drawSelf();
->>>>>>> parent of 96d99d3... Kyle - finished background by adding moving buildings to scenery
 }
 
 void Background::resize(int width, int height)
 {
-<<<<<<< HEAD
-	cMw = Translate(0.0, 0.0, -999);
-	cMw.scale(1000.0 * width / height, 1000.0, 1.0);
-=======
 	back_cMw = Translate(0.0, 0.0, -999);
 	back_cMw.scale(1000.0 * width / height, 1000.0, 1.0);
 
@@ -224,10 +249,21 @@ void Background::resize(int width, int height)
 	ground_cMw.scale(1000.0 * width / height, 1000.0, 1.0);
 }
 
-void Background::moveGroundTexture(int offset)
+void Background::moveGroundTexture(GLfloat offset)
 {
 	texture_offset += offset;
 	if(texture_offset >= 100)
 		texture_offset = 0;
->>>>>>> parent of 96d99d3... Kyle - finished background by adding moving buildings to scenery
+}
+
+void Background::moveBuildings(int distance)
+{
+	for(int i = 0; i < num_buildings; i++)
+	{
+		bldgDist[i] += distance;
+		if(bldgDist[i] >= 0)
+			bldgDist[i] = -999;
+
+		bldgCMW[i] = Translate(0.0, 0.0, bldgDist[i]);
+	}
 }

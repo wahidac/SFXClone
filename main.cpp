@@ -117,6 +117,18 @@ void initShaderHandles() {
 	shaderHandles.EnableTex = glGetUniformLocation( program, "EnableTex" );
     shaderHandles.isAnimatingExplosion = glGetUniformLocation(program, "isAnimatingExplosion");
 }
+void timerFunc(int val)
+{
+	//Function that gets called every 16ms (or 60 times per second)
+	background->moveGroundTexture(0.0010);
+	background->moveBuildings(1.6);
+
+	glutPostRedisplay();
+
+	//Recursively call the timer function to schedule it again
+	glutTimerFunc(16, timerFunc, 0);
+}
+
 
 void init()
 {
@@ -157,11 +169,7 @@ void init()
 	bulletTypes = new BulletTypes(shaderHandles);
     
 	//Initialize the background objects
-<<<<<<< HEAD
-	background = new Background("Images/back.png", shaderHandles);
-=======
-	background = new Background("Images/mountainsky2.png", "Images/grass2048.png", shaderHandles);
->>>>>>> parent of 96d99d3... Kyle - finished background by adding moving buildings to scenery
+	background = new Background("Images/mountainsky.png", "Images/grass2048.png", shaderHandles);
     
     //Initialize the explosion to show when an enemy dies
     explosion = new Explosion("Images/explosionTexture.png",shaderHandles);
@@ -531,6 +539,7 @@ int main(int argc, char **argv)
 	glutReshapeFunc(reshape);
 	glutIdleFunc(idle);
     glutSpecialUpFunc(specialKeyReleased);
+	glutTimerFunc(16, timerFunc, 0);
     
 	glutMainLoop();
 	return 0;

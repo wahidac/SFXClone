@@ -7,22 +7,20 @@
 
 using namespace GLJoe;
 
-#define IMG_WIDTH 1920
-#define IMG_HEIGHT 1200
+#define IMG_WIDTH 2048
+#define IMG_HEIGHT 2048
+
 
 
 class Background
 {
 public:
-	Background(char* backImage, OBJObjectShaderHandles &shaderHandles);
+	Background(char* backImage, char* groundImage, OBJObjectShaderHandles &shaderHandles);
 	void draw();
 
 	void resize(int width, int height);
-<<<<<<< HEAD
-=======
-	void moveGroundTexture(int offset);
->>>>>>> parent of 96d99d3... Kyle - finished background by adding moving buildings to scenery
-
+	void moveGroundTexture(GLfloat offset);
+	void moveBuildings(int distance);
 private:
 	Vec4* plane_vertices;
 	Vec2* tex_coords;
@@ -31,23 +29,29 @@ private:
 	Vec4* material_other;
 
 	GLubyte image[IMG_WIDTH * IMG_HEIGHT * 3];
+	OBJObject* buildings[5];
+	Transform bldgCMW[5];
+	Transform bldgWMO[5];
+	int bldgDist[5];
+	GLubyte back_image[IMG_WIDTH * IMG_HEIGHT * 3];
+	GLubyte ground_image[IMG_WIDTH * IMG_HEIGHT * 3];
+	int num_buildings;
 
-	Transform cMw;
-	Transform wMo;
+	Transform back_cMw;
+	Transform back_wMo;
+	Transform ground_cMw;
+	Transform ground_wMo;
 
 	OBJObjectShaderHandles handles;
 
 	ImgLoader imgLoader;
-
+	OBJObject* city;
 	GLuint vao;
 
 	int num_vertices;
-<<<<<<< HEAD
-=======
-	int texture_offset;
->>>>>>> parent of 96d99d3... Kyle - finished background by adding moving buildings to scenery
+	GLfloat texture_offset;
 
-	GLuint textures[1];
+	GLuint textures[2];
 
 	void initializeOpenGLBuffers();
 };
