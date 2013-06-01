@@ -8,6 +8,7 @@ varying float Shininess;
 
 uniform sampler2D Tex;
 uniform int EnableTex;
+uniform int isAnimatingExplosion;
 
 void main() 
 { 
@@ -42,4 +43,10 @@ void main()
 
        gl_FragColor = combined; //ambient + diffuse + specular;
        gl_FragColor.a = 1.0;
+       
+       //Make all black transparent if we're animating an explosion so we only see the 
+       //flames from the explosion
+       if(isAnimatingExplosion == 1 && gl_FragColor == vec4(0,0,0,1)) {
+            gl_FragColor.a = 0.0;
+       }
 } 

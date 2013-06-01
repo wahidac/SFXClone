@@ -4,8 +4,9 @@
 #include "Spaceship.h"
 #include "OBJLoader/OBJObject.h"
 #include "Background.h"
+#include "Explosion.h"
 
-//#define USE_AUDIO
+#define USE_AUDIO
 
 #ifdef USE_AUDIO
 #include <SFML/Audio.hpp>
@@ -43,6 +44,9 @@ GLfloat shiftY;
 // Background objects
 Background* background;
 
+// Explosion
+Explosion* explosion;
+
 // Spaceship and enemies
 Spaceship* spaceship;
 EnemyTypes* enemyTypes;
@@ -72,6 +76,8 @@ OBJObjectShaderHandles shaderHandles;
 // Sounds
 sf::SoundBuffer bufferLaser;
 sf::Sound soundLaser;
+sf::SoundBuffer bufferExplosion;
+sf::Sound soundExplosion;
 sf::Music music;
 #endif
 
@@ -102,6 +108,7 @@ void initShaderHandles() {
 	shaderHandles.vTexCoords = glGetAttribLocation( program, "vTexCoords" );
 	shaderHandles.tex = glGetUniformLocation( program, "Tex" );
 	shaderHandles.EnableTex = glGetUniformLocation( program, "EnableTex" );
+    shaderHandles.isAnimatingExplosion = glGetUniformLocation(program, "isAnimatingExplosion");
 }
 
 void init()
@@ -142,6 +149,9 @@ void init()
     
 	//Initialize the background objects
 	background = new Background("Images/back.png", shaderHandles);
+    
+    //Initialize the explosion to show when an enemy dies
+    explosion = new Explosion("Images/explosionTexture.png",shaderHandles);
 
 	// Initialize timers
 	lastTime = newTime = glutGet(GLUT_ELAPSED_TIME);
@@ -155,6 +165,13 @@ void init()
 		Error("Failed loading sound %s", "laser.wav");
 	}
 	soundLaser.setBuffer(bufferLaser);
+    
+    if (!bufferExplosion.loadFromFile("Sounds/explode2.wav"))
+	{
+		Error("Failed loading sound %s", "explode2.wav");
+	}
+	soundExplosion.setBuffer(bufferExplosion);
+    
 	if (!music.openFromFile("Sounds/music.ogg"))
 	{
 		Error("Failed loading music %s", "music.ogg");
@@ -168,6 +185,16 @@ void init()
 		Error("Failed loading sound %s", "laser.wav");
 	}
 	soundLaser.SetBuffer(bufferLaser);
+    
+    
+    if (!bufferExplosion.LoadFromFile("Sounds/explode2.wav"))
+	{
+		Error("Failed loading sound %s", "explode2.wav");
+	}
+	soundExplosion.SetBuffer(bufferExplosion);
+    
+    
+    
 	if (!music.OpenFromFile("Sounds/music.ogg"))
 	{
 		Error("Failed loading music %s", "music.ogg");
@@ -214,10 +241,18 @@ void keyboard(unsigned char key, int x, int y)
 					os.y >= oe.y - 5 &&
 					os.y <= oe.y + 5)
 				{
-					delete enemies[i];
-					enemies[i] = 0;
-					number--;
-					numberKilled++;
+                    enemies[i]->killEnemy();
+                    
+                    #ifdef USE_AUDIO
+                    
+                    #ifdef __APPLE__
+                    soundExplosion.play();
+                    #else
+                    soundExplosion.Play();
+                    #endif
+                    
+                    #endif
+                    
 				}
 			}
 		}
@@ -326,7 +361,7 @@ void idle()
         
         //Pick a random enemy from our different types of enemies.
         int randomEnemyType = rand()%NUM_ENEMY_TYPES;
-		enemies[iEnemy] = new Enemy(program,enemyTypes->enemies[randomEnemyType]);
+		enemies[iEnemy] = new Enemy(program,enemyTypes->enemies[randomEnemyType],explosion);
         
 		iEnemy = (iEnemy + 1) % MAX_ENEMIES;
 		number++;
@@ -339,15 +374,29 @@ void idle()
 	{
 		if (enemies[i])
 		{
-			if (enemies[i]->offset.z < Z_ENEMIES_STOP)
-				enemies[i]->offset += Vec4(0, 0, elapsedTime / 1000.0 *
-					enemies[i]->speed, 0);
+            if (enemies[i]->isAlive()) {
+                if (enemies[i]->offset.z < Z_ENEMIES_STOP)
+                    enemies[i]->offset += Vec4(0, 0, elapsedTime / 1000.0 *
+                                               enemies[i]->speed, 0);
+            } else {
+                
+                if (!enemies[i]->animatingDeath()) {
+                    //Done animating the explosion. We can free memory
+                    	delete enemies[i];
+                    	enemies[i] = 0;
+                    	number--;
+                    	numberKilled++;
+                } else {
+                    enemies[i]->updateExplosionAnimation(elapsedTime/1000.0);
+                }
+            }
+	
 		}
 	}
     
     //Update the spaceship's position based on how much time has elapsed since the last time idle was called
     spaceship->updatePosition(elapsedTime/1000.0);
-
+    
 	
 	glutPostRedisplay();
 }
@@ -363,6 +412,8 @@ void display()
 	glUniform1i(glGetUniformLocation(program, "EnableTex"), 0);
     spaceship->draw();
 
+   
+    
 	//glUniform1i(EnableTex, 1);
 	for (int i = 0; i < MAX_ENEMIES; ++i)
 	{
@@ -370,10 +421,25 @@ void display()
 		{
             enemies[i]->cMw = Translate(-initialEyePos);
             enemies[i]->wMo = Translate(enemies[i]->offset);
-			enemies[i]->draw();
+            
+            if (enemies[i]->animatingDeath()) {
+                //Turn on transparency for the explosion
+                glUniform1i(shaderHandles.isAnimatingExplosion, 1);
+                glEnable(GL_BLEND);
+                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+                glDepthMask( GL_FALSE );
+                enemies[i]->draw();                
+                glDepthMask( GL_TRUE );
+                glDisable(GL_BLEND);
+                //Turn off transparency
+                glUniform1i(shaderHandles.isAnimatingExplosion, 0);
+            } else {
+                enemies[i]->draw();
+            }
 		}
 	}
 	
+
 	unsigned char score[40];
 	unsigned char energy[40];
 	sprintf((char*) score, "Score: %d", POINTS_PER_KILL * numberKilled);
@@ -381,9 +447,9 @@ void display()
 	
 	glColor3f(1, 1, 1);
 	glRasterPos2f(0.5, 0.8);
-	glutBitmapString(GLUT_BITMAP_HELVETICA_18, score);
+//	glutBitmapString(GLUT_BITMAP_HELVETICA_18, score);
 	glRasterPos2f(-0.8, 0.8);
-	glutBitmapString(GLUT_BITMAP_HELVETICA_18, energy);
+//	glutBitmapString(GLUT_BITMAP_HELVETICA_18, energy);
 	
 	glutSwapBuffers();
 }
@@ -395,8 +461,8 @@ int main(int argc, char **argv)
 	glutInitWindowSize(DEFAULT_WINDOW_SIZE, DEFAULT_WINDOW_SIZE);
 	glutCreateWindow("SFX Clone");
 
-	glewExperimental = GL_TRUE;
-	glewInit();
+//	glewExperimental = GL_TRUE;
+//	glewInit();
 
 	init();
 

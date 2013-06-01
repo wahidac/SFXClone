@@ -39,6 +39,7 @@ struct OBJObjectShaderHandles {
     GLuint LightSpecular;
 	GLuint tex;
 	GLuint EnableTex;
+    GLuint isAnimatingExplosion;
 };
 
 class OBJObject {
