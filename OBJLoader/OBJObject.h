@@ -41,6 +41,7 @@ struct OBJObjectShaderHandles {
 	GLuint EnableTex;
 	GLuint MoveTex;
 	GLuint TexOffset;
+    GLuint isAnimatingExplosion;
 };
 
 class OBJObject {
