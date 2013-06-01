@@ -18,7 +18,8 @@ public:
 	void draw();
 
 	void resize(int width, int height);
-	void moveGroundTexture(int offset);
+	void moveGroundTexture(GLfloat offset);
+	void moveBuildings(int distance);
 
 private:
 	Vec4* plane_vertices;
@@ -37,6 +38,13 @@ private:
 
 	OBJObjectShaderHandles handles;
 
+	OBJObject* buildings[5];
+	Transform bldgCMW[5];
+	Transform bldgWMO[5];
+	int bldgDist[5];
+
+	int num_buildings;
+
 	ImgLoader imgLoader;
 
 	OBJObject* city;
@@ -44,7 +52,7 @@ private:
 	GLuint vao;
 
 	int num_vertices;
-	int texture_offset;
+	GLfloat texture_offset;
 
 	GLuint textures[2];
 

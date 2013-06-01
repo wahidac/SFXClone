@@ -66,20 +66,42 @@ Background::Background(char* backImage, char* groundImage, OBJObjectShaderHandle
 	ground_cMw.translate(0.0, -100.0, -500);
 	ground_cMw.scale(1000);
 
-	Transform city_cMw;
-	Transform city_wMo;
-	city_cMw.translate(0.0, 0.0, -80);
-	//city_wMo.rotateX(270);
-	city_wMo.scale(20);
+	OBJObjectParams defaultBldgParams;
+	defaultBldgParams.material_ambient = Vec4(0.8, 0.8, 0.8, 1.0);
+	defaultBldgParams.material_diffuse = Vec4(0.2, 0.4, 1.0, 1.0);
+	defaultBldgParams.material_specular = Vec4(0.0, 0.0, 0.0, 1.0);
+	defaultBldgParams.material_shininess = 6.0;
 
-	OBJObjectParams cityparams;
-	cityparams.material_ambient = Vec4(0.8, 0.8, 0.8, 1.0);
-	cityparams.material_diffuse = Vec4(0.2, 0.4, 1.0, 1.0);
-	cityparams.material_specular = Vec4(0.0, 0.0, 0.0, 1.0);
-	cityparams.material_shininess = 6.0;
+	bldgDist[0] = -300;
+	bldgDist[1] = -700;
+	bldgDist[2] = -900;
+	bldgDist[3] = -200;
+	bldgDist[4] = -500;
 
-	//city = new OBJObject("Models/Buildings/.obj", handles, city_cMw, city_wMo, &cityparams);
-	//city->initializeOpenGLBuffers();
+
+	bldgWMO[0] = Translate(-43.0, -100, 0);
+	bldgWMO[1] = Translate(50.0, -100, 0);
+	bldgWMO[2] = Translate(10.0, -100, 0);
+	bldgWMO[3] = Translate(100.0, -100, 0);
+	bldgWMO[4] = Translate(-200.0, -100, 0);
+
+	
+	bldgWMO[0].scale(40, 100, 40);
+	bldgWMO[1].scale(40, 100, 40);
+	bldgWMO[2].scale(40, 70, 40);
+	bldgWMO[3].scale(40, 100, 40);
+	bldgWMO[4].scale(40, 100, 40);
+
+	buildings[0] = new OBJObject("Models/Buildings/skyscraper.obj", handles, bldgCMW[0], bldgWMO[0], &defaultBldgParams);
+	buildings[1] = new OBJObject("Models/Buildings/mayanTemple.obj", handles, bldgCMW[1], bldgWMO[1], NULL);
+	buildings[2] = new OBJObject("Models/Buildings/mayanTemple.obj", handles, bldgCMW[2], bldgWMO[2], NULL);
+	buildings[3] = new OBJObject("Models/Buildings/mayanTemple.obj", handles, bldgCMW[3], bldgWMO[3], NULL);
+	buildings[4] = new OBJObject("Models/Buildings/skyscraper.obj", handles, bldgCMW[4], bldgWMO[4], &defaultBldgParams);
+
+	num_buildings = 5;
+
+	for(int i = 0; i < num_buildings; i++)
+		buildings[i]->initializeOpenGLBuffers();
 
 	initializeOpenGLBuffers();
 }
@@ -200,7 +222,7 @@ void Background::draw()
     glUniformMatrix4fv( handles.wMo, 1, GL_TRUE, ground_wMo);
 
 	glUniform1i(handles.MoveTex, 1);
-	glUniform1i(handles.TexOffset, texture_offset);
+	glUniform1f(handles.TexOffset, texture_offset);
 
 	//Draw the object
     glDrawArrays( GL_TRIANGLES, 0, num_vertices);
@@ -208,7 +230,11 @@ void Background::draw()
 	//Turn off Textures
 	glUniform1i(handles.EnableTex, 0);
 
-	//city->drawSelf();
+	for(int i = 0; i < num_buildings; i++)
+	{
+		buildings[i]->setcMw(bldgCMW[i]);
+		buildings[i]->drawSelf();
+	}
 }
 
 void Background::resize(int width, int height)
@@ -221,9 +247,21 @@ void Background::resize(int width, int height)
 	ground_cMw.scale(1000.0 * width / height, 1000.0, 1.0);
 }
 
-void Background::moveGroundTexture(int offset)
+void Background::moveGroundTexture(GLfloat offset)
 {
 	texture_offset += offset;
 	if(texture_offset >= 100)
 		texture_offset = 0;
+}
+
+void Background::moveBuildings(int distance)
+{
+	for(int i = 0; i < num_buildings; i++)
+	{
+		bldgDist[i] += distance;
+		if(bldgDist[i] >= 0)
+			bldgDist[i] = -999;
+
+		bldgCMW[i] = Translate(0.0, 0.0, bldgDist[i]);
+	}
 }

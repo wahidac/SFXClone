@@ -151,7 +151,7 @@ void init()
     enemyTypes = new EnemyTypes(shaderHandles);
     
 	//Initialize the background objects
-	background = new Background("Images/mountainsky2.png", "Images/grass2048.png", shaderHandles);
+	background = new Background("Images/mountainsky.png", "Images/grass2048.png", shaderHandles);
     
     //Initialize the explosion to show when an enemy dies
     explosion = new Explosion("Images/explosionTexture.png",shaderHandles);
@@ -455,6 +455,18 @@ void display()
 	glutSwapBuffers();
 }
 
+void timerFunc(int val)
+{
+	//Function that gets called every 16ms (or 60 times per second)
+	background->moveGroundTexture(0.0010);
+	background->moveBuildings(1.6);
+
+	glutPostRedisplay();
+
+	//Recursively call the timer function to schedule it again
+	glutTimerFunc(16, timerFunc, 0);
+}
+
 int main(int argc, char **argv)
 {
 	glutInit(&argc, argv);
@@ -474,6 +486,7 @@ int main(int argc, char **argv)
 	glutReshapeFunc(reshape);
 	glutIdleFunc(idle);
     glutSpecialUpFunc(specialKeyReleased);
+	glutTimerFunc(16, timerFunc, 0);
     
 	glutMainLoop();
 	return 0;

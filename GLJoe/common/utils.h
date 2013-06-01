@@ -12,6 +12,8 @@
 
 #define BUFFER_OFFSET(offset) ((GLvoid*) (offset))
 
+#include<math.h>
+
 namespace GLJoe
 {
 	inline GLfloat Radians(const GLfloat theta)

@@ -73,11 +73,11 @@ public:
     GLJoe::Transform getwMo() {
         return wMo;
     }
-    void setcMw(const GLJoe::Mat4 &worldToCamera) {
+    void setcMw(const GLJoe::Transform &worldToCamera) {
         cMw = worldToCamera;
     }
     
-    void setwMo(const GLJoe::Mat4 &objectToWorld) {
+    void setwMo(const GLJoe::Transform &objectToWorld) {
         wMo = objectToWorld;
     }
     
