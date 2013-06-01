@@ -127,11 +127,12 @@ void init()
     Transform cMw, wMo;
     
     cMw.translate(-initialEyePos);
-    wMo.rotateY(180);
+    //wMo.rotateY(180);
+	wMo.rotateX(15);
     wMo.scale(5);
 
 	// Generate the spaceship
-    aircraftModel = new OBJObject("Models/Aircraft/f-16.obj", shaderHandles, cMw, wMo, NULL);
+    aircraftModel = new OBJObject("Models/Aircraft/Arwing_001.obj", shaderHandles, cMw, wMo, NULL);
     //Initialize buffers before making any call to draw
     aircraftModel->initializeOpenGLBuffers();
 
