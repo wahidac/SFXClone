@@ -18,6 +18,10 @@ public:
 	void draw();
 
 	void resize(int width, int height);
+<<<<<<< HEAD
+=======
+	void moveGroundTexture(int offset);
+>>>>>>> parent of 96d99d3... Kyle - finished background by adding moving buildings to scenery
 
 private:
 	Vec4* plane_vertices;
@@ -38,6 +42,10 @@ private:
 	GLuint vao;
 
 	int num_vertices;
+<<<<<<< HEAD
+=======
+	int texture_offset;
+>>>>>>> parent of 96d99d3... Kyle - finished background by adding moving buildings to scenery
 
 	GLuint textures[1];
 

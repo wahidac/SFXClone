@@ -57,8 +57,32 @@ Background::Background(char* backImage, OBJObjectShaderHandles &shaderHandles)
 	};
 	material_other = other;
 	
+<<<<<<< HEAD
 	cMw.translate(0.0, 0.0, -999);
 	cMw.scale(1000);
+=======
+	back_cMw.translate(0.0, 0.0, -999);
+	back_cMw.scale(1000);
+
+	ground_cMw.rotateX(90);
+	ground_cMw.translate(0.0, -100.0, -500);
+	ground_cMw.scale(1000);
+
+	Transform city_cMw;
+	Transform city_wMo;
+	city_cMw.translate(0.0, 0.0, -80);
+	//city_wMo.rotateX(270);
+	city_wMo.scale(20);
+
+	OBJObjectParams cityparams;
+	cityparams.material_ambient = Vec4(0.8, 0.8, 0.8, 1.0);
+	cityparams.material_diffuse = Vec4(0.2, 0.4, 1.0, 1.0);
+	cityparams.material_specular = Vec4(0.0, 0.0, 0.0, 1.0);
+	cityparams.material_shininess = 6.0;
+
+	//city = new OBJObject("Models/Buildings/.obj", handles, city_cMw, city_wMo, &cityparams);
+	//city->initializeOpenGLBuffers();
+>>>>>>> parent of 96d99d3... Kyle - finished background by adding moving buildings to scenery
 
 	initializeOpenGLBuffers();
 }
@@ -164,12 +188,46 @@ void Background::draw()
     //Draw the object
     glDrawArrays( GL_TRIANGLES, 0, num_vertices);
 
+<<<<<<< HEAD
 	//Turn off Textures
 	glUniform1i(handles.EnableTex, 0);
+=======
+	glBindTexture( GL_TEXTURE_2D, textures[1] );
+
+	glUniformMatrix4fv( handles.cMw, 1, GL_TRUE, ground_cMw);
+    glUniformMatrix4fv( handles.wMo, 1, GL_TRUE, ground_wMo);
+
+	glUniform1i(handles.MoveTex, 1);
+	glUniform1i(handles.TexOffset, texture_offset);
+
+	//Draw the object
+    glDrawArrays( GL_TRIANGLES, 0, num_vertices);
+
+	//Turn off Textures
+	glUniform1i(handles.EnableTex, 0);
+
+	//city->drawSelf();
+>>>>>>> parent of 96d99d3... Kyle - finished background by adding moving buildings to scenery
 }
 
 void Background::resize(int width, int height)
 {
+<<<<<<< HEAD
 	cMw = Translate(0.0, 0.0, -999);
 	cMw.scale(1000.0 * width / height, 1000.0, 1.0);
+=======
+	back_cMw = Translate(0.0, 0.0, -999);
+	back_cMw.scale(1000.0 * width / height, 1000.0, 1.0);
+
+	ground_cMw = RotateX(90);
+	ground_cMw.translate(0.0, -100.0, -500);
+	ground_cMw.scale(1000.0 * width / height, 1000.0, 1.0);
+}
+
+void Background::moveGroundTexture(int offset)
+{
+	texture_offset += offset;
+	if(texture_offset >= 100)
+		texture_offset = 0;
+>>>>>>> parent of 96d99d3... Kyle - finished background by adding moving buildings to scenery
 }

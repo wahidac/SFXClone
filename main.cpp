@@ -157,7 +157,11 @@ void init()
 	bulletTypes = new BulletTypes(shaderHandles);
     
 	//Initialize the background objects
+<<<<<<< HEAD
 	background = new Background("Images/back.png", shaderHandles);
+=======
+	background = new Background("Images/mountainsky2.png", "Images/grass2048.png", shaderHandles);
+>>>>>>> parent of 96d99d3... Kyle - finished background by adding moving buildings to scenery
     
     //Initialize the explosion to show when an enemy dies
     explosion = new Explosion("Images/explosionTexture.png",shaderHandles);
