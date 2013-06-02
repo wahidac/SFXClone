@@ -122,6 +122,111 @@ void timerFunc(int val)
 	//Function that gets called every 16ms (or 60 times per second)
 	background->moveGroundTexture(0.0010);
 	background->moveBuildings(1.6);
+    
+    
+    //Wahid moved all the stuff previously in idle here because his machine was getting destroyed by the amount
+    //of computation occuring there.
+    newTime = glutGet(GLUT_ELAPSED_TIME);
+	int elapsedTime = newTime - lastTime;
+	int elapsedTimeSinceLastEnemyAppeared = newTime
+    - lastTimeEnemyAppeared;
+	lastTime = newTime;
+	
+	if (number < MAX_ENEMIES &&
+		APPEARANCE_RATE * elapsedTimeSinceLastEnemyAppeared > 1)
+	{
+		while (enemies[iEnemy])
+			iEnemy++;
+		delete enemies[iEnemy];
+        
+        //Pick a random enemy from our different types of enemies.
+        int randomEnemyType = rand()%NUM_ENEMY_TYPES;
+		enemies[iEnemy] = new Enemy(program,enemyTypes->enemies[randomEnemyType],explosion);
+        
+		iEnemy = (iEnemy + 1) % MAX_ENEMIES;
+		number++;
+		lastTimeEnemyAppeared = newTime;
+		
+		cout << "Creating enemy " << randomEnemyType << endl;
+	}
+	for(int i = 0; i < MAX_BULLETS; i++){
+		if(bullets[i]){
+			if(bullets[i]->offset.z > -30){
+				bullets[i]->offset =bullets[i]->offset +  Vec4(0,0,bullets[i]->speed,0);
+                
+			}else{
+				delete bullets[i];
+                bullets[i] = 0;
+                numBullets--;
+                
+                
+			}
+            
+            
+            
+		}
+        
+        
+	}
+	for (int i = 0; i < MAX_ENEMIES; ++i)
+    {
+        if (enemies[i])
+        {
+            Vec3 oe = enemies[i]->offset.xyz();
+            for(int j = 0; j < MAX_BULLETS; j++){
+                if(bullets[j]){
+                    Vec3 os = bullets[j]->offset.xyz();
+                    if (os.x >= oe.x - 2 &&
+                        os.x <= oe.x + 2 &&
+                        os.y >= oe.y - 2 &&
+                        os.y <= oe.y + 2 &&
+                        (os.z >= oe.z - .25 && os.z <= oe.z + .25))
+                    {
+                        enemies[i]->killEnemy();
+                        
+#ifdef USE_AUDIO
+                        
+#ifdef __APPLE__
+                        soundExplosion.play();
+#else
+                        soundExplosion.Play();
+#endif
+                        
+#endif
+                        
+                    }
+                }
+            }
+        }
+    }
+	for (int i = 0; i < MAX_ENEMIES; ++i)
+	{
+		if (enemies[i])
+		{
+            if (enemies[i]->isAlive()) {
+                if (enemies[i]->offset.z < Z_ENEMIES_STOP)
+                    enemies[i]->offset += Vec4(0, 0, elapsedTime / 1000.0 *
+                                               enemies[i]->speed, 0);
+            } else {
+                
+                if (!enemies[i]->animatingDeath()) {
+                    //Done animating the explosion. We can free memory
+                    delete enemies[i];
+                    enemies[i] = 0;
+                    number--;
+                    numberKilled++;
+                } else {
+                    enemies[i]->updateExplosionAnimation(elapsedTime/1000.0);
+                }
+            }
+            
+		}
+	}
+    
+    //Update the spaceship's position based on how much time has elapsed since the last time idle was called
+    spaceship->updatePosition(elapsedTime/1000.0);
+    
+    
 
 	glutPostRedisplay();
 
@@ -349,111 +454,13 @@ void reshape(int width, int height)
 	background->resize(width, height);
 }
 
-void idle()
+/*void idle()
 {
-	newTime = glutGet(GLUT_ELAPSED_TIME);
-	int elapsedTime = newTime - lastTime;
-	int elapsedTimeSinceLastEnemyAppeared = newTime
-		- lastTimeEnemyAppeared;
-	lastTime = newTime;	
 	
-	if (number < MAX_ENEMIES && 
-		APPEARANCE_RATE * elapsedTimeSinceLastEnemyAppeared > 1)
-	{
-		while (enemies[iEnemy])
-			iEnemy++;
-		delete enemies[iEnemy];
-        
-        //Pick a random enemy from our different types of enemies.
-        int randomEnemyType = rand()%NUM_ENEMY_TYPES;
-		enemies[iEnemy] = new Enemy(program,enemyTypes->enemies[randomEnemyType],explosion);
-        
-		iEnemy = (iEnemy + 1) % MAX_ENEMIES;
-		number++;
-		lastTimeEnemyAppeared = newTime;
-		
-		cout << "Creating enemy " << randomEnemyType << endl;
-	}
-	for(int i = 0; i < MAX_BULLETS; i++){
-		if(bullets[i]){
-			if(bullets[i]->offset.z > -30){
-				bullets[i]->offset =bullets[i]->offset +  Vec4(0,0,bullets[i]->speed,0);
-
-			}else{
-				delete bullets[i];
-                bullets[i] = 0;
-                numBullets--;
-
-
-			}
-				
-
-
-		}
-
-
-	}
-	for (int i = 0; i < MAX_ENEMIES; ++i)
-		{
-			if (enemies[i])
-			{
-				Vec3 oe = enemies[i]->offset.xyz();
-				for(int j = 0; j < MAX_BULLETS; j++){
-					if(bullets[j]){
-						Vec3 os = bullets[j]->offset.xyz();
-						if (os.x >= oe.x - 2 &&
-							os.x <= oe.x + 2 &&
-							os.y >= oe.y - 2 &&
-							os.y <= oe.y + 2 &&
-							(os.z >= oe.z - .25 && os.z <= oe.z + .25))
-						{
-							enemies[i]->killEnemy();
-                    
-							#ifdef USE_AUDIO
-                    
-							#ifdef __APPLE__
-							soundExplosion.play();
-							#else
-							soundExplosion.Play();
-							#endif
-                    
-							#endif
-                    
-						}
-					}
-				}
-			}
-		}
-	for (int i = 0; i < MAX_ENEMIES; ++i)
-	{
-		if (enemies[i])
-		{
-            if (enemies[i]->isAlive()) {
-                if (enemies[i]->offset.z < Z_ENEMIES_STOP)
-                    enemies[i]->offset += Vec4(0, 0, elapsedTime / 1000.0 *
-                                               enemies[i]->speed, 0);
-            } else {
-                
-                if (!enemies[i]->animatingDeath()) {
-                    //Done animating the explosion. We can free memory
-                    	delete enemies[i];
-                    	enemies[i] = 0;
-                    	number--;
-                    	numberKilled++;
-                } else {
-                    enemies[i]->updateExplosionAnimation(elapsedTime/1000.0);
-                }
-            }
-	
-		}
-	}
-    
-    //Update the spaceship's position based on how much time has elapsed since the last time idle was called
-    spaceship->updatePosition(elapsedTime/1000.0);
     
 	
 	glutPostRedisplay();
-}
+}*/
 
 void display()
 {
@@ -537,7 +544,7 @@ int main(int argc, char **argv)
 	glutMouseFunc(mouse);
 	glutSpecialFunc(special);
 	glutReshapeFunc(reshape);
-	glutIdleFunc(idle);
+	//glutIdleFunc(idle);
     glutSpecialUpFunc(specialKeyReleased);
 	glutTimerFunc(16, timerFunc, 0);
     
