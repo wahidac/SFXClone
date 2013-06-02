@@ -185,7 +185,9 @@ void timerFunc(int val)
                         (os.z >= oe.z - .25 && os.z <= oe.z + .25))
                     {
                         enemies[i]->killEnemy();
-                        
+                       	delete bullets[j];
+						bullets[j] = 0;
+						numBullets--; 
 #ifdef USE_AUDIO
                         
 #ifdef __APPLE__
