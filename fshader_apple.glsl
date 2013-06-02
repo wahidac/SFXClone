@@ -42,11 +42,11 @@ void main()
        }
 
 	   vec4 combined = ambient + diffuse + specular;
-	   if (EnableTex == 1)
+	   if (EnableTex == 1 && MoveTex == 0)
 			combined = texture2D(Tex, vec2(gl_TexCoord[0]));
-
 	   else if(EnableTex == 1 && MoveTex == 1)
 			combined = texture2D(Tex, vec2(gl_TexCoord[0].x, gl_TexCoord[0].y + TexOffset) * 10.0);
+
        gl_FragColor = combined; //ambient + diffuse + specular;
        gl_FragColor.a = 1.0;
        

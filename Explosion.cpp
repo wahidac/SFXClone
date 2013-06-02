@@ -166,6 +166,7 @@ void Explosion::draw()
     
 	//Turn on Textures
 	glUniform1i(handles.EnableTex, 1);
+	glUniform1i(handles.MoveTex, 0);
     
     //Draw the object
     glDrawArrays( GL_TRIANGLES, 0, num_vertices);

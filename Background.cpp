@@ -133,7 +133,6 @@ void Background::initializeOpenGLBuffers() {
 	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR );
     glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR );
 
-
 	glUniform1i(handles.tex, 0);
 
     GLuint buffer[2];
@@ -212,11 +211,11 @@ void Background::draw()
 
 
 	//Turn on Textures
-    glUniform1i(handles.MoveTex, 1);
+    glUniform1i(handles.EnableTex, 1);
+	glUniform1i(handles.MoveTex, 0);
 	glUniform1f(handles.TexOffset, texture_offset);
     //Draw the object
     glDrawArrays( GL_TRIANGLES, 0, num_vertices);
-
 
 	glBindTexture( GL_TEXTURE_2D, textures[1] );
 

@@ -115,6 +115,8 @@ void initShaderHandles() {
 	shaderHandles.vTexCoords = glGetAttribLocation( program, "vTexCoords" );
 	shaderHandles.tex = glGetUniformLocation( program, "Tex" );
 	shaderHandles.EnableTex = glGetUniformLocation( program, "EnableTex" );
+	shaderHandles.MoveTex = glGetUniformLocation( program, "MoveTex" );
+	shaderHandles.TexOffset = glGetUniformLocation( program, "TexOffset" );
     shaderHandles.isAnimatingExplosion = glGetUniformLocation(program, "isAnimatingExplosion");
 }
 void timerFunc(int val)
