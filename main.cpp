@@ -21,6 +21,7 @@ using namespace GLJoe;
 #define MAX_ENEMIES 100
 #define MAX_BULLETS 50
 #define SPACESHIP_SPEED 25
+#define ENEMY_SCALE 3
 
 const float APPEARANCE_RATE = 0.001;
 const int POINTS_PER_KILL = 250;
@@ -121,6 +122,7 @@ void initShaderHandles() {
 	shaderHandles.MoveTex = glGetUniformLocation( program, "MoveTex" );
 	shaderHandles.TexOffset = glGetUniformLocation( program, "TexOffset" );
     shaderHandles.isAnimatingExplosion = glGetUniformLocation(program, "isAnimatingExplosion");
+    shaderHandles.calculateTexCoordInShader = glGetUniformLocation(program, "calculateTexCoordInShader");
 }
 void timerFunc(int val)
 {
@@ -148,6 +150,23 @@ void timerFunc(int val)
         int randomEnemyType = rand()%NUM_ENEMY_TYPES;
 		enemies[iEnemy] = new Enemy(program,enemyTypes->enemies[randomEnemyType],explosion);
         
+        //Set enemy orientation so enemy faces us!
+        float orientation = 0;
+        switch (randomEnemyType) {
+            case 0:
+                orientation = -90.0;
+                break;
+            case 1:
+                orientation = 90;
+                break;
+            case 2:
+                orientation = 0;
+                break;
+            default:
+                break;
+        }
+        enemies[iEnemy]->enemyOrientation = orientation;
+        
 		iEnemy = (iEnemy + 1) % MAX_ENEMIES;
 		number++;
 		lastTimeEnemyAppeared = newTime;
@@ -166,8 +185,6 @@ void timerFunc(int val)
                 
                 
 			}
-            
-            
             
 		}
         
@@ -553,6 +570,7 @@ void display()
 		{
             enemies[i]->cMw = Translate(-initialEyePos);
             enemies[i]->wMo = Translate(enemies[i]->offset);
+            enemies[i]->scale = ENEMY_SCALE;
             
             if (enemies[i]->animatingDeath()) {
                 //Turn on transparency for the explosion

@@ -1,4 +1,5 @@
 #include "Background.h"
+#include "TexturedOBJObject.h"
 
 Background::Background(char* backImage, char* groundImage, OBJObjectShaderHandles &shaderHandles)
 {
@@ -93,7 +94,8 @@ Background::Background(char* backImage, char* groundImage, OBJObjectShaderHandle
 	bldgWMO[3].scale(40, 100, 40);
 	bldgWMO[4].scale(40, 100, 40);
 
-	buildings[0] = new OBJObject("Models/Buildings/skyscraper.obj", handles, bldgCMW[0], bldgWMO[0], &defaultBldgParams);
+	//buildings[0] = new OBJObject("Models/Buildings/skyscraper.obj", handles, bldgCMW[0], bldgWMO[0], &defaultBldgParams);
+    buildings[0] = new TexturedOBJObject("Images/darkTexture.png",1024,685,"Models/Buildings/skyscraper.obj",handles,bldgCMW[0],bldgWMO[0],&defaultBldgParams);
 	buildings[1] = new OBJObject("Models/Buildings/mayanTemple.obj", handles, bldgCMW[1], bldgWMO[1], NULL);
 	buildings[2] = new OBJObject("Models/Buildings/mayanTemple.obj", handles, bldgCMW[2], bldgWMO[2], NULL);
 	buildings[3] = new OBJObject("Models/Buildings/mayanTemple.obj", handles, bldgCMW[3], bldgWMO[3], NULL);
@@ -127,6 +129,7 @@ void Background::initializeOpenGLBuffers() {
     glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );
     
 	glBindTexture(GL_TEXTURE_2D, textures[1]);
+    
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, IMG_WIDTH, IMG_HEIGHT, 0, GL_RGB, GL_UNSIGNED_BYTE, ground_image);
     glGenerateMipmap( GL_TEXTURE_2D );
 	glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );

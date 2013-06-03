@@ -29,7 +29,9 @@ public:
 	Vec4 offset;
 	float speed;
     //world to camera and object to world matrices
-	Transform cMw, wMo;
+	Transform cMw, wMo; //Right now main just manipulates these directly to move enemies
+    float scale;
+    float enemyOrientation;
 
 	Enemy(const GLuint& program, OBJObject *pEnemyType, Explosion *explosionOnDeath) : enemyType(pEnemyType), explosionOnDeath(explosionOnDeath)
 	{
@@ -51,6 +53,7 @@ public:
         //Final size of the explosion is a function of how far away the enemy is
         explosionEndScale = 150/abs(offset.z);
 
+        //Init to that of this enemy so explosion appears at same position
         explosioncMw = cMw;
         explosionwMo = wMo;
         explosionwMo.scale(explosionCurrentScale);
@@ -65,6 +68,8 @@ public:
         if (!isDead) {
             enemyType->cMw = cMw;
             enemyType->wMo = wMo;
+            enemyType->wMo.scale(scale);
+            enemyType->wMo.rotateY(enemyOrientation);
             enemyType->drawSelf();
         }
     }

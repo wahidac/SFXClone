@@ -42,14 +42,14 @@ struct OBJObjectShaderHandles {
     GLuint isAnimatingExplosion;
 	GLuint MoveTex;
 	GLuint TexOffset;
-
+    GLuint calculateTexCoordInShader;
 };
 
 class OBJObject {
     
 public:
     OBJObject(const char *objFileName, const OBJObjectShaderHandles &shaderHandles, const GLJoe::Transform &cMw, const GLJoe::Transform &wMo, OBJObjectParams *defaultShaderParams);
-    ~OBJObject() {
+    virtual ~OBJObject() {
         delete [] vertices;
         delete [] normals;
         delete [] materials_specular;
@@ -61,12 +61,12 @@ public:
     }
     void loadVerticesAndNormals();
     void loadMaterials();
-    void initializeOpenGLBuffers();
+    virtual void initializeOpenGLBuffers();
     void setMaterialsToParams(OBJObjectParams *params);
     GLuint returnVAO() {
         return vao;
     }
-    void drawSelf();
+    virtual void drawSelf();
     
     GLJoe::Transform getcMw() {
         return cMw;
@@ -86,7 +86,7 @@ public:
     GLJoe::Transform cMw;
     GLJoe::Transform wMo;
     
-private:
+protected:
     GLuint vao; //The vertex attribute that defines this object;
     
     GLJoe::Vec4 *vertices;
