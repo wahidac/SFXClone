@@ -121,7 +121,6 @@ void initShaderHandles() {
 	shaderHandles.MoveTex = glGetUniformLocation( program, "MoveTex" );
 	shaderHandles.TexOffset = glGetUniformLocation( program, "TexOffset" );
     shaderHandles.isAnimatingExplosion = glGetUniformLocation(program, "isAnimatingExplosion");
-    shaderHandles.calculateTexCoordInShader = glGetUniformLocation(program, "calculateTexCoordInShader");
 }
 void timerFunc(int val)
 {
@@ -584,9 +583,9 @@ void display()
 	
 	glColor3f(1, 1, 1);
 	glRasterPos2f(0.5, 0.8);
-//	glutBitmapString(GLUT_BITMAP_HELVETICA_18, score);
+	glutBitmapString(GLUT_BITMAP_HELVETICA_18, score);
 	glRasterPos2f(-0.8, 0.8);
-//	glutBitmapString(GLUT_BITMAP_HELVETICA_18, energy);
+	glutBitmapString(GLUT_BITMAP_HELVETICA_18, energy);
 	
 	glutSwapBuffers();
 }
@@ -598,8 +597,8 @@ int main(int argc, char **argv)
 	glutInitWindowSize(DEFAULT_WINDOW_SIZE, DEFAULT_WINDOW_SIZE);
 	glutCreateWindow("SFX Clone");
 
-//	glewExperimental = GL_TRUE;
-//	glewInit();
+	glewExperimental = GL_TRUE;
+	glewInit();
 
 	init();
 
