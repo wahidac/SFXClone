@@ -60,9 +60,12 @@ OBJObject* aircraftModel;
 
 Enemy* enemies[MAX_ENEMIES] = {0};
 Bullet* bullets[MAX_BULLETS] = {0};
+Bullet* enemybullets[15] = {0};
 int iEnemy; // index of last enemy created
 int iBullet; // index of last bullet created
 int numBullets; // number of bullets currently in play
+int numEnemyBullets;
+int shipHealth;
 int number; // number of living enemies
 int numberKilled = 0; // number of killed enemies
 
@@ -170,10 +173,55 @@ void timerFunc(int val)
         
         
 	}
+	for(int i = 0; i < 15; i++){
+		if(enemybullets[i]){
+			if(enemybullets[i]->offset.z < 3){
+				enemybullets[i]->offset =enemybullets[i]->offset -  Vec4(0,0,enemybullets[i]->speed,0);
+                Vec3 oe = enemybullets[i]->offset.xyz();
+				Vec3 os = spaceship->offset.xyz();
+				if (os.x -2 <= oe.x  &&
+                        os.x+ 2 >= oe.x  &&
+                        os.y- 2 <= oe.y  &&
+                        os.y+ 2 >= oe.y  &&
+                        (os.z- .25 <= oe.z  && os.z + .25 >= oe.z)){
+					shipHealth--;
+					cout << "ship health is now: " << shipHealth << endl;
+					delete enemybullets[i];
+					enemybullets[i] = 0;
+					numEnemyBullets--;
+
+				}
+						
+
+			}else{
+				delete enemybullets[i];
+                enemybullets[i] = 0;
+                numEnemyBullets--;
+                
+                
+			}
+            
+            
+            
+		}
+
+
+	}
 	for (int i = 0; i < MAX_ENEMIES; ++i)
     {
         if (enemies[i])
         {
+
+			if(numEnemyBullets < 15 && Random(1,1000) < 3){
+				iBullet = 0;
+				while(enemybullets[iBullet])
+					iBullet++;
+				delete enemybullets[iBullet];
+				int randomBulletType = rand()%NUM_BULLET_TYPES;
+				enemybullets[iBullet] = new Bullet(program,bulletTypes->bullets[randomBulletType],enemies[i]->offset.x,enemies[i]->offset.y,false);
+				numEnemyBullets++;
+
+			}
             Vec3 oe = enemies[i]->offset.xyz();
             for(int j = 0; j < MAX_BULLETS; j++){
                 if(bullets[j]){
@@ -244,7 +292,7 @@ void init()
 	// Load shaders and use the resulting program
     program = InitShader("vshader_apple.glsl", "fshader_apple.glsl");    
 	glUseProgram(program);
-    
+    shipHealth = 10;
     // Set the shader handles for OBJObjects to use
     initShaderHandles();
 	
@@ -488,6 +536,20 @@ void display()
 		}
 
 	}
+	for(int j = 0; j < 15; j++){
+		if(enemybullets[j]){
+			enemybullets[j]->cMw = Translate(-initialEyePos);
+			enemybullets[j]->wMo = Translate(enemybullets[j]->offset);
+
+
+			enemybullets[j]->draw();
+
+
+
+
+		}
+
+	}
 	for (int i = 0; i < MAX_ENEMIES; ++i)
 	{
 		if (enemies[i])
@@ -550,7 +612,7 @@ int main(int argc, char **argv)
 	glutReshapeFunc(reshape);
 	//glutIdleFunc(idle);
     glutSpecialUpFunc(specialKeyReleased);
-	glutTimerFunc(16, timerFunc, 0);
+	glutTimerFunc(32, timerFunc, 0);
     
 	glutMainLoop();
 	return 0;
