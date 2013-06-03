@@ -12,10 +12,10 @@
 #include <iostream>
 #include "ObjLoader/OBJObject.h"
 
-#define NUM_BULLET_TYPES 4
+#define NUM_BULLET_TYPES 1
 
-//Defines a collection of different enemy types. Just a way to group
-//all the data that defines how enemies look.
+//Defines a collection of different bullet types. Just a way to group
+//all the data that defines how bullets look.
 class BulletTypes  {
     
 public:
@@ -29,14 +29,16 @@ public:
         defaults.material_specular = GLJoe::Vec4(1,1,1,1);
         defaults.material_shininess = 300;
         
-        bullets[0] = new OBJObject("Models/Animals/pig.obj", shaderHandles, cMw, wMo, &defaults);
+		bullets[0] = new OBJObject("Models/Bullet.obj", shaderHandles, cMw, wMo, &defaults);
+		bullets[0]->initializeOpenGLBuffers();
+       /* bullets[0] = new OBJObject("Models/Animals/pig.obj", shaderHandles, cMw, wMo, &defaults);
         bullets[0]->initializeOpenGLBuffers();
         bullets[1] = new OBJObject("Models/Animals/shark.obj", shaderHandles, cMw, wMo, &defaults);
         bullets[1]->initializeOpenGLBuffers();
         bullets[2] = new OBJObject("Models/Animals/eagle.obj", shaderHandles, cMw, wMo, &defaults);
         bullets[2]->initializeOpenGLBuffers();     
 		bullets[3] = new OBJObject("Models/Other/couch.obj",shaderHandles, cMw, wMo, &defaults);
-        bullets[3]->initializeOpenGLBuffers();     
+        bullets[3]->initializeOpenGLBuffers(); */    
     }
     
     ~BulletTypes() {

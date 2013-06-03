@@ -26,6 +26,8 @@ uniform mat4 Projection;
 uniform vec4 LightPosition;
 uniform vec4 LightAmbient, LightDiffuse, LightSpecular;
 
+uniform int calculateTexCoordInShader;
+
 void main()
 {    
     AmbientProduct = LightAmbient * vMaterialAmbient;
@@ -43,7 +45,18 @@ void main()
     
     
     gl_Position = Projection*ModelView*vPosition;
-	gl_TexCoord[0].xy = vTexCoords;
+    
+    if(calculateTexCoordInShader == 1) {
+        //Manually calculate proper texture coordinate
+       // dot(
+        vec4 sPlane = vec4(1,0,0,0);
+        vec4 tPlane = vec4(0,1,0,0);
+        float sCoord = dot(vPosition,sPlane);
+        float tCoord = dot(vPosition,tPlane);
+        gl_TexCoord[0].xy = vec2(sCoord,tCoord);
+    } else {
+        gl_TexCoord[0].xy = vTexCoords;
+    }
 
 }
 

@@ -13,7 +13,7 @@ using namespace std;
 
 // Parameters
 const float START_Z_SHIP = -1.7;
-const float START_Z_ENEMY = -10.0;
+const float START_Z_ENEMY = -9.1;
 const float SPEED_MIN2 = 1.0;
 const float SPEED_MAX2 = 10.0;
 

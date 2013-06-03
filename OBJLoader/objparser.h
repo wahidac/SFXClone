@@ -37,7 +37,9 @@ class OBJMesh
 {
  public:
   OBJMesh(GLMmodel *model);
-  ~OBJMesh();
+    ~OBJMesh() {
+        delete mModel;
+    };
 
   int numTriangles();
   std::vector<OBJMeshTriangle> getTriangles();

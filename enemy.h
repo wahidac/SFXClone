@@ -13,10 +13,10 @@ using namespace GLJoe;
 using namespace std;
 
 // Parameters
-const float LIMIT_X_LEFT = -50.0;
-const float LIMIT_X_RIGHT = 50.0;
-const float LIMIT_Y_LEFT = -50.0;
-const float LIMIT_Y_RIGHT = 50.0;
+const float LIMIT_X_LEFT = -20.0;
+const float LIMIT_X_RIGHT = 20.0;
+const float LIMIT_Y_LEFT = -10.0;
+const float LIMIT_Y_RIGHT = 20.0;
 const float Z_APPEARANCE = -30.0; // distance enemies appear at
 const float Z_ENEMIES_STOP = -10.0; // distance enemies stop at
 const float SPEED_MIN = 1.0;
@@ -29,7 +29,9 @@ public:
 	Vec4 offset;
 	float speed;
     //world to camera and object to world matrices
-	Transform cMw, wMo;
+	Transform cMw, wMo; //Right now main just manipulates these directly to move enemies
+    float scale;
+    float enemyOrientation;
 
 	Enemy(const GLuint& program, OBJObject *pEnemyType, Explosion *explosionOnDeath) : enemyType(pEnemyType), explosionOnDeath(explosionOnDeath)
 	{
@@ -51,6 +53,7 @@ public:
         //Final size of the explosion is a function of how far away the enemy is
         explosionEndScale = 150/abs(offset.z);
 
+        //Init to that of this enemy so explosion appears at same position
         explosioncMw = cMw;
         explosionwMo = wMo;
         explosionwMo.scale(explosionCurrentScale);
@@ -65,6 +68,8 @@ public:
         if (!isDead) {
             enemyType->cMw = cMw;
             enemyType->wMo = wMo;
+            enemyType->wMo.scale(scale);
+            enemyType->wMo.rotateY(enemyOrientation);
             enemyType->drawSelf();
         }
     }

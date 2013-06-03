@@ -7,6 +7,7 @@
 #include "ObjLoader/OBJObject.h"
 #include "Background.h"
 #include "Explosion.h"
+#include <cstring>
 
 //#define USE_AUDIO
 
@@ -21,6 +22,7 @@ using namespace GLJoe;
 #define MAX_ENEMIES 100
 #define MAX_BULLETS 50
 #define SPACESHIP_SPEED 25
+#define ENEMY_SCALE 3
 
 const float APPEARANCE_RATE = 0.001;
 const int POINTS_PER_KILL = 250;
@@ -60,9 +62,12 @@ OBJObject* aircraftModel;
 
 Enemy* enemies[MAX_ENEMIES] = {0};
 Bullet* bullets[MAX_BULLETS] = {0};
+Bullet* enemybullets[15] = {0};
 int iEnemy; // index of last enemy created
 int iBullet; // index of last bullet created
 int numBullets; // number of bullets currently in play
+int numEnemyBullets;
+int shipHealth;
 int number; // number of living enemies
 int numberKilled = 0; // number of killed enemies
 
@@ -70,6 +75,10 @@ int numberKilled = 0; // number of killed enemies
 int lastTime;
 int newTime;
 int lastTimeEnemyAppeared;
+
+//Window parameters
+int windowWidth;
+int windowHeight;
 
 // Program
 GLuint program;
@@ -118,6 +127,7 @@ void initShaderHandles() {
 	shaderHandles.MoveTex = glGetUniformLocation( program, "MoveTex" );
 	shaderHandles.TexOffset = glGetUniformLocation( program, "TexOffset" );
     shaderHandles.isAnimatingExplosion = glGetUniformLocation(program, "isAnimatingExplosion");
+    shaderHandles.calculateTexCoordInShader = glGetUniformLocation(program, "calculateTexCoordInShader");
 }
 void timerFunc(int val)
 {
@@ -145,6 +155,23 @@ void timerFunc(int val)
         int randomEnemyType = rand()%NUM_ENEMY_TYPES;
 		enemies[iEnemy] = new Enemy(program,enemyTypes->enemies[randomEnemyType],explosion);
         
+        //Set enemy orientation so enemy faces us!
+        float orientation = 0;
+        switch (randomEnemyType) {
+            case 0:
+                orientation = -90.0;
+                break;
+            case 1:
+                orientation = 90;
+                break;
+            case 2:
+                orientation = 0;
+                break;
+            default:
+                break;
+        }
+        enemies[iEnemy]->enemyOrientation = orientation;
+        
 		iEnemy = (iEnemy + 1) % MAX_ENEMIES;
 		number++;
 		lastTimeEnemyAppeared = newTime;
@@ -164,25 +191,68 @@ void timerFunc(int val)
                 
 			}
             
-            
-            
 		}
         
         
+	}
+	for(int i = 0; i < 15; i++){
+		if(enemybullets[i]){
+			if(enemybullets[i]->offset.z < 3){
+				enemybullets[i]->offset =enemybullets[i]->offset -  Vec4(0,0,enemybullets[i]->speed,0);
+                Vec3 oe = enemybullets[i]->offset.xyz();
+				Vec3 os = spaceship->offset.xyz();
+				if (os.x -2 <= oe.x  &&
+                        os.x+ 2 >= oe.x  &&
+                        os.y- 2 <= oe.y  &&
+                        os.y+ 2 >= oe.y  &&
+                        (os.z- .25 <= oe.z  && os.z + .25 >= oe.z)){
+					shipHealth--;
+					cout << "ship health is now: " << shipHealth << endl;
+					delete enemybullets[i];
+					enemybullets[i] = 0;
+					numEnemyBullets--;
+
+				}
+						
+
+			}else{
+				delete enemybullets[i];
+                enemybullets[i] = 0;
+                numEnemyBullets--;
+                
+                
+			}
+            
+            
+            
+		}
+
+
 	}
 	for (int i = 0; i < MAX_ENEMIES; ++i)
     {
         if (enemies[i])
         {
+
+			if(numEnemyBullets < 15 && Random(1,1000) < 3){
+				iBullet = 0;
+				while(enemybullets[iBullet])
+					iBullet++;
+				delete enemybullets[iBullet];
+				int randomBulletType = rand()%NUM_BULLET_TYPES;
+				enemybullets[iBullet] = new Bullet(program,bulletTypes->bullets[randomBulletType],enemies[i]->offset.x,enemies[i]->offset.y,false);
+				numEnemyBullets++;
+
+			}
             Vec3 oe = enemies[i]->offset.xyz();
             for(int j = 0; j < MAX_BULLETS; j++){
                 if(bullets[j]){
                     Vec3 os = bullets[j]->offset.xyz();
-                    if (os.x >= oe.x - 2 &&
-                        os.x <= oe.x + 2 &&
-                        os.y >= oe.y - 2 &&
-                        os.y <= oe.y + 2 &&
-                        (os.z >= oe.z - .25 && os.z <= oe.z + .25))
+                    if (os.x >= oe.x - 3 &&
+                        os.x <= oe.x + 3 &&
+                        os.y >= oe.y - 3 &&
+                        os.y <= oe.y + 3 &&
+                        (os.z >= oe.z - .35 && os.z <= oe.z + .35))
                     {
                         enemies[i]->killEnemy();
                        	delete bullets[j];
@@ -244,7 +314,7 @@ void init()
 	// Load shaders and use the resulting program
     program = InitShader("vshader_apple.glsl", "fshader_apple.glsl");    
 	glUseProgram(program);
-    
+    shipHealth = 10;
     // Set the shader handles for OBJObjects to use
     initShaderHandles();
 	
@@ -285,7 +355,7 @@ void init()
 
 	// Initialize timers
 	lastTime = newTime = glutGet(GLUT_ELAPSED_TIME);
-	
+    
 #ifdef USE_AUDIO
 
 #ifdef __APPLE__  //apple
@@ -455,6 +525,8 @@ void reshape(int width, int height)
     Mat4 projection = Perspective(50, (float) width / (float) height, 1, 1000);
     glUniformMatrix4fv(shaderHandles.Projection, 1, GL_TRUE, projection);
 
+    windowWidth = width;
+    windowHeight = height;
 	background->resize(width, height);
 }
 
@@ -465,6 +537,20 @@ void reshape(int width, int height)
 	
 	glutPostRedisplay();
 }*/
+
+// This prints a string to the screen
+void Sprint( int x, int y, char *st, int stringLength)
+{    
+    int l,i;
+    
+    l=stringLength; // see how many characters are in text string.
+    glWindowPos2d( x, y); // location to start printing text
+    for( i=0; i < l; i++) // loop until i is greater then l
+    {
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, st[i]); // Print a character on the screen
+    }
+    
+}
 
 void display()
 {
@@ -482,6 +568,17 @@ void display()
 
 			bullets[j]->draw();
 
+		}
+
+	}
+	for(int j = 0; j < 15; j++){
+		if(enemybullets[j]){
+			enemybullets[j]->cMw = Translate(-initialEyePos);
+			enemybullets[j]->wMo = Translate(enemybullets[j]->offset);
+
+
+			enemybullets[j]->draw();
+
 
 
 
@@ -494,6 +591,7 @@ void display()
 		{
             enemies[i]->cMw = Translate(-initialEyePos);
             enemies[i]->wMo = Translate(enemies[i]->offset);
+            enemies[i]->scale = ENEMY_SCALE;
             
             if (enemies[i]->animatingDeath()) {
                 //Turn on transparency for the explosion
@@ -516,18 +614,16 @@ void display()
 	glUniform1i(glGetUniformLocation(program, "EnableTex"), 0);
     spaceship->draw();
 	
-
 	unsigned char score[40];
-	unsigned char energy[40];
+	unsigned char health[40];
 	sprintf((char*) score, "Score: %d", POINTS_PER_KILL * numberKilled);
-	sprintf((char*) energy, "Energy: 100%%");
+	sprintf((char*) health, "Health: %d",shipHealth);
 	
 	glColor3f(1, 1, 1);
-	glRasterPos2f(0.5, 0.8);
-	glutBitmapString(GLUT_BITMAP_HELVETICA_18, score);
-	glRasterPos2f(-0.8, 0.8);
-	glutBitmapString(GLUT_BITMAP_HELVETICA_18, energy);
-	
+    //Print score
+    Sprint(windowWidth-175,windowHeight-20,(char *)score,strlen((const char*)score));
+    Sprint(windowWidth-175,windowHeight-40,(char *)health,strlen((const char*)health));
+
 	glutSwapBuffers();
 }
 
@@ -550,7 +646,7 @@ int main(int argc, char **argv)
 	glutReshapeFunc(reshape);
 	//glutIdleFunc(idle);
     glutSpecialUpFunc(specialKeyReleased);
-	glutTimerFunc(16, timerFunc, 0);
+	glutTimerFunc(32, timerFunc, 0);
     
 	glutMainLoop();
 	return 0;

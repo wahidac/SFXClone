@@ -189,6 +189,7 @@ void OBJObject::initializeOpenGLBuffers() {
 
 }
 
+
 void OBJObject::drawSelf() {
     if (!buffersInitialized) {
         std::cout<<"Have not intialized OpenGL buffers yet! Can't draw!";
@@ -199,11 +200,11 @@ void OBJObject::drawSelf() {
     #else
         glBindVertexArray(vao);
     #endif
-    
+     
     //Send correct Transformation information to the shaders
     glUniformMatrix4fv( shaderHandles.cMw, 1, GL_TRUE, cMw);
     glUniformMatrix4fv( shaderHandles.wMo, 1, GL_TRUE, wMo);
-    
+
     //Draw the object
     glDrawArrays( GL_TRIANGLES, 0, numVertices);
 }
