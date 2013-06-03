@@ -243,11 +243,11 @@ void timerFunc(int val)
             for(int j = 0; j < MAX_BULLETS; j++){
                 if(bullets[j]){
                     Vec3 os = bullets[j]->offset.xyz();
-                    if (os.x >= oe.x - 2 &&
-                        os.x <= oe.x + 2 &&
-                        os.y >= oe.y - 2 &&
-                        os.y <= oe.y + 2 &&
-                        (os.z >= oe.z - .25 && os.z <= oe.z + .25))
+                    if (os.x >= oe.x - 3 &&
+                        os.x <= oe.x + 3 &&
+                        os.y >= oe.y - 3 &&
+                        os.y <= oe.y + 3 &&
+                        (os.z >= oe.z - .35 && os.z <= oe.z + .35))
                     {
                         enemies[i]->killEnemy();
                        	delete bullets[j];

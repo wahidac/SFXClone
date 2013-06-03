@@ -13,10 +13,10 @@ using namespace GLJoe;
 using namespace std;
 
 // Parameters
-const float LIMIT_X_LEFT = -50.0;
-const float LIMIT_X_RIGHT = 50.0;
-const float LIMIT_Y_LEFT = -50.0;
-const float LIMIT_Y_RIGHT = 50.0;
+const float LIMIT_X_LEFT = -20.0;
+const float LIMIT_X_RIGHT = 20.0;
+const float LIMIT_Y_LEFT = -10.0;
+const float LIMIT_Y_RIGHT = 20.0;
 const float Z_APPEARANCE = -30.0; // distance enemies appear at
 const float Z_ENEMIES_STOP = -10.0; // distance enemies stop at
 const float SPEED_MIN = 1.0;
