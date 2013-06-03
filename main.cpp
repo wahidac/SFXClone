@@ -7,6 +7,7 @@
 #include "OBJLoader/OBJObject.h"
 #include "Background.h"
 #include "Explosion.h"
+#include <cstring>
 
 //#define USE_AUDIO
 
@@ -74,6 +75,10 @@ int numberKilled = 0; // number of killed enemies
 int lastTime;
 int newTime;
 int lastTimeEnemyAppeared;
+
+//Window parameters
+int windowWidth;
+int windowHeight;
 
 // Program
 GLuint program;
@@ -520,6 +525,8 @@ void reshape(int width, int height)
     Mat4 projection = Perspective(50, (float) width / (float) height, 1, 1000);
     glUniformMatrix4fv(shaderHandles.Projection, 1, GL_TRUE, projection);
 
+    windowWidth = width;
+    windowHeight = height;
 	background->resize(width, height);
 }
 
@@ -530,6 +537,20 @@ void reshape(int width, int height)
 	
 	glutPostRedisplay();
 }*/
+
+// This prints a string to the screen
+void Sprint( int x, int y, char *st, int stringLength)
+{    
+    int l,i;
+    
+    l=stringLength; // see how many characters are in text string.
+    glWindowPos2d( x, y); // location to start printing text
+    for( i=0; i < l; i++) // loop until i is greater then l
+    {
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, st[i]); // Print a character on the screen
+    }
+    
+}
 
 void display()
 {
@@ -593,18 +614,16 @@ void display()
 	glUniform1i(glGetUniformLocation(program, "EnableTex"), 0);
     spaceship->draw();
 	
-
 	unsigned char score[40];
-	unsigned char energy[40];
+	unsigned char health[40];
 	sprintf((char*) score, "Score: %d", POINTS_PER_KILL * numberKilled);
-	sprintf((char*) energy, "Energy: 100%%");
+	sprintf((char*) health, "Health: %d",shipHealth);
 	
 	glColor3f(1, 1, 1);
-	glRasterPos2f(0.5, 0.8);
-	glutBitmapString(GLUT_BITMAP_HELVETICA_18, score);
-	glRasterPos2f(-0.8, 0.8);
-	glutBitmapString(GLUT_BITMAP_HELVETICA_18, energy);
-	
+    //Print score
+    Sprint(windowWidth-175,windowHeight-20,(char *)score,strlen((const char*)score));
+    Sprint(windowWidth-175,windowHeight-40,(char *)health,strlen((const char*)health));
+
 	glutSwapBuffers();
 }
 
