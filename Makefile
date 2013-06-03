@@ -61,7 +61,7 @@
 PROGRAM   = sfxclone
 
 # The pre-processor and compiler options.
-MY_CFLAGS = -IGLJoe -IOBJLoader
+MY_CFLAGS = -IGLJoe -IObjLoader -D USE_AUDIO
 
 # The linker options.
 MY_LIBS   = -lglut -lGL -lGLU -lGLEW -lsfml-audio
@@ -74,7 +74,7 @@ LDFLAGS   =
 
 # The directories in which source files reside.
 # If not specified, only the current directory will be serached.
-SRCDIRS   = . GLJoe OBJLoader
+SRCDIRS   = . GLJoe ObjLoader
 
 ## Implicit Section: change the following only when necessary.
 ##==========================================================================
