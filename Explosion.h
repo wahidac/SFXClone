@@ -11,7 +11,7 @@
 
 #include <iostream>
 #include "GLJoe/GLJoe.h"
-#include "ObjLoader/OBJObject.h"
+#include "OBJLoader/OBJObject.h"
 #include "ImgLoader.h"
 
 using namespace GLJoe;

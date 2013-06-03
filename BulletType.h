@@ -10,7 +10,7 @@
 #define __Dev__BulletTypes__
 
 #include <iostream>
-#include "ObjLoader/OBJObject.h"
+#include "OBJLoader/OBJObject.h"
 
 #define NUM_BULLET_TYPES 1
 

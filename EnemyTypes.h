@@ -10,7 +10,7 @@
 #define __Dev__EnemyTypes__
 
 #include <iostream>
-#include "ObjLoader/OBJObject.h"
+#include "OBJLoader/OBJObject.h"
 #include "OBJLoader/TexturedOBJObject.h"
 
 #define NUM_ENEMY_TYPES 3

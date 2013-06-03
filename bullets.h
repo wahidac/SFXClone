@@ -6,7 +6,7 @@
 #define DEF_BULLET_H
 
 #include "GLJoe/GLJoe.h"
-#include "ObjLoader/OBJObject.h"
+#include "OBJLoader/OBJObject.h"
 
 using namespace GLJoe;
 using namespace std;

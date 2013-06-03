@@ -10,7 +10,7 @@
 #define Dev_spaceship_h
 
 #include "GLJoe/GLJoe.h"
-#include "ObjLoader/OBJObject.h"
+#include "OBJLoader/OBJObject.h"
 
 using namespace GLJoe;
 

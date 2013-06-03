@@ -4,7 +4,7 @@
 #include "bullets.h"
 #include "EnemyTypes.h"
 #include "Spaceship.h"
-#include "ObjLoader/OBJObject.h"
+#include "OBJLoader/OBJObject.h"
 #include "Background.h"
 #include "Explosion.h"
 #include <cstring>
