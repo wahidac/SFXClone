@@ -16,7 +16,7 @@ using namespace GLJoe;
 
 
 class Spaceship
-{
+{	
 public:
     Vec4 offset;
 	float speed;
@@ -26,9 +26,9 @@ public:
     bool isInMotion;
     bool isFlickering;
     char direction;
-    
+    bool barrelRoll;
 	Spaceship(OBJObject *aircraftModel, float speed, const Transform &cMw, const Transform &wMo) : aircraftModel(aircraftModel), speed(speed),
-    cMw(cMw), wMo(wMo), isInMotion(false)
+    cMw(cMw), wMo(wMo), isInMotion(false), rotated(NO)
 	{
         isFlickering = false;
     }
@@ -47,6 +47,12 @@ private:
     int timeBetweenToggle;
     int numTimesStateToggled;
     int numTimesToToggle;
+    int rotated;
+    
+    void resetRotation();
+    
+    enum {NO, UP, DOWN, LEFT, RIGHT};
+    
 };
 
 #endif

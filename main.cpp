@@ -10,6 +10,7 @@
 #include "powerup.h"
 #include <cstring>
 
+
 #ifndef _WINDOWS_
 #define USE_AUDIO
 #endif
@@ -24,11 +25,16 @@ using namespace GLJoe;
 // Parameters for game
 #define MAX_ENEMIES 100
 #define MAX_BULLETS 50
+#define MAX_ENEMY_BULLETS 15
+#define SPEED_BARREL 1
 #define SPACESHIP_SPEED 25
 #define ENEMY_SCALE 3
 
-#define POINTS_FOR_POWERUP 15000
 
+#define POINTS_FOR_POWERUP 10000
+
+const float BULLET_APPEARANCE_RATE = 0.0005; // max frequency at which enemy can shoot
+const float ENEMY_NICENESS = 100; // each enemy will shoot with proba 1 / ENEMY_NICENESS
 const float APPEARANCE_RATE = 0.001;
 const int POINTS_PER_KILL = 250;
 
@@ -64,13 +70,14 @@ Explosion* explosion;
 Spaceship* spaceship;
 EnemyTypes* enemyTypes;
 BulletTypes* bulletTypes;
+BulletTypes* enemyBulletTypes;
 
 //Specification of how the aircraft looks
 OBJObject* aircraftModel;
 
 Enemy* enemies[MAX_ENEMIES] = {0};
 Bullet* bullets[MAX_BULLETS] = {0};
-Bullet* enemybullets[15] = {0};
+Bullet* enemybullets[MAX_ENEMY_BULLETS] = {0};
 int iEnemy; // index of last enemy created
 int iBullet; // index of last bullet created
 int numBullets; // number of bullets currently in play
@@ -78,6 +85,9 @@ int numEnemyBullets;
 int shipHealth;
 int number; // number of living enemies
 int numberKilled = 0; // number of killed enemies
+bool barrelRoll = false;
+int degreesRotated = 0;
+int zOrRCounter = 0;
 
 // Timers for animation
 int lastTime;
@@ -106,8 +116,15 @@ sf::SoundBuffer bufferLaser;
 sf::Sound soundLaser;
 sf::SoundBuffer bufferExplosion;
 sf::Sound soundExplosion;
+sf::SoundBuffer bufferWounded;
+sf::Sound soundWounded;
+sf::SoundBuffer bufferRoll;
+sf::Sound soundRoll;
+sf::SoundBuffer bufferGameOver;
+sf::Sound soundGameOver;
 sf::Music music;
 #endif
+bool soundGameOverPlayed = false;
 
 void display();
 
@@ -164,6 +181,39 @@ void timerFunc(int val)
     - lastTimeEnemyAppeared;
 	lastTime = newTime;
 	
+
+	if(barrelRoll){
+		zOrRCounter = 0;
+		if(degreesRotated < 360){
+			spaceship->wMo.rotateZ(elapsedTime * SPEED_BARREL);
+			degreesRotated += elapsedTime * SPEED_BARREL;
+#ifdef USE_AUDIO
+                        
+#ifdef __APPLE__
+                        if (soundRoll.getStatus() != sf::Sound::Playing)
+                        	soundRoll.play();
+#else
+                        if (soundRoll.GetStatus() != sf::Sound::Playing)
+                        	soundRoll.Play();
+#endif
+                        
+#endif
+			if (degreesRotated > 360) {
+				spaceship->wMo.rotateZ(360 - degreesRotated);
+				degreesRotated = 0;
+				barrelRoll = false;
+				spaceship->barrelRoll = false;
+				
+			}
+		}else{
+			degreesRotated = 0;
+			barrelRoll = false;
+			spaceship->barrelRoll = false;
+		}
+
+
+
+	}
 	if (number < MAX_ENEMIES &&
 		APPEARANCE_RATE * elapsedTimeSinceLastEnemyAppeared > 1)
 	{
@@ -201,7 +251,7 @@ void timerFunc(int val)
 	for(int i = 0; i < MAX_BULLETS; i++){
 		if(bullets[i]){
 			if(bullets[i]->offset.z > -30){
-				bullets[i]->offset =bullets[i]->offset +  Vec4(0,0,bullets[i]->speed,0);
+				bullets[i]->offset =bullets[i]->offset +  Vec4(0,0,bullets[i]->speed * elapsedTime / 10,0);
                 
 			}else{
 				delete bullets[i];
@@ -215,17 +265,17 @@ void timerFunc(int val)
         
         
 	}
-	for(int i = 0; i < 15; i++){
+	for(int i = 0; i < MAX_ENEMY_BULLETS; i++){
 		if(enemybullets[i]){
-			if(enemybullets[i]->offset.z < 3){
-				enemybullets[i]->offset =enemybullets[i]->offset -  Vec4(0,0,enemybullets[i]->speed,0);
+			if(enemybullets[i]->offset.z < 10){
+				enemybullets[i]->offset =enemybullets[i]->offset -  Vec4(0,0,enemybullets[i]->speed * elapsedTime / 10.0,0);
                 Vec3 oe = enemybullets[i]->offset.xyz();
 				Vec3 os = spaceship->offset.xyz();
 				if (os.x -2 <= oe.x  &&
                         os.x+ 2 >= oe.x  &&
                         os.y- 2 <= oe.y  &&
                         os.y+ 2 >= oe.y  &&
-                        (os.z- .25 <= oe.z  && os.z + .25 >= oe.z)){
+                        (os.z- .95 <= oe.z  && os.z + .95 >= oe.z)){
 					shipHealth--;
 					cout << "ship health is now: " << shipHealth << endl;
                     spaceship->beginFlickering(500, 5);
@@ -236,6 +286,16 @@ void timerFunc(int val)
                     
                     
                     spaceship->beginFlickering(100, 15);
+                    
+#ifdef USE_AUDIO
+                        
+#ifdef __APPLE__
+                        soundWounded.play();
+#else
+                        soundWounded.Play();
+#endif
+                        
+#endif
                     
                     if (shipHealth <= 0 && !gameOver) {
                         gameOver = true;
@@ -264,13 +324,15 @@ void timerFunc(int val)
         if (enemies[i])
         {
 
-			if(numEnemyBullets < 15 && Random(1,1000) < 3){
+			if(numEnemyBullets < MAX_ENEMY_BULLETS && 
+				BULLET_APPEARANCE_RATE * elapsedTimeSinceLastEnemyAppeared &&
+				Random(1,ENEMY_NICENESS) < 3){
 				iBullet = 0;
 				while(enemybullets[iBullet])
 					iBullet++;
 				delete enemybullets[iBullet];
 				int randomBulletType = rand()%NUM_BULLET_TYPES;
-				enemybullets[iBullet] = new Bullet(program,bulletTypes->bullets[randomBulletType],enemies[i]->offset.x,enemies[i]->offset.y,false);
+				enemybullets[iBullet] = new Bullet(program,enemyBulletTypes->bullets[randomBulletType],enemies[i]->offset.x,enemies[i]->offset.y,false);
 				numEnemyBullets++;
 
 			}
@@ -282,7 +344,7 @@ void timerFunc(int val)
                         os.x <= oe.x + 3 &&
                         os.y >= oe.y - 3 &&
                         os.y <= oe.y + 3 &&
-                        (os.z >= oe.z - .35 && os.z <= oe.z + .35))
+                        (os.z >= oe.z - .55 && os.z <= oe.z + .55))
                     {
 						//Check to see if enough points gotten for a powerup
 						if(((numberKilled + 1) * POINTS_PER_KILL) % POINTS_FOR_POWERUP == 0)
@@ -383,10 +445,11 @@ void init()
     aircraftModel->initializeOpenGLBuffers();
 
     spaceship = new Spaceship(aircraftModel,SPACESHIP_SPEED,cMw,wMo);
-
+	spaceship->barrelRoll = false;
     //Initialize Enemy vertices/normals/shader params/textures
     enemyTypes = new EnemyTypes(shaderHandles);
-	bulletTypes = new BulletTypes(shaderHandles);
+	bulletTypes = new BulletTypes(shaderHandles, true);
+	enemyBulletTypes = new BulletTypes(shaderHandles, false);
     
 	//Initialize the background objects
 	background = new Background("Images/mountainsky.png", "Images/grass2048.png", shaderHandles);
@@ -409,17 +472,42 @@ void init()
 		Error("Failed loading sound %s", "laser.wav");
 	}
 	soundLaser.setBuffer(bufferLaser);
+	soundLaser.setVolume(50);
     
     if (!bufferExplosion.loadFromFile("Sounds/explode2.wav"))
 	{
 		Error("Failed loading sound %s", "explode2.wav");
 	}
 	soundExplosion.setBuffer(bufferExplosion);
+	soundExplosion.setVolume(100);     
+	
+	if (!bufferGameOver.loadFromFile("Sounds/gameover.wav"))
+	{
+		Error("Failed loading sound %s", "gameover.wav");
+	}
+	soundGameOver.setBuffer(bufferGameOver);
+	soundGameOver.setVolume(100);  
+    
+    if (!bufferWounded.loadFromFile("Sounds/boom.wav"))
+	{
+		Error("Failed loading sound %s", "boom.wav");
+	}
+	soundWounded.setBuffer(bufferWounded);
+	soundWounded.SetPitch(2);
+	soundWounded.setVolume(100);    
+    
+    if (!bufferRoll.loadFromFile("Sounds/roll.ogg"))
+	{
+		Error("Failed loading sound %s", "explode2.wav");
+	}
+	soundRoll.setBuffer(bufferRoll);
+	soundRoll.setVolume(100);    
     
 	if (!music.openFromFile("Sounds/music.ogg"))
 	{
 		Error("Failed loading music %s", "music.ogg");
 	}
+	music.setVolume(50);
 	music.setLoop(true);
 	music.play();
 #else
@@ -429,6 +517,7 @@ void init()
 		Error("Failed loading sound %s", "laser.wav");
 	}
 	soundLaser.SetBuffer(bufferLaser);
+	soundLaser.SetVolume(50);
     
     
     if (!bufferExplosion.LoadFromFile("Sounds/explode2.wav"))
@@ -436,13 +525,37 @@ void init()
 		Error("Failed loading sound %s", "explode2.wav");
 	}
 	soundExplosion.SetBuffer(bufferExplosion);
+	soundExplosion.SetVolume(100);  
+	
+	if (!bufferGameOver.LoadFromFile("Sounds/gameover.wav"))
+	{
+		Error("Failed loading sound %s", "gameover.wav");
+	}
+	soundGameOver.SetBuffer(bufferGameOver);
+	soundGameOver.SetVolume(100);  
     
+    if (!bufferRoll.LoadFromFile("Sounds/roll.ogg"))
+	{
+		Error("Failed loading sound %s", "explode2.wav");
+	}
+	soundRoll.SetBuffer(bufferRoll);
+	soundRoll.SetVolume(100);    
+    
+    
+    if (!bufferWounded.LoadFromFile("Sounds/boom.wav"))
+	{
+		Error("Failed loading sound %s", "boom.wav");
+	}
+	soundWounded.SetBuffer(bufferWounded);
+	soundWounded.SetPitch(2);
+	soundWounded.SetVolume(100);    
     
     
 	if (!music.OpenFromFile("Sounds/music.ogg"))
 	{
 		Error("Failed loading music %s", "music.ogg");
 	}
+	music.SetVolume(50);
 	music.SetLoop(true);
 	music.Play();
 #endif
@@ -463,6 +576,18 @@ void keyboard(unsigned char key, int x, int y)
 	case 'q':
 	case 'Q': // Quit
 		exit(EXIT_SUCCESS);
+		break;
+	case 'b':
+		spaceship->barrelRoll = true;
+		barrelRoll = true;
+		break;
+	case 'z':
+	case 'r':
+		if(zOrRCounter == 1){
+			barrelRoll = true;
+			spaceship->barrelRoll = true;
+		}else
+			zOrRCounter++;
 		break;
 	case ' ': // space
             
@@ -642,6 +767,23 @@ void display()
         Sprint(windowWidth/2-35,windowHeight/2,gameOverMessage,strlen(gameOverMessage));
         Sprint(windowWidth/2-35,windowHeight/2-20,score,strlen(score));
         glutSwapBuffers();
+        
+        if (soundGameOverPlayed == false) {
+		    #ifdef USE_AUDIO
+		        
+		    #ifdef __APPLE__
+		        soundGameOver.play();
+		        soundLaser.setVolume(0);
+		        soundWounded.setVolume(0);
+		    #else
+		        soundGameOver.Play();
+		        soundLaser.SetVolume(0);
+		        soundWounded.SetVolume(0);
+		    #endif
+		        
+		    #endif
+		    soundGameOverPlayed = true;
+        }
         return;
     }
 
@@ -663,7 +805,7 @@ void display()
 		}
 
 	}
-	for(int j = 0; j < 15; j++){
+	for(int j = 0; j < MAX_ENEMY_BULLETS; j++){
 		if(enemybullets[j]){
 			enemybullets[j]->cMw = Translate(-initialEyePos);
 			enemybullets[j]->wMo = Translate(enemybullets[j]->offset);
