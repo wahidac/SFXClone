@@ -101,6 +101,8 @@ sf::SoundBuffer bufferLaser;
 sf::Sound soundLaser;
 sf::SoundBuffer bufferExplosion;
 sf::Sound soundExplosion;
+sf::SoundBuffer bufferWounded;
+sf::Sound soundWounded;
 sf::Music music;
 #endif
 
@@ -228,6 +230,16 @@ void timerFunc(int val)
                     
                     
                     spaceship->beginFlickering(100, 15);
+                    
+#ifdef USE_AUDIO
+                        
+#ifdef __APPLE__
+                        soundWounded.play();
+#else
+                        soundWounded.Play();
+#endif
+                        
+#endif
                     
                     if (shipHealth <= 0 && !gameOver) {
                         gameOver = true;
@@ -389,12 +401,22 @@ void init()
 		Error("Failed loading sound %s", "laser.wav");
 	}
 	soundLaser.setBuffer(bufferLaser);
+	soundLaser.setVolume(50);
     
     if (!bufferExplosion.loadFromFile("Sounds/explode2.wav"))
 	{
 		Error("Failed loading sound %s", "explode2.wav");
 	}
 	soundExplosion.setBuffer(bufferExplosion);
+	soundExplosion.setVolume(100);
+    
+    
+    if (!bufferWounded.loadFromFile("Sounds/boom.wav"))
+	{
+		Error("Failed loading sound %s", "explode2.wav");
+	}
+	soundWounded.setBuffer(bufferWounded);
+	soundWounded.setVolume(100);    
     
 	if (!music.openFromFile("Sounds/music.ogg"))
 	{
@@ -418,14 +440,23 @@ void init()
 		Error("Failed loading sound %s", "explode2.wav");
 	}
 	soundExplosion.SetBuffer(bufferExplosion);
-	soundLaser.SetVolume(100);
+	soundExplosion.SetVolume(100);
     
+    
+    if (!bufferWounded.LoadFromFile("Sounds/boom.wav"))
+	{
+		Error("Failed loading sound %s", "explode2.wav");
+	}
+	soundWounded.SetBuffer(bufferWounded);
+	soundWounded.SetPitch(2);
+	soundWounded.SetVolume(100);    
     
     
 	if (!music.OpenFromFile("Sounds/music.ogg"))
 	{
 		Error("Failed loading music %s", "music.ogg");
 	}
+	music.SetVolume(50);
 	music.SetLoop(true);
 	music.Play();
 #endif
