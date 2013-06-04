@@ -395,6 +395,7 @@ void init()
 	{
 		Error("Failed loading music %s", "music.ogg");
 	}
+	music.setVolume(50);
 	music.setLoop(true);
 	music.play();
 #else
@@ -404,6 +405,7 @@ void init()
 		Error("Failed loading sound %s", "laser.wav");
 	}
 	soundLaser.SetBuffer(bufferLaser);
+	soundLaser.SetVolume(50);
     
     
     if (!bufferExplosion.LoadFromFile("Sounds/explode2.wav"))
@@ -411,6 +413,7 @@ void init()
 		Error("Failed loading sound %s", "explode2.wav");
 	}
 	soundExplosion.SetBuffer(bufferExplosion);
+	soundLaser.SetVolume(100);
     
     
     
