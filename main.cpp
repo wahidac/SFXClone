@@ -22,6 +22,7 @@ using namespace GLJoe;
 #define MAX_ENEMIES 100
 #define MAX_BULLETS 50
 #define MAX_ENEMY_BULLETS 15
+#define SPEED_BARREL 1
 #define SPACESHIP_SPEED 25
 #define ENEMY_SCALE 3
 
@@ -105,6 +106,10 @@ sf::SoundBuffer bufferLaser;
 sf::Sound soundLaser;
 sf::SoundBuffer bufferExplosion;
 sf::Sound soundExplosion;
+sf::SoundBuffer bufferWounded;
+sf::Sound soundWounded;
+sf::SoundBuffer bufferRoll;
+sf::Sound soundRoll;
 sf::Music music;
 #endif
 
@@ -164,8 +169,22 @@ void timerFunc(int val)
 	if(barrelRoll){
 		zOrRCounter = 0;
 		if(degreesRotated < 360){
-			spaceship->wMo.rotateZ(10);
-			degreesRotated+=10;
+			spaceship->wMo.rotateZ(elapsedTime * SPEED_BARREL);
+			degreesRotated += elapsedTime * SPEED_BARREL;
+#ifdef USE_AUDIO
+                        
+#ifdef __APPLE__
+                        soundRoll.play();
+#else
+                        soundRoll.Play();
+#endif
+                        
+#endif
+			if (degreesRotated > 360) {
+				spaceship->wMo.rotateZ(360 - degreesRotated);
+				degreesRotated = 0;
+				barrelRoll = false;
+			}
 		}else{
 			degreesRotated = 0;
 			barrelRoll = false;
@@ -247,6 +266,16 @@ void timerFunc(int val)
                     
                     
                     spaceship->beginFlickering(100, 15);
+                    
+#ifdef USE_AUDIO
+                        
+#ifdef __APPLE__
+                        soundWounded.play();
+#else
+                        soundWounded.Play();
+#endif
+                        
+#endif
                     
                     if (shipHealth <= 0 && !gameOver) {
                         gameOver = true;
@@ -409,12 +438,29 @@ void init()
 		Error("Failed loading sound %s", "laser.wav");
 	}
 	soundLaser.setBuffer(bufferLaser);
+	soundLaser.setVolume(50);
     
     if (!bufferExplosion.loadFromFile("Sounds/explode2.wav"))
 	{
 		Error("Failed loading sound %s", "explode2.wav");
 	}
 	soundExplosion.setBuffer(bufferExplosion);
+	soundExplosion.setVolume(100);    
+    
+    if (!bufferWounded.loadFromFile("Sounds/boom.wav"))
+	{
+		Error("Failed loading sound %s", "boom.wav");
+	}
+	soundWounded.setBuffer(bufferWounded);
+	soundWounded.SetPitch(2);
+	soundWounded.setVolume(100);    
+    
+    if (!bufferRoll.loadFromFile("Sounds/roll.aif"))
+	{
+		Error("Failed loading sound %s", "explode2.wav");
+	}
+	soundRoll.setBuffer(bufferRoll);
+	soundRoll.setVolume(100);    
     
 	if (!music.openFromFile("Sounds/music.ogg"))
 	{
@@ -438,14 +484,30 @@ void init()
 		Error("Failed loading sound %s", "explode2.wav");
 	}
 	soundExplosion.SetBuffer(bufferExplosion);
-	soundLaser.SetVolume(100);
+	soundExplosion.SetVolume(100);  
     
+    if (!bufferRoll.LoadFromFile("Sounds/roll.aif"))
+	{
+		Error("Failed loading sound %s", "explode2.wav");
+	}
+	soundRoll.SetBuffer(bufferRoll);
+	soundRoll.SetVolume(100);    
+    
+    
+    if (!bufferWounded.LoadFromFile("Sounds/boom.wav"))
+	{
+		Error("Failed loading sound %s", "boom.wav");
+	}
+	soundWounded.SetBuffer(bufferWounded);
+	soundWounded.SetPitch(2);
+	soundWounded.SetVolume(100);    
     
     
 	if (!music.OpenFromFile("Sounds/music.ogg"))
 	{
 		Error("Failed loading music %s", "music.ogg");
 	}
+	music.SetVolume(50);
 	music.SetLoop(true);
 	music.Play();
 #endif
