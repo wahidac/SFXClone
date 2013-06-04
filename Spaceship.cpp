@@ -67,6 +67,7 @@ void Spaceship::setInMotion(char dir) {
 
 void Spaceship::stopShip() {
     isInMotion = false;
+	resetRotation();
 }
 
 void Spaceship::updatePosition(float deltaTime) {
@@ -80,18 +81,38 @@ void Spaceship::updatePosition(float deltaTime) {
         case 'U':
             offset += GLJoe::Vec4(0,delta,0,0);
             wMo.translate(0,delta,0);
+            if (rotated != UP) {
+            	resetRotation();
+    	        wMo.rotateX(30);
+				rotated = UP;         
+            }
             break;
         case 'D':
             offset += GLJoe::Vec4(0,-delta,0,0);
             wMo.translate(0,-delta,0);
+            if (rotated != DOWN) {
+            	resetRotation();
+            	wMo.rotateX(-30);
+				rotated = DOWN;
+            }            
             break;
         case 'L':
             offset += GLJoe::Vec4(-delta,0,0,0);
             wMo.translate(-delta,0,0);
+            if (rotated != LEFT) {
+            	resetRotation();
+            	wMo.rotateZ(45);
+				rotated = LEFT;
+            }            
             break;
         case 'R':
             offset += GLJoe::Vec4(delta,0,0,0);
             wMo.translate(delta,0,0);
+            if (rotated != RIGHT) {
+            	resetRotation();
+            	wMo.rotateZ(-45);
+				rotated = RIGHT;
+            }            
             break;
         default:
             break;
@@ -104,4 +125,25 @@ void Spaceship::beginFlickering(int timeFlicker, int numTimesFlicker) {
     timeToToggleState = glutGet(GLUT_ELAPSED_TIME) + timeFlicker;
     timeBetweenToggle = timeFlicker;
     numTimesToToggle = numTimesFlicker;
+}
+
+void Spaceship::resetRotation()
+{
+	switch(rotated) {
+		case NO:
+			break;
+		case UP:
+			wMo.rotateX(-30);
+			break;
+		case DOWN:
+			wMo.rotateX(30);
+			break;
+		case LEFT:
+			wMo.rotateZ(-45);
+			break;
+		case RIGHT:
+			wMo.rotateZ(45);
+			break;
+	}
+	rotated = NO;
 }
