@@ -174,9 +174,11 @@ void timerFunc(int val)
 #ifdef USE_AUDIO
                         
 #ifdef __APPLE__
-                        soundRoll.play();
+                        if (soundRoll.getStatus() != sf::Sound::Playing)
+                        	soundRoll.play();
 #else
-                        soundRoll.Play();
+                        if (soundRoll.GetStatus() != sf::Sound::Playing)
+                        	soundRoll.Play();
 #endif
                         
 #endif
@@ -455,7 +457,7 @@ void init()
 	soundWounded.SetPitch(2);
 	soundWounded.setVolume(100);    
     
-    if (!bufferRoll.loadFromFile("Sounds/roll.aif"))
+    if (!bufferRoll.loadFromFile("Sounds/roll.ogg"))
 	{
 		Error("Failed loading sound %s", "explode2.wav");
 	}
@@ -486,7 +488,7 @@ void init()
 	soundExplosion.SetBuffer(bufferExplosion);
 	soundExplosion.SetVolume(100);  
     
-    if (!bufferRoll.LoadFromFile("Sounds/roll.aif"))
+    if (!bufferRoll.LoadFromFile("Sounds/roll.ogg"))
 	{
 		Error("Failed loading sound %s", "explode2.wav");
 	}
