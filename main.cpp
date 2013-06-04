@@ -9,7 +9,7 @@
 #include "Explosion.h"
 #include <cstring>
 
-#define USE_AUDIO
+//#define USE_AUDIO
 
 #ifdef USE_AUDIO
 #include <SFML/Audio.hpp>
@@ -73,6 +73,9 @@ int numEnemyBullets;
 int shipHealth;
 int number; // number of living enemies
 int numberKilled = 0; // number of killed enemies
+bool barrelRoll = false;
+int degreesRotated = 0;
+int zOrRCounter = 0;
 
 // Timers for animation
 int lastTime;
@@ -158,6 +161,20 @@ void timerFunc(int val)
     - lastTimeEnemyAppeared;
 	lastTime = newTime;
 	
+
+	if(barrelRoll){
+		zOrRCounter = 0;
+		if(degreesRotated < 360){
+			spaceship->wMo.rotateZ(10);
+			degreesRotated+=10;
+		}else{
+			degreesRotated = 0;
+			barrelRoll = false;
+		}
+
+
+
+	}
 	if (number < MAX_ENEMIES &&
 		APPEARANCE_RATE * elapsedTimeSinceLastEnemyAppeared > 1)
 	{
@@ -211,7 +228,7 @@ void timerFunc(int val)
 	}
 	for(int i = 0; i < MAX_ENEMY_BULLETS; i++){
 		if(enemybullets[i]){
-			if(enemybullets[i]->offset.z < 3){
+			if(enemybullets[i]->offset.z < 10){
 				enemybullets[i]->offset =enemybullets[i]->offset -  Vec4(0,0,enemybullets[i]->speed,0);
                 Vec3 oe = enemybullets[i]->offset.xyz();
 				Vec3 os = spaceship->offset.xyz();
@@ -477,6 +494,16 @@ void keyboard(unsigned char key, int x, int y)
 	case 'q':
 	case 'Q': // Quit
 		exit(EXIT_SUCCESS);
+		break;
+	case 'b':
+		barrelRoll = true;
+		break;
+	case 'z':
+	case 'r':
+		if(zOrRCounter == 1)
+			barrelRoll = true;
+		else
+			zOrRCounter++;
 		break;
 	case ' ': // space
             
