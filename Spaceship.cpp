@@ -11,9 +11,53 @@
 
 void Spaceship::draw()
 {
-    aircraftModel->cMw = cMw;
-    aircraftModel->wMo = wMo;
-    aircraftModel->drawSelf();
+    if (numTimesStateToggled >= numTimesToToggle ) {
+        isFlickering = false;
+        numTimesStateToggled = 0;
+    }
+    
+    if (isFlickering) {
+        int time = glutGet(GLUT_ELAPSED_TIME);
+        
+        //Is it time to toggle the state i.e blend w/ background vs. show ship normally?
+        if (time >= timeToToggleState && isFlickering) {
+            timeToToggleState = time + timeBetweenToggle;
+            makeShipTransparent = !makeShipTransparent;
+            numTimesStateToggled++;
+        }
+        
+        if (makeShipTransparent) {
+            //Turn on transparency
+            OBJObjectShaderHandles shaderHandles = aircraftModel->getShaderHandles();
+            
+            glUniform1i(shaderHandles.blendModel, 1);
+            glUniform1f(shaderHandles.alpha, .2);
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            glDepthMask( GL_FALSE );
+            
+            aircraftModel->cMw = cMw;
+            aircraftModel->wMo = wMo;
+            aircraftModel->drawSelf();
+            
+            glDepthMask( GL_TRUE );
+            glDisable(GL_BLEND);
+            //Turn off transparency
+            glUniform1i(shaderHandles.blendModel, 0);
+        } else {
+            //Draw the spaceship as before
+            aircraftModel->cMw = cMw;
+            aircraftModel->wMo = wMo;
+            aircraftModel->drawSelf();
+        }
+        
+    } else {
+        
+        //Draw the spaceship as before
+        aircraftModel->cMw = cMw;
+        aircraftModel->wMo = wMo;
+        aircraftModel->drawSelf();
+    }
 }
 
 void Spaceship::setInMotion(char dir) {
@@ -53,4 +97,11 @@ void Spaceship::updatePosition(float deltaTime) {
             break;
     }
     
+}
+
+void Spaceship::beginFlickering(int timeFlicker, int numTimesFlicker) {
+    isFlickering = true;
+    timeToToggleState = glutGet(GLUT_ELAPSED_TIME) + timeFlicker;
+    timeBetweenToggle = timeFlicker;
+    numTimesToToggle = numTimesFlicker;
 }

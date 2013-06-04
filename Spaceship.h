@@ -24,19 +24,29 @@ public:
     Transform cMw, wMo;
     OBJObject *aircraftModel;
     bool isInMotion;
+    bool isFlickering;
     char direction;
     
 	Spaceship(OBJObject *aircraftModel, float speed, const Transform &cMw, const Transform &wMo) : aircraftModel(aircraftModel), speed(speed),
     cMw(cMw), wMo(wMo), isInMotion(false)
-	{ }
+	{
+        isFlickering = false;
+    }
     ~Spaceship() {
     }
-
+    void beginFlickering(int timeFlicker, int numTimesFlicker);
     void draw(); 
     void setInMotion(char dir);
     void stopShip();
     void updatePosition(float deltaTime);
     
+private:
+    //Just parameters to make the ship flicker when it's hit
+    bool makeShipTransparent;
+    int timeToToggleState;
+    int timeBetweenToggle;
+    int numTimesStateToggled;
+    int numTimesToToggle;
 };
 
 #endif

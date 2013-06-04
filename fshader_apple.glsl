@@ -13,6 +13,8 @@ uniform int isAnimatingExplosion;
 
 uniform int MoveTex;
 uniform float TexOffset;
+uniform float alpha;
+uniform int blendModel;
 
 void main() 
 { 
@@ -54,5 +56,9 @@ void main()
        //flames from the explosion
        if(isAnimatingExplosion == 1 && gl_FragColor == vec4(0,0,0,1)) {
             gl_FragColor.a = 0.0;
+       }
+       
+       if(blendModel == 1) {
+            gl_FragColor.a = alpha;
        }
 } 
