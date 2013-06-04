@@ -1,4 +1,4 @@
-#include "Powerup.h"
+#include "powerup.h"
 
 Powerup::Powerup(char* displayImage, char* colorPickingImage, Vec3 samplingColor, OBJObjectShaderHandles &shaderHandles)
 {
