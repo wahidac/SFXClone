@@ -1,6 +1,17 @@
+Starfox Clone Final Project
+
 Adam Shwert - 503 651 289
 Wahid Chowdhury
 Kyle Morton
-Joachim
+Joachim Valente 204 134 373
 
 
+For this project we used Blender models for the ship, the enemies, and the buildings. The background
+and grass were orthographic projections of images. The bullets were also a model. We used SFML for 
+our sound purposes. We mapped textures onto the pig enemy. The explosions as well as the ship flashing
+when it gets hit utilize transparency. You start with 10 health and it counts your score as you go, 
+getting 250 points per enemy killed. We use collision detection to determine if you hit enemies or if 
+an enemy hits us. Once you kill a certain number of enemies, a button appears that you can click to kill
+all of the enemies on the screen. This uses color mapping and selection. When your health reaches 0, you
+get a game over screen and your final score is displayed. If you have any issues getting the code to run,
+don't hesitate to e-mail one of us. Have fun!
