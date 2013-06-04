@@ -5,6 +5,13 @@ Wahid Chowdhury - 103 673 844
 Kyle Morton - 503 779 834
 Joachim Valente 204 134 373
 
+Our project is a game inspired by the game Starfox on NES. We control a spaceship that can translate on a plane (using 
+directional arrows) and shoot at enemies that pop up in the distance (SPACE). Enemies come closer to the spaceship
+until a certain point where they stay still but keep shooting back at the spaceship. There are several kinds of enemies
+which have different speeds and shapes. Each time an enemy is hit it is destroyed (and we earn points) and whenever the
+spaceship is hit our health bar decreases. Each 10,000 points the player can click on a power-up to destroy all enemies
+at once. When health reaches zero the game is over. The ship can also do a barrel roll (hit 'b' once or 'z' or 'r'
+twice).
 
 For this project we used Blender models for the ship, the enemies, and the buildings. The background
 and grass were orthographic projections of images. The bullets were also a model. We used SFML for 
