@@ -233,7 +233,7 @@ void timerFunc(int val)
 	for(int i = 0; i < MAX_BULLETS; i++){
 		if(bullets[i]){
 			if(bullets[i]->offset.z > -30){
-				bullets[i]->offset =bullets[i]->offset +  Vec4(0,0,bullets[i]->speed,0);
+				bullets[i]->offset =bullets[i]->offset +  Vec4(0,0,bullets[i]->speed * elapsedTime / 10,0);
                 
 			}else{
 				delete bullets[i];
@@ -250,7 +250,7 @@ void timerFunc(int val)
 	for(int i = 0; i < MAX_ENEMY_BULLETS; i++){
 		if(enemybullets[i]){
 			if(enemybullets[i]->offset.z < 10){
-				enemybullets[i]->offset =enemybullets[i]->offset -  Vec4(0,0,enemybullets[i]->speed,0);
+				enemybullets[i]->offset =enemybullets[i]->offset -  Vec4(0,0,enemybullets[i]->speed * elapsedTime / 10,0);
                 Vec3 oe = enemybullets[i]->offset.xyz();
 				Vec3 os = spaceship->offset.xyz();
 				if (os.x -2 <= oe.x  &&
