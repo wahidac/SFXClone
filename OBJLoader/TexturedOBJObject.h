@@ -14,7 +14,7 @@
 #ifdef __gnu_linux__
 # include "../ImgLoader.h"
 #else
-# include "ImgLoader.h"
+# include "../ImgLoader.h"
 #endif
 
 //Inherits from OBJObject. Just adds texturing
