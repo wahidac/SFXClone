@@ -61,7 +61,7 @@
 PROGRAM   = sfxclone
 
 # The pre-processor and compiler options.
-MY_CFLAGS = -IGLJoe -IOBJLoader
+MY_CFLAGS = -IGLJoe -IOBJLoader -D USE_AUDIO
 
 # The linker options.
 MY_LIBS   = -lglut -lGL -lGLU -lGLEW -lsfml-audio

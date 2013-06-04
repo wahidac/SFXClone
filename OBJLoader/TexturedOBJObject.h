@@ -11,7 +11,11 @@
 
 #include <iostream>
 #include "OBJObject.h"
-#include "ImgLoader.h"
+#ifdef __gnu_linux__
+# include "../ImgLoader.h"
+#else
+# include "ImgLoader.h"
+#endif
 
 //Inherits from OBJObject. Just adds texturing
 class TexturedOBJObject: public OBJObject {
