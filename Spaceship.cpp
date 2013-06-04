@@ -81,7 +81,7 @@ void Spaceship::updatePosition(float deltaTime) {
         case 'U':
             offset += GLJoe::Vec4(0,delta,0,0);
             wMo.translate(0,delta,0);
-            if (rotated != UP) {
+            if (rotated != UP && !barrelRoll) {
             	resetRotation();
     	        wMo.rotateX(30);
 				rotated = UP;         
@@ -90,7 +90,7 @@ void Spaceship::updatePosition(float deltaTime) {
         case 'D':
             offset += GLJoe::Vec4(0,-delta,0,0);
             wMo.translate(0,-delta,0);
-            if (rotated != DOWN) {
+            if (rotated != DOWN && !barrelRoll) {
             	resetRotation();
             	wMo.rotateX(-30);
 				rotated = DOWN;
@@ -99,7 +99,7 @@ void Spaceship::updatePosition(float deltaTime) {
         case 'L':
             offset += GLJoe::Vec4(-delta,0,0,0);
             wMo.translate(-delta,0,0);
-            if (rotated != LEFT) {
+            if (rotated != LEFT && !barrelRoll) {
             	resetRotation();
             	wMo.rotateZ(45);
 				rotated = LEFT;
@@ -108,7 +108,7 @@ void Spaceship::updatePosition(float deltaTime) {
         case 'R':
             offset += GLJoe::Vec4(delta,0,0,0);
             wMo.translate(delta,0,0);
-            if (rotated != RIGHT) {
+            if (rotated != RIGHT && !barrelRoll) {
             	resetRotation();
             	wMo.rotateZ(-45);
 				rotated = RIGHT;

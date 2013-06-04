@@ -59,6 +59,7 @@ Explosion* explosion;
 Spaceship* spaceship;
 EnemyTypes* enemyTypes;
 BulletTypes* bulletTypes;
+BulletTypes* enemyBulletTypes;
 
 //Specification of how the aircraft looks
 OBJObject* aircraftModel;
@@ -104,8 +105,6 @@ sf::SoundBuffer bufferLaser;
 sf::Sound soundLaser;
 sf::SoundBuffer bufferExplosion;
 sf::Sound soundExplosion;
-sf::SoundBuffer bufferWounded;
-sf::Sound soundWounded;
 sf::Music music;
 #endif
 
@@ -170,6 +169,7 @@ void timerFunc(int val)
 		}else{
 			degreesRotated = 0;
 			barrelRoll = false;
+			spaceship->barrelRoll = false;
 		}
 
 
@@ -248,16 +248,6 @@ void timerFunc(int val)
                     
                     spaceship->beginFlickering(100, 15);
                     
-#ifdef USE_AUDIO
-                        
-#ifdef __APPLE__
-                        soundWounded.play();
-#else
-                        soundWounded.Play();
-#endif
-                        
-#endif
-                    
                     if (shipHealth <= 0 && !gameOver) {
                         gameOver = true;
                         finalScore = POINTS_PER_KILL * numberKilled;
@@ -293,7 +283,7 @@ void timerFunc(int val)
 					iBullet++;
 				delete enemybullets[iBullet];
 				int randomBulletType = rand()%NUM_BULLET_TYPES;
-				enemybullets[iBullet] = new Bullet(program,bulletTypes->bullets[randomBulletType],enemies[i]->offset.x,enemies[i]->offset.y,false);
+				enemybullets[iBullet] = new Bullet(program,enemyBulletTypes->bullets[randomBulletType],enemies[i]->offset.x,enemies[i]->offset.y,false);
 				numEnemyBullets++;
 
 			}
@@ -395,10 +385,11 @@ void init()
     aircraftModel->initializeOpenGLBuffers();
 
     spaceship = new Spaceship(aircraftModel,SPACESHIP_SPEED,cMw,wMo);
-
+	spaceship->barrelRoll = false;
     //Initialize Enemy vertices/normals/shader params/textures
     enemyTypes = new EnemyTypes(shaderHandles);
-	bulletTypes = new BulletTypes(shaderHandles);
+	bulletTypes = new BulletTypes(shaderHandles, true);
+	enemyBulletTypes = new BulletTypes(shaderHandles, false);
     
 	//Initialize the background objects
 	background = new Background("Images/mountainsky.png", "Images/grass2048.png", shaderHandles);
@@ -418,23 +409,12 @@ void init()
 		Error("Failed loading sound %s", "laser.wav");
 	}
 	soundLaser.setBuffer(bufferLaser);
-	soundLaser.setVolume(50);
     
     if (!bufferExplosion.loadFromFile("Sounds/explode2.wav"))
 	{
 		Error("Failed loading sound %s", "explode2.wav");
 	}
 	soundExplosion.setBuffer(bufferExplosion);
-	soundExplosion.setVolume(100);
-    
-    
-    if (!bufferWounded.loadFromFile("Sounds/boom.wav"))
-	{
-		Error("Failed loading sound %s", "boom.wav");
-	}
-	soundWounded.setBuffer(bufferWounded);
-	soundWounded.SetPitch(2);
-	soundWounded.setVolume(100);    
     
 	if (!music.openFromFile("Sounds/music.ogg"))
 	{
@@ -458,23 +438,14 @@ void init()
 		Error("Failed loading sound %s", "explode2.wav");
 	}
 	soundExplosion.SetBuffer(bufferExplosion);
-	soundExplosion.SetVolume(100);
+	soundLaser.SetVolume(100);
     
-    
-    if (!bufferWounded.LoadFromFile("Sounds/boom.wav"))
-	{
-		Error("Failed loading sound %s", "boom.wav");
-	}
-	soundWounded.SetBuffer(bufferWounded);
-	soundWounded.SetPitch(2);
-	soundWounded.SetVolume(100);    
     
     
 	if (!music.OpenFromFile("Sounds/music.ogg"))
 	{
 		Error("Failed loading music %s", "music.ogg");
 	}
-	music.SetVolume(50);
 	music.SetLoop(true);
 	music.Play();
 #endif
@@ -497,13 +468,15 @@ void keyboard(unsigned char key, int x, int y)
 		exit(EXIT_SUCCESS);
 		break;
 	case 'b':
+		spaceship->barrelRoll = true;
 		barrelRoll = true;
 		break;
 	case 'z':
 	case 'r':
-		if(zOrRCounter == 1)
+		if(zOrRCounter == 1){
 			barrelRoll = true;
-		else
+			spaceship->barrelRoll = true;
+		}else
 			zOrRCounter++;
 		break;
 	case ' ': // space

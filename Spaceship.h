@@ -26,7 +26,7 @@ public:
     bool isInMotion;
     bool isFlickering;
     char direction;
-    
+    bool barrelRoll;
 	Spaceship(OBJObject *aircraftModel, float speed, const Transform &cMw, const Transform &wMo) : aircraftModel(aircraftModel), speed(speed),
     cMw(cMw), wMo(wMo), isInMotion(false), rotated(NO)
 	{

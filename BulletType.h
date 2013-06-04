@@ -19,15 +19,22 @@
 class BulletTypes  {
     
 public:
-    BulletTypes(const OBJObjectShaderHandles &shaderHandles) {
+    BulletTypes(const OBJObjectShaderHandles &shaderHandles, bool isShip) {
         Transform cMw, wMo;
         
         //Default shader params in case the file has none defined (will make things red and shiny)
         OBJObjectParams defaults;
-        defaults.material_ambient = GLJoe::Vec4(1,0,0,1);
-        defaults.material_diffuse = GLJoe::Vec4(1,0,0,1);
-        defaults.material_specular = GLJoe::Vec4(1,1,1,1);
-        defaults.material_shininess = 300;
+		if(isShip){
+			defaults.material_ambient = GLJoe::Vec4(1,0,0,1);
+			defaults.material_diffuse = GLJoe::Vec4(1,0,0,1);
+			defaults.material_specular = GLJoe::Vec4(1,1,1,1);
+			defaults.material_shininess = 300;
+		}else{
+			defaults.material_ambient = GLJoe::Vec4(1,0,1,1);
+			defaults.material_diffuse = GLJoe::Vec4(1,0,1,1);
+			defaults.material_specular = GLJoe::Vec4(1,1,1,1);
+			defaults.material_shininess = 300;
+		}
         
 		bullets[0] = new OBJObject("Models/Bullet.obj", shaderHandles, cMw, wMo, &defaults);
 		bullets[0]->initializeOpenGLBuffers();
