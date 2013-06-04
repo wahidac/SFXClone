@@ -110,6 +110,8 @@ sf::SoundBuffer bufferWounded;
 sf::Sound soundWounded;
 sf::SoundBuffer bufferRoll;
 sf::Sound soundRoll;
+sf::SoundBuffer bufferGameOver;
+sf::Sound soundGameOver;
 sf::Music music;
 #endif
 
@@ -449,7 +451,14 @@ void init()
 		Error("Failed loading sound %s", "explode2.wav");
 	}
 	soundExplosion.setBuffer(bufferExplosion);
-	soundExplosion.setVolume(100);    
+	soundExplosion.setVolume(100);     
+	
+	if (!bufferGameOver.loadFromFile("Sounds/gameover.wav"))
+	{
+		Error("Failed loading sound %s", "gameover.wav");
+	}
+	soundGameOver.setBuffer(bufferGameOver);
+	soundGameOver.setVolume(100);  
     
     if (!bufferWounded.loadFromFile("Sounds/boom.wav"))
 	{
@@ -489,6 +498,13 @@ void init()
 	}
 	soundExplosion.SetBuffer(bufferExplosion);
 	soundExplosion.SetVolume(100);  
+	
+	if (!bufferGameOver.LoadFromFile("Sounds/gameover.wav"))
+	{
+		Error("Failed loading sound %s", "gameover.wav");
+	}
+	soundGameOver.SetBuffer(bufferGameOver);
+	soundGameOver.SetVolume(100);  
     
     if (!bufferRoll.LoadFromFile("Sounds/roll.ogg"))
 	{
@@ -688,6 +704,20 @@ void display()
         Sprint(windowWidth/2-35,windowHeight/2,gameOverMessage,strlen(gameOverMessage));
         Sprint(windowWidth/2-35,windowHeight/2-20,score,strlen(score));
         glutSwapBuffers();
+        
+        #ifdef USE_AUDIO
+            
+        #ifdef __APPLE__
+            soundGameOver.play();
+            soundLaser.setVolume(0);
+            soundWounded.setVolume(0);
+        #else
+            soundGameOver.Play();
+            soundLaser.SetVolume(0);
+            soundWounded.SetVolume(0);
+        #endif
+            
+        #endif
         return;
     }
     
