@@ -186,6 +186,8 @@ void timerFunc(int val)
 				spaceship->wMo.rotateZ(360 - degreesRotated);
 				degreesRotated = 0;
 				barrelRoll = false;
+				spaceship->barrelRoll = false;
+				
 			}
 		}else{
 			degreesRotated = 0;
