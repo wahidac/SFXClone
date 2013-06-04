@@ -79,40 +79,48 @@ void Spaceship::updatePosition(float deltaTime) {
     
     switch (direction) {
         case 'U':
-            offset += GLJoe::Vec4(0,delta,0,0);
-            wMo.translate(0,delta,0);
-            if (rotated != UP && !barrelRoll) {
-            	resetRotation();
-    	        wMo.rotateX(30);
-				rotated = UP;         
-            }
+			if(offset.y < 20){
+				offset += GLJoe::Vec4(0,delta,0,0);
+				wMo.translate(0,delta,0);
+				if (rotated != UP && !barrelRoll) {
+            		resetRotation();
+    				wMo.rotateX(30);
+					rotated = UP;         
+				}
+			}
             break;
         case 'D':
-            offset += GLJoe::Vec4(0,-delta,0,0);
-            wMo.translate(0,-delta,0);
-            if (rotated != DOWN && !barrelRoll) {
-            	resetRotation();
-            	wMo.rotateX(-30);
-				rotated = DOWN;
-            }            
+			if(offset.y > -20){
+				offset += GLJoe::Vec4(0,-delta,0,0);
+				wMo.translate(0,-delta,0);
+				if (rotated != DOWN && !barrelRoll) {
+            		resetRotation();
+            		wMo.rotateX(-30);
+					rotated = DOWN;
+				}   
+			}
             break;
         case 'L':
-            offset += GLJoe::Vec4(-delta,0,0,0);
-            wMo.translate(-delta,0,0);
-            if (rotated != LEFT && !barrelRoll) {
-            	resetRotation();
-            	wMo.rotateZ(45);
-				rotated = LEFT;
-            }            
+			if(offset.x > -30){
+				offset += GLJoe::Vec4(-delta,0,0,0);
+				wMo.translate(-delta,0,0);
+				if (rotated != LEFT && !barrelRoll) {
+            		resetRotation();
+            		wMo.rotateZ(45);
+					rotated = LEFT;
+				}  
+			}
             break;
         case 'R':
-            offset += GLJoe::Vec4(delta,0,0,0);
-            wMo.translate(delta,0,0);
-            if (rotated != RIGHT && !barrelRoll) {
-            	resetRotation();
-            	wMo.rotateZ(-45);
-				rotated = RIGHT;
-            }            
+			if(offset.x < 30){
+				offset += GLJoe::Vec4(delta,0,0,0);
+				wMo.translate(delta,0,0);
+				if (rotated != RIGHT && !barrelRoll) {
+            		resetRotation();
+            		wMo.rotateZ(-45);
+					rotated = RIGHT;
+				}  
+			}
             break;
         default:
             break;

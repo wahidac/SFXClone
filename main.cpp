@@ -255,14 +255,14 @@ void timerFunc(int val)
 	for(int i = 0; i < MAX_ENEMY_BULLETS; i++){
 		if(enemybullets[i]){
 			if(enemybullets[i]->offset.z < 10){
-				enemybullets[i]->offset =enemybullets[i]->offset -  Vec4(0,0,enemybullets[i]->speed * elapsedTime / 10,0);
+				enemybullets[i]->offset =enemybullets[i]->offset -  Vec4(0,0,enemybullets[i]->speed * elapsedTime / 10.0,0);
                 Vec3 oe = enemybullets[i]->offset.xyz();
 				Vec3 os = spaceship->offset.xyz();
 				if (os.x -2 <= oe.x  &&
                         os.x+ 2 >= oe.x  &&
                         os.y- 2 <= oe.y  &&
                         os.y+ 2 >= oe.y  &&
-                        (os.z- .25 <= oe.z  && os.z + .25 >= oe.z)){
+                        (os.z- .95 <= oe.z  && os.z + .95 >= oe.z)){
 					shipHealth--;
 					cout << "ship health is now: " << shipHealth << endl;
                     spaceship->beginFlickering(500, 5);
@@ -331,7 +331,7 @@ void timerFunc(int val)
                         os.x <= oe.x + 3 &&
                         os.y >= oe.y - 3 &&
                         os.y <= oe.y + 3 &&
-                        (os.z >= oe.z - .35 && os.z <= oe.z + .35))
+                        (os.z >= oe.z - .55 && os.z <= oe.z + .55))
                     {
                         enemies[i]->killEnemy();
                        	delete bullets[j];
