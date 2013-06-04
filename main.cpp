@@ -493,7 +493,7 @@ void init()
 		Error("Failed loading sound %s", "boom.wav");
 	}
 	soundWounded.setBuffer(bufferWounded);
-	soundWounded.SetPitch(2);
+	soundWounded.setPitch(2);
 	soundWounded.setVolume(100);    
     
     if (!bufferRoll.loadFromFile("Sounds/roll.ogg"))
@@ -869,8 +869,8 @@ int main(int argc, char **argv)
 	glutInitWindowSize(DEFAULT_WINDOW_SIZE, DEFAULT_WINDOW_SIZE);
 	glutCreateWindow("SFX Clone");
 
-	glewExperimental = GL_TRUE;
-	glewInit();
+//	glewExperimental = GL_TRUE;
+//	glewInit();
 
 	init();
 

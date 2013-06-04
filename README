@@ -8,10 +8,18 @@ Joachim Valente 204 134 373
 
 For this project we used Blender models for the ship, the enemies, and the buildings. The background
 and grass were orthographic projections of images. The bullets were also a model. We used SFML for 
-our sound purposes. We mapped textures onto the pig enemy. The explosions as well as the ship flashing
-when it gets hit utilize transparency. You start with 10 health and it counts your score as you go, 
-getting 250 points per enemy killed. We use collision detection to determine if you hit enemies or if 
-an enemy hits us. Once you kill a certain number of enemies, a button appears that you can click to kill
-all of the enemies on the screen. This uses color mapping and selection. When your health reaches 0, you
-get a game over screen and your final score is displayed. If you have any issues getting the code to run,
-don't hesitate to e-mail one of us. Have fun!
+our sound purposes. We mapped textures onto the shark enemy as well as one of the skyscrapers (the black one). 
+The explosions as well as the ship flashing when it gets hit utilize transparency. You start with 
+10 health and it counts your score as you go, getting 250 points per enemy killed. We use collision 
+detection to determine if you hit enemies or if an enemy hits us, which satisfies one of the advanced 
+topics we had intended to cover. Once you kill a certain number of enemies, a button appears that you can click to kill
+all of the enemies on the screen. This uses color mapping and selection, and satisfies the second advanced topic 
+we chose to implement. When your health reaches 0, you get a game over screen and your final score is displayed.
+If you have any issues getting the code to run, don't hesitate to e-mail one of us. Have fun!
+
+SFML: We utilize the SFML library to handle sound in the game. A copy of it is included for Mac OS X Lion in this directory,
+and you will needed to copy the .framework files from the Frameworks directory in it to 
+/Library/Frameworks to install the library on your machine. Additionally, you will need to copy the two 
+.framework files from the extlibs directory (freetype.framework and sndfile.framework) to /Library/Frameworks.
+Installation instructions can be found here http://www.sfml-dev.org/tutorials/2.0/start-osx.php. If your OS is older
+than Lion, you can go to the Downloads section and install an older version.
