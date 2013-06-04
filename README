@@ -23,3 +23,7 @@ and you will needed to copy the .framework files from the Frameworks directory i
 .framework files from the extlibs directory (freetype.framework and sndfile.framework) to /Library/Frameworks.
 Installation instructions can be found here http://www.sfml-dev.org/tutorials/2.0/start-osx.php. If your OS is older
 than Lion, you can go to the Downloads section and install an older version.
+SFML installation on Linux is straightforward: sudo apt-get install libsfml-dev (beware; we used SFML 1.6 on Linux and 
+SFML 2.0 on Mac OS, and our code uses the trick #ifdef __APPLE__ to distinguish between between 1.6 and 2.0 code).
+
+Lastly the program has been shown to have some issues on Linux, it may be recommended to run it on Mac OS or Windows.
