@@ -9,7 +9,7 @@
 #include "Explosion.h"
 #include <cstring>
 
-//#define USE_AUDIO
+#define USE_AUDIO
 
 #ifdef USE_AUDIO
 #include <SFML/Audio.hpp>
@@ -86,6 +86,10 @@ GLuint program;
 // Structure to store all the GLuints that reference variable locations in the shaders
 OBJObjectShaderHandles shaderHandles;
 
+//Game over params
+bool gameOver = false;
+int finalScore;
+
 #define DEFAULT_WINDOW_SIZE 512
 
 #ifdef USE_AUDIO
@@ -128,9 +132,14 @@ void initShaderHandles() {
 	shaderHandles.TexOffset = glGetUniformLocation( program, "TexOffset" );
     shaderHandles.isAnimatingExplosion = glGetUniformLocation(program, "isAnimatingExplosion");
     shaderHandles.calculateTexCoordInShader = glGetUniformLocation(program, "calculateTexCoordInShader");
+    shaderHandles.alpha = glGetUniformLocation(program, "alpha");
+    shaderHandles.blendModel = glGetUniformLocation(program, "blendModel");
 }
+
+
 void timerFunc(int val)
 {
+    
 	//Function that gets called every 16ms (or 60 times per second)
 	background->moveGroundTexture(0.0010);
 	background->moveBuildings(1.6);
@@ -208,9 +217,19 @@ void timerFunc(int val)
                         (os.z- .25 <= oe.z  && os.z + .25 >= oe.z)){
 					shipHealth--;
 					cout << "ship health is now: " << shipHealth << endl;
+                    spaceship->beginFlickering(500, 5);
+                    
 					delete enemybullets[i];
 					enemybullets[i] = 0;
 					numEnemyBullets--;
+                    
+                    
+                    spaceship->beginFlickering(100, 15);
+                    
+                    if (shipHealth <= 0 && !gameOver) {
+                        gameOver = true;
+                        finalScore = POINTS_PER_KILL * numberKilled;
+                    }
 
 				}
 						
@@ -305,7 +324,7 @@ void timerFunc(int val)
 	glutPostRedisplay();
 
 	//Recursively call the timer function to schedule it again
-	glutTimerFunc(16, timerFunc, 0);
+	glutTimerFunc(24, timerFunc, 0);
 }
 
 
@@ -421,15 +440,17 @@ void keyboard(unsigned char key, int x, int y)
 		exit(EXIT_SUCCESS);
 		break;
 	case ' ': // space
-#ifdef USE_AUDIO
             
-#ifdef __APPLE__
-	    soundLaser.play();
-#else
-        soundLaser.Play();
-#endif
+        if (!gameOver) {
+        #ifdef USE_AUDIO
             
-#endif
+        #ifdef __APPLE__
+            soundLaser.play();
+        #else
+            soundLaser.Play();
+        #endif
+            
+        #endif
 
 		iBullet = 0;
 		while(bullets[iBullet])
@@ -439,7 +460,7 @@ void keyboard(unsigned char key, int x, int y)
 		bullets[iBullet] = new Bullet(program,bulletTypes->bullets[randomBulletType],spaceship->offset.x,spaceship->offset.y,true);
 		numBullets++;
 		cout << "firing bullet";
-
+        }
 
 	}
 	
@@ -457,6 +478,7 @@ void mouse(int button, int state, int x, int y)
 
 void special(int key, int x, int y)
 {
+    
 	glutPostRedisplay();
 	
 	switch (key)
@@ -530,13 +552,6 @@ void reshape(int width, int height)
 	background->resize(width, height);
 }
 
-/*void idle()
-{
-	
-    
-	
-	glutPostRedisplay();
-}*/
 
 // This prints a string to the screen
 void Sprint( int x, int y, char *st, int stringLength)
@@ -555,10 +570,21 @@ void Sprint( int x, int y, char *st, int stringLength)
 void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
+    
 	// Draw background
 	background->draw();
-       
+    
+    if (gameOver) {
+        glClearColor(0.0, 0.0, 0.0, 1);
+        char gameOverMessage[] = "Game Over";
+        char score[40];
+        sprintf((char*) score, "Final Score: %d", finalScore);
+        Sprint(windowWidth/2-35,windowHeight/2,gameOverMessage,strlen(gameOverMessage));
+        Sprint(windowWidth/2-35,windowHeight/2-20,score,strlen(score));
+        glutSwapBuffers();
+        return;
+    }
+    
 	//glUniform1i(EnableTex, 1);
 	for(int j = 0; j < MAX_BULLETS; j++){
 		if(bullets[j]){
@@ -644,9 +670,8 @@ int main(int argc, char **argv)
 	glutMouseFunc(mouse);
 	glutSpecialFunc(special);
 	glutReshapeFunc(reshape);
-	//glutIdleFunc(idle);
     glutSpecialUpFunc(specialKeyReleased);
-	glutTimerFunc(32, timerFunc, 0);
+	glutTimerFunc(24, timerFunc, 0);
     
 	glutMainLoop();
 	return 0;

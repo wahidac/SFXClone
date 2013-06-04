@@ -43,6 +43,8 @@ struct OBJObjectShaderHandles {
 	GLuint MoveTex;
 	GLuint TexOffset;
     GLuint calculateTexCoordInShader;
+    GLuint alpha;
+    GLuint blendModel;
 };
 
 class OBJObject {
@@ -82,6 +84,10 @@ public:
         wMo = objectToWorld;
     }
     
+    OBJObjectShaderHandles getShaderHandles() {
+        return shaderHandles;
+    }
+    
     //Directly manipulate to move the object around
     GLJoe::Transform cMw;
     GLJoe::Transform wMo;
@@ -101,6 +107,7 @@ protected:
     int numVertices;
     OBJObjectShaderHandles shaderHandles;
     bool buffersInitialized;
+    
 };
 
 
