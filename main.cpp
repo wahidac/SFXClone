@@ -648,6 +648,15 @@ void mouse(int button, int state, int x, int y)
 					enemies[i]->killEnemy();
 				}
 			powerup->isVisible = false;
+			 #ifdef USE_AUDIO
+            
+        	#ifdef __APPLE__
+            	soundExplosion.play();
+		    #else
+		        soundExplosion.Play();
+		    #endif
+		        
+		    #endif
 		}
 
 		//Alert everything that is pick-able to no longer use picking mode again here
