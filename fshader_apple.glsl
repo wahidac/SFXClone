@@ -8,13 +8,15 @@ varying float Shininess;
 
 uniform sampler2D Tex;
 uniform int EnableTex;
-uniform int isAnimatingExplosion;
+uniform int blackTransparent;
 
 
 uniform int MoveTex;
 uniform float TexOffset;
 uniform float alpha;
 uniform int blendModel;
+
+uniform int useColorPicking;
 
 void main() 
 { 
@@ -54,11 +56,15 @@ void main()
        
        //Make all black transparent if we're animating an explosion so we only see the 
        //flames from the explosion
-       if(isAnimatingExplosion == 1 && gl_FragColor == vec4(0,0,0,1)) {
+       if(blackTransparent == 1 && gl_FragColor.xyz == vec3(0,0,0)) {
             gl_FragColor.a = 0.0;
        }
        
        if(blendModel == 1) {
             gl_FragColor.a = alpha;
        }
+
+	   if(useColorPicking == 1) {
+			gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+	   }
 } 

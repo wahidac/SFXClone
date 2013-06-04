@@ -39,12 +39,13 @@ struct OBJObjectShaderHandles {
     GLuint LightSpecular;
 	GLuint tex;
 	GLuint EnableTex;
-    GLuint isAnimatingExplosion;
+    GLuint blackTransparent;
 	GLuint MoveTex;
 	GLuint TexOffset;
     GLuint calculateTexCoordInShader;
     GLuint alpha;
     GLuint blendModel;
+	GLuint useColorPicking;
 };
 
 class OBJObject {

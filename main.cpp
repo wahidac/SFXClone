@@ -7,9 +7,12 @@
 #include "OBJLoader/OBJObject.h"
 #include "Background.h"
 #include "Explosion.h"
+#include "powerup.h"
 #include <cstring>
 
+#ifndef _WINDOWS_
 #define USE_AUDIO
+#endif
 
 #ifdef USE_AUDIO
 #include <SFML/Audio.hpp>
@@ -23,6 +26,8 @@ using namespace GLJoe;
 #define MAX_BULLETS 50
 #define SPACESHIP_SPEED 25
 #define ENEMY_SCALE 3
+
+#define POINTS_FOR_POWERUP 15000
 
 const float APPEARANCE_RATE = 0.001;
 const int POINTS_PER_KILL = 250;
@@ -48,6 +53,9 @@ GLfloat shiftY;
 
 // Background objects
 Background* background;
+
+// Powerup object
+Powerup* powerup;
 
 // Explosion
 Explosion* explosion;
@@ -101,6 +109,8 @@ sf::Sound soundExplosion;
 sf::Music music;
 #endif
 
+void display();
+
 void initView()
 {
 	initialEyePos = Vec3(0, 0, EYE_POSITION_Z);
@@ -130,10 +140,11 @@ void initShaderHandles() {
 	shaderHandles.EnableTex = glGetUniformLocation( program, "EnableTex" );
 	shaderHandles.MoveTex = glGetUniformLocation( program, "MoveTex" );
 	shaderHandles.TexOffset = glGetUniformLocation( program, "TexOffset" );
-    shaderHandles.isAnimatingExplosion = glGetUniformLocation(program, "isAnimatingExplosion");
+    shaderHandles.blackTransparent = glGetUniformLocation(program, "blackTransparent");
     shaderHandles.calculateTexCoordInShader = glGetUniformLocation(program, "calculateTexCoordInShader");
     shaderHandles.alpha = glGetUniformLocation(program, "alpha");
     shaderHandles.blendModel = glGetUniformLocation(program, "blendModel");
+	shaderHandles.useColorPicking = glGetUniformLocation(program, "useColorPicking");
 }
 
 
@@ -273,6 +284,17 @@ void timerFunc(int val)
                         os.y <= oe.y + 3 &&
                         (os.z >= oe.z - .35 && os.z <= oe.z + .35))
                     {
+						//Check to see if enough points gotten for a powerup
+						if(((numberKilled + 1) * POINTS_PER_KILL) % POINTS_FOR_POWERUP == 0)
+						{
+							//If so, display one only if one isn't already shown
+							if(powerup->isVisible == false)
+							{
+								powerup->setLocation(enemies[i]->offset);
+								powerup->isVisible = true;
+							}
+						}
+
                         enemies[i]->killEnemy();
                        	delete bullets[j];
 						bullets[j] = 0;
@@ -369,6 +391,9 @@ void init()
 	//Initialize the background objects
 	background = new Background("Images/mountainsky.png", "Images/grass2048.png", shaderHandles);
     
+	//Initialize the powerup object
+	powerup = new Powerup("Images/powerup.png", "Images/colorMappedPowerup.png", Vec3(255.0, 255.0, 0.0), shaderHandles);
+
     //Initialize the explosion to show when an enemy dies
     explosion = new Explosion("Images/explosionTexture.png",shaderHandles);
 
@@ -471,6 +496,41 @@ void keyboard(unsigned char key, int x, int y)
 
 void mouse(int button, int state, int x, int y)
 {
+	//if powerup is on the screen and mouse is clicked redraw everything with simple colors
+	if(powerup->isVisible && button == GLUT_LEFT_BUTTON && state == GLUT_DOWN)
+	{
+		glUniform1i(shaderHandles.useColorPicking, 1);
+
+		//Alert everything that is pick-able here
+		powerup->useColorPicking();
+
+		display();
+
+		unsigned char sample[3];
+		glReadBuffer(GL_BACK);
+
+		GLint viewport[4];
+		glGetIntegerv(GL_VIEWPORT, viewport);
+		glReadPixels(x, viewport[3] - y, 1, 1, GL_RGB, GL_UNSIGNED_BYTE, sample);
+		Vec3 colorSample = Vec3(sample[0], sample[1], sample[2]);
+		Vec3 powerupColor = powerup->getColorSamplingColor();
+
+		if(colorSample.x == powerupColor.x && colorSample.y == powerupColor.y && colorSample.z == powerupColor.z)
+		{
+			for(int i = 0; i< MAX_ENEMIES; i++)
+				if(enemies[i])
+				{
+					enemies[i]->killEnemy();
+				}
+			powerup->isVisible = false;
+		}
+
+		//Alert everything that is pick-able to no longer use picking mode again here
+		powerup->disableColorPicking();
+
+		glUniform1i(shaderHandles.useColorPicking, 0);
+	}
+
 	glutPostRedisplay();
 	
 	(void) button, (void)state, (void)x, (void)y;
@@ -584,6 +644,12 @@ void display()
         glutSwapBuffers();
         return;
     }
+
+	//Draw powerups if one is available
+	if(powerup->isVisible)
+	{
+		powerup->draw();
+	}
     
 	//glUniform1i(EnableTex, 1);
 	for(int j = 0; j < MAX_BULLETS; j++){
@@ -621,7 +687,7 @@ void display()
             
             if (enemies[i]->animatingDeath()) {
                 //Turn on transparency for the explosion
-                glUniform1i(shaderHandles.isAnimatingExplosion, 1);
+                glUniform1i(shaderHandles.blackTransparent, 1);
                 glEnable(GL_BLEND);
                 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
                 glDepthMask( GL_FALSE );
@@ -629,7 +695,7 @@ void display()
                 glDepthMask( GL_TRUE );
                 glDisable(GL_BLEND);
                 //Turn off transparency
-                glUniform1i(shaderHandles.isAnimatingExplosion, 0);
+                glUniform1i(shaderHandles.blackTransparent, 0);
             } else {
                 enemies[i]->draw();
             }
@@ -650,7 +716,8 @@ void display()
     Sprint(windowWidth-175,windowHeight-20,(char *)score,strlen((const char*)score));
     Sprint(windowWidth-175,windowHeight-40,(char *)health,strlen((const char*)health));
 
-	glutSwapBuffers();
+	if(powerup->colorPicking == false)
+		glutSwapBuffers();
 }
 
 int main(int argc, char **argv)
