@@ -430,9 +430,10 @@ void init()
     
     if (!bufferWounded.loadFromFile("Sounds/boom.wav"))
 	{
-		Error("Failed loading sound %s", "explode2.wav");
+		Error("Failed loading sound %s", "boom.wav");
 	}
 	soundWounded.setBuffer(bufferWounded);
+	soundWounded.SetPitch(2);
 	soundWounded.setVolume(100);    
     
 	if (!music.openFromFile("Sounds/music.ogg"))
@@ -462,7 +463,7 @@ void init()
     
     if (!bufferWounded.LoadFromFile("Sounds/boom.wav"))
 	{
-		Error("Failed loading sound %s", "explode2.wav");
+		Error("Failed loading sound %s", "boom.wav");
 	}
 	soundWounded.SetBuffer(bufferWounded);
 	soundWounded.SetPitch(2);
