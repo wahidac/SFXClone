@@ -1,7 +1,7 @@
 Starfox Clone Final Project
 
 Adam Shwert - 503 651 289
-Wahid Chowdhury - 103673844
+Wahid Chowdhury - 103 673 844
 Kyle Morton - 503 779 834
 Joachim Valente 204 134 373
 
@@ -27,3 +27,9 @@ SFML installation on Linux is straightforward: sudo apt-get install libsfml-dev 
 SFML 2.0 on Mac OS, and our code uses the trick #ifdef __APPLE__ to distinguish between between 1.6 and 2.0 code).
 
 Lastly the program has been shown to have some issues on Linux, it may be recommended to run it on Mac OS or Windows.
+
+Note: We have submitted the code as an Xcode project that you should be able to run on a Mac. The main function has two
+lines that initialize glew (glewExperimental = GL_TRUE; glewInit();), that we commented out while doing development
+because it wasn't installed on the Mac machine we were using. You may need to add the GLEW library to the Xcode project
+for those two lines to work if using the included Xcode project Dev, though it will probably be okay to comment the two
+lines out a play the game.

@@ -869,8 +869,8 @@ int main(int argc, char **argv)
 	glutInitWindowSize(DEFAULT_WINDOW_SIZE, DEFAULT_WINDOW_SIZE);
 	glutCreateWindow("SFX Clone");
 
-//	glewExperimental = GL_TRUE;
-//	glewInit();
+	glewExperimental = GL_TRUE;
+	glewInit();
 
 	init();
 
