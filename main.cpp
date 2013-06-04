@@ -21,9 +21,12 @@ using namespace GLJoe;
 // Parameters for game
 #define MAX_ENEMIES 100
 #define MAX_BULLETS 50
+#define MAX_ENEMY_BULLETS 15
 #define SPACESHIP_SPEED 25
 #define ENEMY_SCALE 3
 
+const float BULLET_APPEARANCE_RATE = 0.0005; // max frequency at which enemy can shoot
+const float ENEMY_NICENESS = 100; // each enemy will shoot with proba 1 / ENEMY_NICENESS
 const float APPEARANCE_RATE = 0.001;
 const int POINTS_PER_KILL = 250;
 
@@ -62,7 +65,7 @@ OBJObject* aircraftModel;
 
 Enemy* enemies[MAX_ENEMIES] = {0};
 Bullet* bullets[MAX_BULLETS] = {0};
-Bullet* enemybullets[15] = {0};
+Bullet* enemybullets[MAX_ENEMY_BULLETS] = {0};
 int iEnemy; // index of last enemy created
 int iBullet; // index of last bullet created
 int numBullets; // number of bullets currently in play
@@ -204,7 +207,7 @@ void timerFunc(int val)
         
         
 	}
-	for(int i = 0; i < 15; i++){
+	for(int i = 0; i < MAX_ENEMY_BULLETS; i++){
 		if(enemybullets[i]){
 			if(enemybullets[i]->offset.z < 3){
 				enemybullets[i]->offset =enemybullets[i]->offset -  Vec4(0,0,enemybullets[i]->speed,0);
@@ -253,7 +256,9 @@ void timerFunc(int val)
         if (enemies[i])
         {
 
-			if(numEnemyBullets < 15 && Random(1,1000) < 3){
+			if(numEnemyBullets < MAX_ENEMY_BULLETS && 
+				BULLET_APPEARANCE_RATE * elapsedTimeSinceLastEnemyAppeared &&
+				Random(1,ENEMY_NICENESS) < 3){
 				iBullet = 0;
 				while(enemybullets[iBullet])
 					iBullet++;
@@ -600,7 +605,7 @@ void display()
 		}
 
 	}
-	for(int j = 0; j < 15; j++){
+	for(int j = 0; j < MAX_ENEMY_BULLETS; j++){
 		if(enemybullets[j]){
 			enemybullets[j]->cMw = Translate(-initialEyePos);
 			enemybullets[j]->wMo = Translate(enemybullets[j]->offset);
