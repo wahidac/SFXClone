@@ -114,6 +114,7 @@ sf::SoundBuffer bufferGameOver;
 sf::Sound soundGameOver;
 sf::Music music;
 #endif
+bool soundGameOverPlayed = false;
 
 void initView()
 {
@@ -705,19 +706,22 @@ void display()
         Sprint(windowWidth/2-35,windowHeight/2-20,score,strlen(score));
         glutSwapBuffers();
         
-        #ifdef USE_AUDIO
-            
-        #ifdef __APPLE__
-            soundGameOver.play();
-            soundLaser.setVolume(0);
-            soundWounded.setVolume(0);
-        #else
-            soundGameOver.Play();
-            soundLaser.SetVolume(0);
-            soundWounded.SetVolume(0);
-        #endif
-            
-        #endif
+        if (soundGameOverPlayed == false) {
+		    #ifdef USE_AUDIO
+		        
+		    #ifdef __APPLE__
+		        soundGameOver.play();
+		        soundLaser.setVolume(0);
+		        soundWounded.setVolume(0);
+		    #else
+		        soundGameOver.Play();
+		        soundLaser.SetVolume(0);
+		        soundWounded.SetVolume(0);
+		    #endif
+		        
+		    #endif
+		    soundGameOverPlayed = true;
+        }
         return;
     }
     
